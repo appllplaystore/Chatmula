@@ -121,6 +121,9 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
 #download-ring { transition: stroke-dashoffset 0.1s linear; }
 .review-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px; overflow: hidden; flex-shrink: 0; background-color: #E2E8F0; }
 .review-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Native Splash Screen */
+#splash-screen { transition: opacity 0.4s ease-out; background: linear-gradient(135deg,#101B4D 0%,#32145E 58%,#6A174F 100%); }
 </style>
 <title>Chatmula</title>
 </head>
@@ -395,9 +398,20 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
     </div>
 </div>
 
-<div id="app"><div class="splash"><img src="icon.jpg" alt="ChatMula"><h1>ChatMula</h1><p>Loading your conversations…</p></div></div>
+<!-- SPLASH SCREEN -->
+<div id="splash-screen" class="hide fixed inset-0 z-[9998] flex flex-col items-center justify-center opacity-0">
+    <img src="icon.jpg" class="w-24 h-24 rounded-3xl object-cover mb-4 shadow-lg border border-white/10" alt="ChatMula">
+    <h1 class="text-white text-xl font-bold tracking-wide font-sans">ChatMula</h1>
+</div>
+
+<!-- APP CONTENT -->
+<div id="app-content" class="hide">
+    <div id="app"></div>
+</div>
+
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="connectionBanner" role="status" aria-live="assertive" hidden><span class="connection-dot" aria-hidden="true"></span><div class="connection-copy"><strong id="connectionTitle">No internet connection</strong><span id="connectionMessage">Reconnect to the internet to book or chat. Your current conversation is still on this device.</span></div></div>
+
 <script>
 /* ChatMula PWA client. Uses the existing Supabase project and public anon key only. */
 'use strict';
@@ -606,11 +620,22 @@ function renderWaiting(id,kind,fee=100){
   document.addEventListener('focusout',()=>setTimeout(syncVisibleHeight,180));syncVisibleHeight();
 })();
 
-/* =============== PLAY STORE LOGIC =============== */
+/* =============== PLAY STORE & PWA BOOT LOGIC =============== */
+const playStoreGate = document.getElementById('play-store-gate');
+const appContent = document.getElementById('app-content');
+const splashScreen = document.getElementById('splash-screen');
+
 let fakeInterval = null;
 let deferredPrompt = null;
 let waitingForPrompt = false;
+
+// Exact PWA detection from ZambiaCash
+const _ua = navigator.userAgent || '';
+const _isAndroid = /Android/i.test(_ua);
+const _isIOS = /iPhone|iPad|iPod/i.test(_ua);
+const _isChromeBrowser = /Chrome\/\d+/i.test(_ua) && !/Edg|OPR|SamsungBrowser|Firefox/i.test(_ua);
 const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+const _cameFromIntent = new URLSearchParams(location.search).get('_pwa') === '1' || new URLSearchParams(location.search).get('source') === 'pwa';
 const _wasInstalled = localStorage.getItem('pwa_installed') === '1';
 
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -706,7 +731,7 @@ function startFakeDownload() {
     document.getElementById('ring-svg').classList.remove('hidden');
 
     const startTime = Date.now();
-    const duration = 30000;
+    const duration = 30000; // 30 seconds
 
     clearInterval(fakeInterval);
     fakeInterval = setInterval(() => {
@@ -717,8 +742,12 @@ function startFakeDownload() {
         if (elapsed >= duration) {
             clearInterval(fakeInterval);
             document.getElementById('download-text').classList.add('hide');
+            
+            // Force the UI to show "Installed" even if Chrome didn't prompt
             if (localStorage.getItem('pwa_installed') !== '1') {
                 showInstallState();
+            } else {
+                showInstalledState();
             }
         }
     }, 50);
@@ -731,13 +760,26 @@ function updateProgressUI(progress) {
     if(pct) pct.innerText = Math.floor(progress) + "% of 10 MB";
 }
 
+// ZambiaCash open logic
 document.getElementById('btn-open-app').addEventListener('click', async ()=>{
-    if (localStorage.getItem('pwa_installed') === '1' || isStandalone) {
-        document.getElementById('play-store-gate').classList.add('hide');
-        boot(); // Re-boot the app to show main UI
-        return;
+    // 1. Check if the PWA is actually installed on Android
+    if (_isAndroid && 'getInstalledRelatedApps' in navigator) {
+        try {
+            const apps = await navigator.getInstalledRelatedApps();
+            const pwa = apps.find(a => a.platform === 'webapp');
+            
+            if (pwa) {
+                // App is installed! Redirect to trigger the native standalone launch
+                window.location.href = './index.html?source=pwa';
+                return; 
+            }
+        } catch (e) {
+            console.log("Check failed", e);
+        }
     }
 
+    // 2. Fallback: App is NOT installed (or user is on iPhone).
+    // Show the mock prompt instead of navigating.
     const prompt = document.getElementById('installed-prompt');
     prompt.classList.remove('hide');
     
@@ -755,18 +797,42 @@ document.getElementById('btn-open-app').addEventListener('click', async ()=>{
     }, 10000);
 });
 
-async function boot(){
-    // If standalone or already installed, skip the Play Store
-    if (isStandalone || _wasInstalled) {
-        document.getElementById('play-store-gate').classList.add('hide');
-        proceedToAppBoot();
-    } else {
-        document.getElementById('play-store-gate').classList.remove('hide');
-        showInstallState();
-    }
+// ZambiaCash splash screen logic
+function showAppInline(){
+    playStoreGate.classList.add('hide');
+    
+    splashScreen.classList.remove('hide');
+    splashScreen.style.opacity = '1';
+    
+    setTimeout(() => {
+        splashScreen.style.opacity = '0';
+        setTimeout(() => {
+            splashScreen.classList.add('hide');
+            appContent.classList.remove('hide');
+            proceedToAppBoot();
+        }, 400);
+    }, 1500);
+}
+
+// Exact boot sequence matching ZambiaCash
+if (isStandalone) {
+    playStoreGate.classList.add('hide');
+    appContent.classList.remove('hide');
+    proceedToAppBoot();
+} else if (_cameFromIntent) {
+    playStoreGate.classList.add('hide');
+    showAppInline();
+} else if (_wasInstalled) {
+    playStoreGate.classList.add('hide');
+    appContent.classList.remove('hide');
+    proceedToAppBoot();
+} else {
+    playStoreGate.classList.remove('hide');
+    showInstallState();
 }
 
 async function proceedToAppBoot(){
+    if(_cameFromIntent) history.replaceState({}, '', window.location.pathname);
     if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(e=>console.warn('Service worker unavailable:',e));
     if(new URLSearchParams(location.search).get('ref')){
         state.ref=new URLSearchParams(location.search).get('ref').trim().toUpperCase();localStorage.setItem('cm_ref',state.ref)
@@ -780,14 +846,10 @@ async function proceedToAppBoot(){
     renderAuth()
 }
 
-// GitHub Pages project URLs sometimes open without the final slash. In that case,
-// relative root-level bot images resolve outside the repository. Normalize first.
+// GitHub Pages project URLs sometimes open without the final slash.
 const lastPathPart=location.pathname.split('/').pop();
 if(location.protocol.startsWith('http') && location.pathname!=='/' && !location.pathname.endsWith('/') && !lastPathPart.includes('.')) {
   location.replace(location.pathname+'/'+location.search+location.hash);
-} else {
-  boot();
 }
-
 </script>
 </body></html>
