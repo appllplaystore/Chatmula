@@ -23,29 +23,6 @@
 
 .activation-wall{position:fixed;inset:0;background:rgba(4,7,22,.78);z-index:10000;display:grid;place-items:center;padding:22px}.activation-wall .activation-dialog{width:min(100%,380px);background:#191A42;border:1px solid #394168;border-radius:16px;padding:22px;box-shadow:0 20px 70px #0008;color:#fff}.activation-wall h2{margin:0 0 12px;font-size:20px}.activation-wall p{margin:0 0 20px;color:#C5D2E8;line-height:1.5}.activation-wall .activation-actions{display:flex;justify-content:flex-end;gap:10px}
 
-/* Activation screen mirrored from Android activity_confirm.xml */
-.activation-screen{min-height:100dvh;background:#0A0F1F;padding:20px 20px calc(24px + env(safe-area-inset-bottom));color:#fff;max-width:760px;margin:0 auto;box-sizing:border-box}
-.activation-hero{background:linear-gradient(135deg,#101B4D 0%,#32145E 58%,#6A174F 100%);border:1px solid #282e50;border-radius:26px;padding:20px;margin:0 0 16px;box-sizing:border-box;animation:activationEnter .55s ease-out both}
-.activation-live{display:inline-block;background:#102A43;color:#00E5FF;border:1px solid #33566f;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;letter-spacing:.4px}
-.activation-hero h1{font-size:22px;line-height:1.25;margin:12px 0 6px;color:#fff;font-weight:800}
-.activation-hero p{font-size:14px;line-height:1.45;margin:0;color:#D1C4E9;min-height:21px;transition:opacity .28s}
-.activation-card{background:#11182D;border:1px solid #27324e;border-radius:18px;padding:18px;margin:0 0 16px;box-sizing:border-box;box-shadow:0 8px 24px #00000018}
-.activation-label{display:block;color:#9AA4BF;font-size:12px;line-height:1.4}
-.activation-fee strong{display:block;margin-top:6px;font-size:26px;line-height:1.3;font-weight:800;color:#fff}
-.activation-username{display:block;color:#fff;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
-.activation-email{margin-top:4px;color:#9AA4BF;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
-.activation-account label{display:block;margin-top:16px;color:#9AA4BF;font-size:12px}
-.activation-account input{display:block;width:100%;box-sizing:border-box;margin-top:6px;padding:14px;border:1px solid #343d5d;border-radius:10px;background:#0D1426;color:#fff;font:inherit;outline:none;min-height:48px}
-.activation-account input::placeholder{color:#A0B0CC}.activation-account input:focus{border-color:#00E5FF;box-shadow:0 0 0 2px #00E5FF20}
-.activation-promo{margin-top:10px;padding:14px;border:1px solid #33425b;border-radius:16px;background:#102A43;color:#00E5FF;font-size:14px;line-height:1.5;font-weight:800;overflow-wrap:anywhere;transition:opacity .22s,background .22s,color .22s}
-.activation-error{margin:0 0 16px;background:#3A1414;border:1px solid #713333;color:#FFB4B4;border-radius:10px;padding:12px;font-size:14px;line-height:1.45}
-.activation-pay,.activation-cancel{display:block;width:100%;min-height:50px;border:0;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;box-sizing:border-box}
-.activation-pay{margin-top:20px;padding:16px;background:#FF4081;color:#fff;box-shadow:0 6px 18px #ff40812a}.activation-pay:disabled{opacity:.65}
-.activation-cancel{margin-top:10px;padding:12px;background:transparent;color:#00E5FF;border:1px solid transparent;font-size:14px}
-@keyframes activationEnter{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-@media(min-width:520px){.activation-screen{padding-left:24px;padding-right:24px}.activation-hero{padding:24px}.activation-card{padding:20px}}
-
-
 /* Native Android ConfirmActivity parity */
 .native-activation{background:#0A0F1F;padding:20px;min-height:100vh;color:#fff}
 .native-activation .na-hero{background:linear-gradient(135deg,#6A1B9A,#102A43);border-radius:26px;padding:20px;animation:na-enter .7s ease both}
@@ -182,7 +159,7 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                     </div>
                 </div>
                 <div class="bg-[#00E5FF]/10 border border-[#00E5FF]/20 rounded-xl p-3 text-center mt-1">
-                    <p class="text-[#00E5FF] font-extrabold text-sm">Use promo code: CHAT2026</p>
+                    <p id="installed-promo-text" class="text-[#00E5FF] font-extrabold text-sm">Use promo code: CHAT2026</p>
                 </div>
             </div>
         </div>
@@ -215,23 +192,66 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                 <div class="w-px h-10 bg-gray-200"></div>
                 <div class="flex-1 flex flex-col items-center"><div class="border border-gray-600 rounded px-1.5 text-[11px] font-bold mb-1">12+</div><span class="text-[11px] text-gray-600">Rated for 12+</span></div>
             </div>
-            <div class="flex gap-4 overflow-x-auto hide-scrollbar mb-8 pb-4 snap-x">
-                <div class="w-44 h-80 bg-gradient-to-br from-[#0056D2] to-[#00E5FF] rounded-2xl flex-shrink-0 p-5 flex flex-col justify-between shadow-soft snap-center">
-                    <div><p class="text-blue-200 text-[11px] font-bold tracking-widest uppercase">Earnings</p><p class="text-white text-3xl font-extrabold mt-2">KSh 500+</p><p class="text-blue-100 text-xs mt-1">per conversation</p></div>
-                    <div class="bg-white/20 backdrop-blur rounded-xl p-4 border border-white/20"><p class="text-white text-sm font-bold">Instant Withdrawals</p><p class="text-blue-100 text-[11px] mt-1">Straight to M-Pesa</p></div>
+            
+            <!-- REALISTIC SCREENSHOTS -->
+            <div class="flex gap-4 overflow-x-auto hide-scrollbar mb-8 pb-4 snap-x px-2">
+                <!-- Screenshot 1: Chat UI -->
+                <div class="w-[180px] h-[360px] bg-[#0A0F1F] rounded-[2rem] border-[6px] border-gray-800 flex-shrink-0 p-3 snap-center relative overflow-hidden shadow-xl flex flex-col">
+                    <div class="w-16 h-1 bg-gray-600 rounded-full mx-auto mb-4 mt-1"></div>
+                    <div class="flex items-center gap-2 mb-4 border-b border-gray-700 pb-2">
+                        <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold text-white">A</div>
+                        <div><p class="text-white text-xs font-bold leading-tight">Alex Carter</p><p class="text-[9px] text-green-400">Online</p></div>
+                    </div>
+                    <div class="flex-1 space-y-3 overflow-hidden">
+                        <div class="bg-gray-800 text-gray-200 text-[10px] p-2 rounded-xl rounded-tl-none w-4/5 self-start">Hey! How is your day going?</div>
+                        <div class="bg-[#0056D2] text-white text-[10px] p-2 rounded-xl rounded-tr-none w-4/5 self-end ml-auto">It's going great! Ready to learn some Swahili?</div>
+                        <div class="bg-gray-800 text-gray-200 text-[10px] p-2 rounded-xl rounded-tl-none w-4/5 self-start">Yes please! Teach me how to greet.</div>
+                    </div>
+                    <div class="h-8 bg-gray-800 rounded-full mt-2 flex items-center px-3"><span class="text-[10px] text-gray-500">Type message...</span></div>
                 </div>
-                <div class="w-44 h-80 bg-white border border-gray-200 rounded-2xl flex-shrink-0 p-5 flex flex-col justify-between shadow-soft snap-center">
-                    <div><p class="text-gray-400 text-[11px] font-bold tracking-widest uppercase">Audience</p><p class="text-[#0056D2] text-4xl font-extrabold mt-2">1M+</p><p class="text-gray-500 text-sm font-medium mt-1">Global users</p></div>
-                    <div class="bg-blue-50 rounded-xl p-4 border border-blue-100"><p class="text-[#0056D2] text-sm font-bold">Learn & Connect</p><p class="text-gray-500 text-[11px] mt-1">Teach Swahili</p></div>
+
+                <!-- Screenshot 2: Earnings -->
+                <div class="w-[180px] h-[360px] bg-[#0A0F1F] rounded-[2rem] border-[6px] border-gray-800 flex-shrink-0 p-3 snap-center relative overflow-hidden shadow-xl flex flex-col">
+                    <div class="w-16 h-1 bg-gray-600 rounded-full mx-auto mb-4 mt-1"></div>
+                    <div class="text-center mt-4">
+                        <p class="text-gray-400 text-[10px] uppercase tracking-wider font-bold">Available Balance</p>
+                        <p class="text-white text-2xl font-extrabold mt-1">KSh 2,450</p>
+                    </div>
+                    <div class="mt-6 space-y-3">
+                        <div class="bg-gray-800 p-2 rounded-lg flex justify-between items-center">
+                            <div><p class="text-[10px] text-white font-bold">M-Pesa Withdrawal</p><p class="text-[8px] text-gray-400">Today, 10:24 AM</p></div>
+                            <p class="text-[10px] text-green-400 font-bold">-1,000</p>
+                        </div>
+                        <div class="bg-gray-800 p-2 rounded-lg flex justify-between items-center">
+                            <div><p class="text-[10px] text-white font-bold">Chat Earnings</p><p class="text-[8px] text-gray-400">Yesterday</p></div>
+                            <p class="text-[10px] text-green-400 font-bold">+450</p>
+                        </div>
+                        <div class="bg-gray-800 p-2 rounded-lg flex justify-between items-center">
+                            <div><p class="text-[10px] text-white font-bold">Referral Bonus</p><p class="text-[8px] text-gray-400">Oct 22</p></div>
+                            <p class="text-[10px] text-green-400 font-bold">+200</p>
+                        </div>
+                    </div>
+                    <button class="w-full bg-[#FF4081] text-white text-[10px] font-bold py-2 rounded-full mt-auto mb-2">Withdraw to M-Pesa</button>
                 </div>
-                <div class="w-44 h-80 bg-emerald-500 rounded-2xl flex-shrink-0 p-5 flex flex-col justify-between shadow-soft snap-center">
-                    <div><p class="text-emerald-100 text-[11px] font-bold tracking-widest uppercase">Payout Time</p><p class="text-white text-4xl font-extrabold mt-2">2 Min</p></div>
-                    <div class="bg-white/20 backdrop-blur rounded-xl p-4 border border-white/20"><p class="text-white text-sm font-bold">Fastest Payouts</p><p class="text-emerald-50 text-[11px] mt-1">24/7 Available</p></div>
+
+                <!-- Screenshot 3: Global connection -->
+                <div class="w-[180px] h-[360px] bg-[#0A0F1F] rounded-[2rem] border-[6px] border-gray-800 flex-shrink-0 p-3 snap-center relative overflow-hidden shadow-xl flex flex-col items-center justify-center">
+                    <div class="w-16 h-1 bg-gray-600 rounded-full mx-auto absolute top-4"></div>
+                    <div class="w-24 h-24 rounded-full border-2 border-dashed border-[#00E5FF] flex items-center justify-center mb-4 relative">
+                        <div class="absolute inset-0 rounded-full border border-[#00E5FF] animate-ping opacity-20"></div>
+                        <img src="icon.jpg" class="w-12 h-12 rounded-full object-cover z-10">
+                    </div>
+                    <h3 class="text-white text-sm font-bold text-center">Connect Globally</h3>
+                    <p class="text-gray-400 text-[10px] text-center mt-1 px-2">Chat with learners from USA, UK, and Canada.</p>
+                    <div class="absolute bottom-6 flex gap-2">
+                        <span class="text-xs">🇺🇸</span><span class="text-xs">🇬🇧</span><span class="text-xs">🇨🇦</span>
+                    </div>
                 </div>
             </div>
+
             <div class="mb-8">
                 <h3 class="font-bold text-xl text-gray-900 mb-3">About this app</h3>
-                <p class="text-sm text-gray-600 leading-relaxed mb-4">ChatMula connects Kenyans with foreigners looking to learn Swahili. Chat with international students, teach them your language, and earn real money directly to your M-Pesa. No paperwork, 100% online.</p>
+                <p class="text-sm text-gray-600 leading-relaxed mb-4">ChatMula connects Kenyans with foreigners looking to learn Swahili. Chat with international students, teach them your language, and earn real money directly to your M-Pesa. 100% online and completely flexible.</p>
                 <div class="flex gap-2"><span class="border border-gray-300 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-700">Social</span><span class="border border-gray-300 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-700">Communication</span></div>
             </div>
             <div class="mb-8 border-t border-gray-100 pt-8">
@@ -419,6 +439,14 @@ const API='https://hiftjunvppgrlmdcvleo.supabase.co';
 const KEY='sb_publishable_rY8X9teF9-Uxy_bb__DGDA_KBCag4RB';
 const $=s=>document.querySelector(s);const app=$('#app');
 const state={page:'',user:null,profile:null,token:localStorage.getItem('cm_token')||'',refresh:localStorage.getItem('cm_refresh')||'',uid:localStorage.getItem('cm_uid')||'',username:localStorage.getItem('cm_username')||'',email:localStorage.getItem('cm_email')||'',ref:localStorage.getItem('cm_ref')||new URLSearchParams(location.search).get('ref')||'',messages:[],bot:null,botHistory:[],pollTimer:null,botReplyTimer:null,botTyping:false};
+
+// STRENGTHEN REFERRAL LOGIC: Capture URL ref immediately and save to localStorage
+const urlRef = new URLSearchParams(location.search).get('ref');
+if (urlRef) {
+    state.ref = urlRef.trim().toUpperCase();
+    localStorage.setItem('cm_ref', state.ref);
+}
+
 const bots=[["Alex Carter","male","USA","4.7","bot_alex_carter.jpg",["Hey 😊 How has your day been so far?","What do you normally enjoy doing when you finally get some quiet time?","I like that. People usually reveal a lot about themselves through the little things they enjoy.","What kind of music fits your mood when you want to relax?","If tomorrow was completely free, how would you spend it?","Would you rather have a long conversation at night or a quick chat during the day?"],"Alex","Swahili beginner"],["Jordan Brooks","male","Canada","4.6","bot_jordan_brooks.jpg",["Yo 😄 What has been keeping you busy today?","Are you more into football, music, movies, gaming, business, tech, or something completely different?","What team do you support, if you follow football?","Football conversations can get serious very quickly 😂. Who is your favourite player?","What is the last movie or series that actually held your attention?","What kind of music do you play when you are in a good mood?"],"Jordan","Swahili beginner"],["Morgan Bennett","male","UK","4.5","bot_morgan_bennett.jpg",["What's up 😄 How is your day going?","Are you usually the person who starts conversations or waits for someone else?","What makes a conversation instantly interesting for you?","Are you into sports? If yes, which one?","What is the most competitive thing you have ever done?","Do you enjoy business and money topics, or do you avoid them?"],"Morgan","Swahili beginner"],["Sam Reid","male","Canada","4.8","bot_sam_reid.jpg",["Hi 😊 How are you feeling today?","What usually helps you relax when life gets busy?","Do you enjoy quiet places or busy environments more?","What is your favourite kind of evening?","Do you like listening to other people's stories?","What is one story from your life that always makes people laugh?"],"Sam","Swahili beginner"],["Charlie Mitchell","male","USA","4.4","bot_charlie_mitchell.jpg",["Hey 😄 What is happening on your side?","What is your favourite way to spend a free evening?","Do you follow football or another sport?","Who is your favourite team or player?","What food would you order without even checking the menu?","Do you enjoy cooking or are you better at finding good places to eat? 😂"],"Charlie","Swahili beginner"],["Ethan Walsh","male","USA","4.6","bot_ethan_walsh.jpg",["Hey 👋 How's your day been?","What do you usually get up to when you're not working?","I like that. People always surprise me with what they enjoy.","Is there a place you've been wanting to visit for a while?","If you had a completely free weekend, what would you do?","What's one thing you've been thinking about lately?"],"Ethan","Swahili beginner"],["Liam Foster","male","UK","4.5","bot_liam_foster.jpg",["Hey there 😊 what's keeping you busy today?","Are you more of a morning person or a night owl?","I find that says a lot about someone.","What kind of music do you have on repeat lately?","If money weren't a concern, what would you spend your time doing?","What's something small that always cheers you up?"],"Liam","Swahili beginner"],["Noah Sinclair","male","Canada","4.8","bot_noah_sinclair.jpg",["Hey 😊 how's everything going?","What do you do when you need to recharge?","I feel like rest is underrated these days.","Do you prefer quiet nights in or going out with friends?","What's a hobby you've picked up recently?","What's something you're really proud of, even if it seems small?"],"Noah","Swahili beginner"],["Caleb Rhodes","male","USA","4.4","bot_caleb_rhodes.jpg",["Hey 👋 what's up?","Got any plans for the week?","Nice. I like hearing what people are into.","Do you follow any sports, or not really your thing?","What kind of food could you eat any day?","What's the best thing that happened to you this week?"],"Caleb","Swahili beginner"],["Mason Clarke","male","UK","4.7","bot_mason_clarke.jpg",["Hey 😊 how's your day treating you?","What's something you've been working on lately?","That sounds interesting. What's the hardest part?","Do you like being busy or do you prefer calmer days?","If you could learn one skill instantly, what would it be?","What's one thing you'd like to change about your routine?"],"Mason","Swahili beginner"],["Taylor Parker","female","UK","4.9","bot_taylor_parker.jpg",["Hi 😊 What kind of day are you having?","What usually makes you feel comfortable with someone new?","I think being able to laugh together helps a lot.","What is your favourite kind of conversation?","Would you rather spend a weekend near the ocean or somewhere quiet inland?","If you could travel anywhere tomorrow, where would you go?"],"Taylor","Swahili beginner"],["Riley Price","female","USA","4.6","bot_riley_price.jpg",["Hello 😊 How are things on your side today?","Are you a morning person or do you become more energetic at night?","What is the first thing you usually do when you get home?","What kind of food do you never get tired of?","Do you cook often or prefer someone else to handle the kitchen?","What Kenyan place would you happily visit again?"],"Riley","Swahili beginner"],["Casey Collins","female","Canada","4.7","bot_casey_collins.jpg",["Hey 😊 What has made you smile today?","What kind of things do you enjoy talking about with new people?","Are you more interested in music, movies, food, travel, or random stories?","What song have you played more than once recently?","Do you have a favourite place to relax?","What would your ideal Saturday look like?"],"Casey","Swahili beginner"],["Jamie Grant","female","UK","4.5","bot_jamie_grant.jpg",["Hey there 😊 What are you up to today?","What kind of personality do you normally click with?","Are you naturally talkative or quiet until you know someone?","What kind of music would you play on a road trip?","If you could take a road trip tomorrow, where would you go?","What snack would definitely come along for the ride? 😂"],"Jamie","Swahili beginner"],["Avery Hayes","female","USA","4.8","bot_avery_hayes.jpg",["Hey, how are you doing?","What is keeping you busy these days?","Do you enjoy your work, or is it mainly something that pays the bills?","What kind of career would you choose if money was not a concern?","What skill do you think everyone should learn?","Are you interested in technology or do you prefer keeping things simple?"],"Avery","Swahili beginner"],["Olivia Stone","female","Canada","4.9","bot_olivia_stone.jpg",["Hi 😊 how are you feeling today?","What's been on your mind this week?","I love that. Sometimes the simple things stick with us.","What do you do to unwind after a long day?","Is there a song that always lifts your mood?","What's something kind someone has done for you recently?"],"Olivia","Swahili beginner"],["Emma Hart","female","USA","4.7","bot_emma_hart.jpg",["Hey 😊 what's going on with you today?","Are you into movies, music, or something else entirely?","I like a good mix — depends on the mood.","What's the last thing that made you laugh out loud?","Do you enjoy cooking, or is that not really your thing?","What's one goal you're working toward right now?"],"Emma","Swahili beginner"],["Sophie Lane","female","UK","4.6","bot_sophie_lane.jpg",["Hi 👋 how's your week going?","Are you close with your family, or more independent?","Both are valid — depends on the people, I think.","What do you value most in a friendship?","Do you like travelling, or are you more of a homebody?","What's something you'd love to try if you had the chance?"],"Sophie","Swahili beginner"],["Chloe Vance","female","Canada","4.8","bot_chloe_vance.jpg",["Hey there 😊 how are you doing?","What's something you've been curious about lately?","I love that. Curiosity keeps life interesting.","Do you prefer deep conversations or lighter ones?","What's one thing you wish people asked you more often?","What's a memory that always makes you smile?"],"Chloe","Swahili beginner"],["Mia Winters","female","USA","4.5","bot_mia_winters.jpg",["Hi 😊 what have you been up to?","Are you a planner or do you go with the flow?","I feel like each has its place, honestly.","What's your favourite way to spend a quiet evening?","Do you have a favourite place in the world?","What's one thing you'd like to be better at?"],"Mia","Swahili beginner"]];
 function orderedBots(){
  const key='cm_bot_order_'+(state.uid||'guest');
@@ -629,13 +657,11 @@ let fakeInterval = null;
 let deferredPrompt = null;
 let waitingForPrompt = false;
 
-// Exact PWA detection from ZambiaCash
 const _ua = navigator.userAgent || '';
 const _isAndroid = /Android/i.test(_ua);
 const _isIOS = /iPhone|iPad|iPod/i.test(_ua);
 const _isChromeBrowser = /Chrome\/\d+/i.test(_ua) && !/Edg|OPR|SamsungBrowser|Firefox/i.test(_ua);
 const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-const _cameFromIntent = new URLSearchParams(location.search).get('_pwa') === '1' || new URLSearchParams(location.search).get('source') === 'pwa';
 const _wasInstalled = localStorage.getItem('pwa_installed') === '1';
 
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -760,26 +786,17 @@ function updateProgressUI(progress) {
     if(pct) pct.innerText = Math.floor(progress) + "% of 10 MB";
 }
 
-// ZambiaCash open logic
-document.getElementById('btn-open-app').addEventListener('click', async ()=>{
-    // 1. Check if the PWA is actually installed on Android
-    if (_isAndroid && 'getInstalledRelatedApps' in navigator) {
-        try {
-            const apps = await navigator.getInstalledRelatedApps();
-            const pwa = apps.find(a => a.platform === 'webapp');
-            
-            if (pwa) {
-                // App is installed! Redirect to trigger the native standalone launch
-                window.location.href = './index.html?source=pwa';
-                return; 
-            }
-        } catch (e) {
-            console.log("Check failed", e);
-        }
+// Open button shows prompt and dynamically uses the referrer's code if present
+document.getElementById('btn-open-app').addEventListener('click', () => {
+    const promoText = document.getElementById('installed-promo-text');
+    
+    // If the user arrived via a referral link, show the actual code
+    if (state.ref) {
+        promoText.innerText = `Your referral code: ${state.ref}`;
+    } else {
+        promoText.innerText = `Use promo code: CHAT2026`;
     }
 
-    // 2. Fallback: App is NOT installed (or user is on iPhone).
-    // Show the mock prompt instead of navigating.
     const prompt = document.getElementById('installed-prompt');
     prompt.classList.remove('hide');
     
@@ -794,34 +811,14 @@ document.getElementById('btn-open-app').addEventListener('click', async ()=>{
         setTimeout(() => {
             prompt.classList.add('hide');
         }, 300);
-    }, 10000);
+    }, 8000); // Show prompt for 8 seconds
 });
-
-// ZambiaCash splash screen logic
-function showAppInline(){
-    playStoreGate.classList.add('hide');
-    
-    splashScreen.classList.remove('hide');
-    splashScreen.style.opacity = '1';
-    
-    setTimeout(() => {
-        splashScreen.style.opacity = '0';
-        setTimeout(() => {
-            splashScreen.classList.add('hide');
-            appContent.classList.remove('hide');
-            proceedToAppBoot();
-        }, 400);
-    }, 1500);
-}
 
 // Exact boot sequence matching ZambiaCash
 if (isStandalone) {
     playStoreGate.classList.add('hide');
     appContent.classList.remove('hide');
     proceedToAppBoot();
-} else if (_cameFromIntent) {
-    playStoreGate.classList.add('hide');
-    showAppInline();
 } else if (_wasInstalled) {
     playStoreGate.classList.add('hide');
     appContent.classList.remove('hide');
@@ -832,11 +829,14 @@ if (isStandalone) {
 }
 
 async function proceedToAppBoot(){
-    if(_cameFromIntent) history.replaceState({}, '', window.location.pathname);
     if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(e=>console.warn('Service worker unavailable:',e));
+    
+    // Ensure URL referrer overrides localStorage if it exists on initial load
     if(new URLSearchParams(location.search).get('ref')){
-        state.ref=new URLSearchParams(location.search).get('ref').trim().toUpperCase();localStorage.setItem('cm_ref',state.ref)
+        state.ref=new URLSearchParams(location.search).get('ref').trim().toUpperCase();
+        localStorage.setItem('cm_ref',state.ref);
     }
+    
     if(state.token&&state.uid){
         try{await loadProfile()}catch(e){state.profile=null;console.warn('Profile refresh failed; keeping signed-in session:',e)}
         renderHome();
