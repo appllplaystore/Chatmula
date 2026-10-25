@@ -2,9 +2,7 @@
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <script>
-  /* If launched from the home-screen icon (standalone), go straight to the actual app.
-     Covers iOS (where manifest start_url is ignored) and any install whose launch
-     page is index.html. Browser visits still see the Play Store page. */
+  /* If launched from the home-screen icon (standalone), go straight to the actual app. */
   (function(){
     try {
       var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
@@ -21,17 +19,32 @@
 <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Roboto','Arial','sans-serif']},colors:{playBlue:'#0056D2',playGreen:'#01875f'},boxShadow:{soft:'0 10px 40px -10px rgba(0,0,0,.08)'}}}}</script>
 <style>.hide{display:none!important}body{font-family:Roboto,Arial,sans-serif}.hide-scrollbar::-webkit-scrollbar{display:none}#download-ring{transition:stroke-dashoffset .12s linear}button:disabled{opacity:.55;cursor:default}.review-avatar{width:56px;height:56px;flex:0 0 56px;border-radius:50%;overflow:hidden;background:#eef2f7;display:flex;align-items:center;justify-content:center}.review-avatar img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}.review-entry{padding-bottom:2px}.native-toast{animation:toastIn .25s ease-out}@keyframes toastIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}.rate-star{background:transparent;border:0;font-size:1.875rem;line-height:1;padding:4px 8px;cursor:pointer;transition:color .15s ease,transform .12s ease,filter .12s ease;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;-webkit-user-select:none}.rate-star:hover{transform:scale(1.12)}.rate-star:active{transform:scale(.94)}.rate-star:focus-visible{outline:2px solid #0056D2;outline-offset:3px;border-radius:8px}</style>
 
-<!-- EARLY INSTALL READINESS: capture Chrome's install prompt before the body parses,
-     and register the service worker so the app becomes installable immediately. -->
+<!-- EARLY INSTALL READINESS -->
 <script>
   window.__cmDeferredPrompt = null;
   window.addEventListener('beforeinstallprompt', function (e) {
     e.preventDefault();
     window.__cmDeferredPrompt = e;
+    console.log('[ChatMula] beforeinstallprompt fired');
     try { window.dispatchEvent(new Event('cm-install-ready')); } catch (_) {}
   });
+
   if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-    navigator.serviceWorker.register('./sw.js').catch(function (e) {
+    navigator.serviceWorker.register('./sw.js').then(function(reg){
+      navigator.serviceWorker.ready.then(function(){
+        // First visit: SW is now active but not controlling this page yet.
+        // Reload once so install prompt criteria are met on the next load.
+        if (!navigator.serviceWorker.controller) {
+          var already = false;
+          try { already = sessionStorage.getItem('cm_sw_reloaded_once') === '1'; } catch(_) {}
+          if (!already) {
+            try { sessionStorage.setItem('cm_sw_reloaded_once', '1'); } catch(_) {}
+            console.log('[ChatMula] Reloading once so SW takes control (enables install prompt)');
+            setTimeout(function(){ location.reload(); }, 350);
+          }
+        }
+      });
+    }).catch(function (e) {
       console.warn('ChatMula service worker registration failed:', e);
     });
   }
@@ -100,7 +113,6 @@
     <button type="button" class="rate-star text-3xl text-gray-300" data-value="5" aria-label="5 stars" aria-checked="false" role="radio">☆</button>
   </div>
   <p id="rate-live-label" class="text-xs text-gray-500 mt-2 text-center" aria-live="polite"></p>
-
   <div id="rating-box" class="hide mt-5 bg-slate-50 border border-gray-200 rounded-xl p-5">
     <p id="rating-box-label" class="text-sm font-semibold text-gray-900 mb-1">You rated ChatMula 5 stars</p>
     <p class="text-xs text-gray-500 mb-3">Tell others what you think (optional)</p>
@@ -297,8 +309,26 @@
  }
 
  function requestPrompt(){
-   if(!deferredPrompt){waitingForPrompt=true;return;}
+   if(!deferredPrompt){
+     waitingForPrompt=true;
+     // Give Chrome up to 5s to fire beforeinstallprompt if SW is controlling but prompt is late.
+     clearTimeout(promptTimeout);
+     promptTimeout=setTimeout(()=>{
+       if(waitingForPrompt && !actuallyInstalled){
+         waitingForPrompt=false;
+         if(downloading.classList.contains('hide')){
+           // Not in download flow → just toast
+           say('Install prompt not ready yet. Tap Install again, or use Chrome ⋮ → Install app.');
+         } else {
+           // Download running → don't interrupt; toast a hint
+           say('If the prompt does not appear, use Chrome menu ⋮ → Install app.');
+         }
+       }
+     },5000);
+     return;
+   }
    const ev=deferredPrompt;deferredPrompt=null;window.__cmDeferredPrompt=null;waitingForPrompt=false;
+   clearTimeout(promptTimeout);
    try{
      ev.prompt();
      ev.userChoice.then(choice=>{
@@ -308,6 +338,36 @@
        }
      }).catch(()=>showInstallState('Installation cancelled. Tap Install to try again.'));
    }catch(e){showInstallState('Installation could not start. Tap Install to try again.')}
+ }
+
+ function showInstallFallback(){
+   let layer=document.getElementById('install-fallback-layer');
+   if(layer) return;
+   layer=document.createElement('div');
+   layer.id='install-fallback-layer';
+   layer.className='fixed inset-0 z-[10002] bg-black/70 flex items-center justify-center p-5';
+   layer.setAttribute('role','dialog');
+   layer.setAttribute('aria-modal','true');
+   layer.innerHTML=`
+     <div class="bg-[#1e1e1e] rounded-2xl p-5 w-full max-w-sm shadow-2xl border border-gray-700 text-white relative">
+       <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
+       <h2 class="text-lg font-bold mb-3">Install ChatMula</h2>
+       <p class="text-sm text-gray-300 mb-3">Chrome hasn't shown the install dialog yet. Try one of these:</p>
+       <ol class="text-sm text-gray-300 space-y-2 mb-4 list-decimal list-inside">
+         <li><strong>Refresh this page</strong> and tap Install again.</li>
+         <li>Or open Chrome's menu <strong>(⋮)</strong> and tap <strong>Install app</strong>.</li>
+       </ol>
+       <div class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-3 mb-4 text-center">
+         <p class="text-yellow-400 font-extrabold text-sm">Your referral code: ${referralCode()}</p>
+       </div>
+       <button id="fallback-refresh" class="w-full bg-playBlue text-white font-bold py-3 rounded-xl mb-2">Refresh page</button>
+       <button id="fallback-close" class="w-full bg-transparent text-gray-400 text-sm font-semibold py-2">Close</button>
+     </div>
+   `;
+   document.body.appendChild(layer);
+   layer.querySelector('#fallback-refresh').onclick=()=>location.reload();
+   layer.querySelector('#fallback-close').onclick=()=>layer.remove();
+   layer.addEventListener('click',e=>{ if(e.target===layer) layer.remove(); });
  }
 
  function showIosInstallInstructions(){
@@ -349,6 +409,15 @@
    if(standalone()){ showInstalledState(); return; }
    if(actuallyInstalled || localStorage.getItem('pwa_installed')==='1'){ showInstalledState(); return; }
    if(isIOSSafari){ showIosInstallInstructions(); return; }
+
+   // Pre-flight: if the page isn't yet controlled by the SW AND no prompt exists,
+   // the browser won't be able to install right now. Offer reload.
+   const swControlling = !!(navigator.serviceWorker && navigator.serviceWorker.controller);
+   if(!deferredPrompt && !swControlling){
+     showInstallFallback();
+     return;
+   }
+
    startProgress();
    requestPrompt();
  });
@@ -374,11 +443,12 @@
    modal.addEventListener('click',e=>{if(e.target===modal){clearTimeout(showInstalledPromptModal._t);modal.classList.add('hide')}});
  })();
 
- window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;window.__cmDeferredPrompt=e;if(waitingForPrompt)requestPrompt()});
+ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;window.__cmDeferredPrompt=e;console.log('[ChatMula] beforeinstallprompt (main)');if(waitingForPrompt)requestPrompt()});
  window.addEventListener('appinstalled',()=>{
    actuallyInstalled=true;
    localStorage.setItem('pwa_installed','1');
    window.__cmDeferredPrompt=null;
+   console.log('[ChatMula] appinstalled');
    if(progressTimer) return;
    showInstalledState();
    say('The browser confirmed that ChatMula was installed.');
