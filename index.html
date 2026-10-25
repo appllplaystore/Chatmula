@@ -1,11 +1,28 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<script>
+  /* If launched from the home-screen icon (standalone), go straight to the actual app.
+     Covers iOS (where manifest start_url is ignored) and any install whose launch
+     page is index.html. Browser visits still see the Play Store page. */
+  (function(){
+    try {
+      var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
+                    || window.navigator.standalone === true;
+      var onApp = /\/app\.html$/i.test(location.pathname);
+      if (standalone && !onApp) {
+        location.replace('./app.html' + location.search + location.hash);
+      }
+    } catch(e) {}
+  })();
+</script>
 <title>ChatMula</title><meta name="theme-color" content="#0056D2"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png" type="image/png">
 <script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Roboto','Arial','sans-serif']},colors:{playBlue:'#0056D2',playGreen:'#01875f'},boxShadow:{soft:'0 10px 40px -10px rgba(0,0,0,.08)'}}}}</script>
 <style>.hide{display:none!important}body{font-family:Roboto,Arial,sans-serif}.hide-scrollbar::-webkit-scrollbar{display:none}#download-ring{transition:stroke-dashoffset .12s linear}button:disabled{opacity:.55;cursor:default}.review-avatar{width:56px;height:56px;flex:0 0 56px;border-radius:50%;overflow:hidden;background:#eef2f7;display:flex;align-items:center;justify-content:center}.review-avatar img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}.review-entry{padding-bottom:2px}.native-toast{animation:toastIn .25s ease-out}@keyframes toastIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}.rate-star{background:transparent;border:0;font-size:1.875rem;line-height:1;padding:4px 8px;cursor:pointer;transition:color .15s ease,transform .12s ease,filter .12s ease;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;-webkit-user-select:none}.rate-star:hover{transform:scale(1.12)}.rate-star:active{transform:scale(.94)}.rate-star:focus-visible{outline:2px solid #0056D2;outline-offset:3px;border-radius:8px}</style>
 
+<!-- EARLY INSTALL READINESS: capture Chrome's install prompt before the body parses,
+     and register the service worker so the app becomes installable immediately. -->
 <script>
   window.__cmDeferredPrompt = null;
   window.addEventListener('beforeinstallprompt', function (e) {
@@ -145,22 +162,17 @@
  const isAndroid=/Android/i.test(ua);
  const isIOS=/iPhone|iPad|iPod/i.test(ua);
 
- // In-app / embedded browsers (cannot trigger PWA install)
  const inAppRegex = /FBAN|FBAV|FB4A|FB_IAB|Instagram|musical_ly|BytedanceWebview|TikTok|Line|Snapchat|LinkedIn|Pinterest|WhatsApp|Telegram|GSA|Twitter|Discord|Reddit|Slack|Messenger|Viber|WeChat|MicroMessenger|QQ\/|QQBrowser|Baidu|baiduboxapp|Weibo|KAKAOTALK|NAVER|KakaoTalk/i;
 
  const isAndroidInApp   = isAndroid && (inAppRegex.test(ua) || /; wv\)/i.test(ua));
- // Safari on iOS is the ONLY browser that can Add to Home Screen.
- // Any other iOS browser (Chrome, Firefox, Edge, Opera) is a WebKit wrapper.
  const isIOSSafari      = isIOS && /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|MXiOS|DuckDuckGo/i.test(ua);
  const isIOSNonSafariBr = isIOS && !isIOSSafari && /CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|MXiOS|DuckDuckGo/i.test(ua);
  const isIOSInApp       = isIOS && !isIOSSafari && !isIOSNonSafariBr;
 
- // What kind of warning is needed?
  const needsOpenInChrome = isAndroidInApp && !standalone();
  const needsOpenInSafari = (isIOSInApp || isIOSNonSafariBr) && !standalone();
  const needsBrowserSwitch = needsOpenInChrome || needsOpenInSafari;
 
- // --- Configure warning overlay based on platform -------------------------
  function configureBrowserWarning(){
    if(!needsBrowserSwitch) return;
    const title=$('browser-warning-title'), desc=$('browser-warning-desc'), openBtnWarn=$('open-in-chrome');
@@ -177,15 +189,12 @@
    const mainEl=document.querySelector('main'); if(mainEl) mainEl.classList.add('hide');
  }
 
- // --- Open in correct browser ---------------------------------------------
  function openInChrome(){
-   // Android → intent:// to Chrome
    if(isAndroid){
      const url=new URL(window.location.href);
      window.location.href='intent://'+url.host+url.pathname+url.search+url.hash+'#Intent;scheme=https;package=com.android.chrome;end';
      return;
    }
-   // iOS → x-safari-https:// scheme opens Safari
    if(isIOS){
      window.location.href=window.location.href.replace(/^https?:\/\//,'x-safari-https://');
      return;
@@ -214,12 +223,10 @@
  $('open-in-chrome').addEventListener('click',openInChrome);
  $('copy-link-help').addEventListener('click',copyLinkAndShowHelp);
 
- // Show warning if needed BEFORE any other UI runs
  configureBrowserWarning();
 
  function say(msg){toast.textContent=msg;toast.classList.remove('hide');toast.classList.add('native-toast');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.add('hide'),5000)}
 
- // --- Play-Store-style progress -------------------------------------------
  function progressUI(n){
    const MB=10, currentMB=(n/100*MB).toFixed(1);
    $('download-ring').style.strokeDashoffset=301.59-(n/100)*301.59;
@@ -296,7 +303,6 @@
      ev.prompt();
      ev.userChoice.then(choice=>{
        if(choice&&choice.outcome==='accepted'){
-         // Chrome installs in the background; appinstalled will fire.
        } else {
          showInstallState('Installation cancelled. Tap Install to try again.');
        }
@@ -304,7 +310,6 @@
    }catch(e){showInstallState('Installation could not start. Tap Install to try again.')}
  }
 
- // --- iOS Safari: Add to Home Screen instructions -------------------------
  function showIosInstallInstructions(){
    let layer=document.getElementById('ios-install-layer');
    if(layer) return;
@@ -340,20 +345,16 @@
    layer.addEventListener('click',e=>{ if(e.target===layer) layer.remove(); });
  }
 
- // --- Install button behaviour per platform ------------------------------
  installBtn.addEventListener('click',()=>{
    if(standalone()){ showInstalledState(); return; }
    if(actuallyInstalled || localStorage.getItem('pwa_installed')==='1'){ showInstalledState(); return; }
-   // iOS Safari: cannot install via Chrome prompt — show Add to Home Screen guide
    if(isIOSSafari){ showIosInstallInstructions(); return; }
-   // Anywhere else (Android/desktop): Play Store-style download + native prompt
    startProgress();
    requestPrompt();
  });
 
  $('btn-cancel-install').addEventListener('click',()=>showInstallState());
 
- // --- Open button --------------------------------------------------------
  function showInstalledPromptModal(){
    updateRefDisplays();
    const modal=$('installed-modal');
@@ -391,7 +392,6 @@
  $('more-btn').addEventListener('click',()=>say('ChatMula app details'));
  $('btn-see-all').addEventListener('click',()=>{const hidden=[...document.querySelectorAll('.review-entry.hide')],b=$('btn-see-all');if(hidden.length){hidden.forEach(el=>el.classList.remove('hide'));b.textContent='Show less'}else{document.querySelectorAll('.review-entry').forEach((el,i)=>{if(i>=4)el.classList.add('hide')});b.textContent='See all 12,432 reviews'}});
 
- // --- Live rating stars + rating box -------------------------------------
  (function initRating(){
    const stars = Array.from(document.querySelectorAll('.rate-star'));
    if (!stars.length) return;
