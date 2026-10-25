@@ -188,8 +188,8 @@ function renderWaiting(id,kind){state.page='waiting';shell(`<section class="hero
     }
   },{passive:true});
   // Native-like toast feedback when network state changes; actual backend checks still govern chat entry.
-  window.addEventListener('offline',()=>{if(typeof toast==='function')toast('You are offline. Reconnect to use ChatMula chat and booking.')});
-  window.addEventListener('online',()=>{if(typeof toast==='function')toast('Internet connection restored. Checking ChatMula access…')});
+  window.addEventListener('offline',()=>{if(typeof showConnectionBanner==='function')showConnectionBanner()});
+  window.addEventListener('online',()=>{if(typeof showConnectionBanner==='function')showConnectionBanner('Internet is back. ChatMula will check the connection when you try to chat.',true)});
   // Keep the active screen visible above the Android keyboard without forcing a layout jump.
   if(window.visualViewport){window.visualViewport.addEventListener('resize',()=>{const active=document.activeElement;if(active&&/INPUT|TEXTAREA/.test(active.tagName)){setTimeout(()=>{try{active.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(_){ }},60)}})}
 })();
