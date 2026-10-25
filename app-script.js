@@ -170,6 +170,30 @@ async function renderActivation(){
  };
 }
 function renderWaiting(id,kind){state.page='waiting';shell(`<section class="hero"><h1>Verifying payment</h1><p>Complete the M-Pesa prompt on your phone. This page will check the payment status.</p></section><section class="card"><div class="notice">Keep this page open. Verification runs every 5 seconds.</div><div id="waitingStatus" class="notice">Waiting for payment confirmation…</div><button class="btn secondary full" id="checkNow">Check status now</button><button class="btn ghost full" id="cancelWait" style="margin-top:8px">Return to bots</button></section>`,'chat');$('#cancelWait').onclick=()=>{clearTimeout(state.pollTimer);renderHome()};const check=async()=>{try{const path=kind==='activation'?'/functions/v1/check-activation?id=':'/functions/v1/check-signup?id=';const d=await req(path+encodeURIComponent(id),{token:KEY});const status=String(d.status||'').toUpperCase();if(status==='COMPLETED'){clearTimeout(state.pollTimer);$('#waitingStatus').className='notice success';$('#waitingStatus').textContent='Payment confirmed. Updating your account…';await loadProfile();toast('Payment confirmed.');renderHome();return}if(status==='FAILED'){clearTimeout(state.pollTimer);$('#waitingStatus').className='notice error';$('#waitingStatus').textContent='Payment was not completed. Return to activation and try again.';return}$('#waitingStatus').textContent='Status: '+(status||'PENDING')+'. Waiting for confirmation…'}catch(ex){$('#waitingStatus').textContent=ex.message}state.pollTimer=setTimeout(check,5000)};$('#checkNow').onclick=()=>{clearTimeout(state.pollTimer);check()};check()}
+
+/* V15 native interaction layer: Android-like ripple/haptics and connection feedback. */
+(function installNativeInteractionLayer(){
+  if(window.__chatmulaNativeLayerInstalled)return;window.__chatmulaNativeLayerInstalled=true;
+  const canVibrate=()=>!!(navigator.vibrate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  document.addEventListener('pointerdown',function(ev){
+    const target=ev.target&&ev.target.closest&&ev.target.closest('button,.btn,.book-btn,.nav button,.item,[role="button"]');
+    if(!target||target.disabled||target.getAttribute('aria-disabled')==='true')return;
+    if(canVibrate() && ev.pointerType==='touch') { try{navigator.vibrate(8)}catch(_){ } }
+    if(ev.pointerType==='touch' && target.matches('button,.btn,.book-btn,.nav button,[role="button"]')){
+      const rect=target.getBoundingClientRect();const size=Math.max(rect.width,rect.height)*1.65;
+      const ripple=document.createElement('span');ripple.className='ripple';ripple.style.width=size+'px';ripple.style.height=size+'px';
+      ripple.style.left=(ev.clientX-rect.left-size/2)+'px';ripple.style.top=(ev.clientY-rect.top-size/2)+'px';
+      target.querySelectorAll(':scope > .ripple').forEach(n=>n.remove());target.appendChild(ripple);
+      ripple.addEventListener('animationend',()=>ripple.remove(),{once:true});
+    }
+  },{passive:true});
+  // Native-like toast feedback when network state changes; actual backend checks still govern chat entry.
+  window.addEventListener('offline',()=>{if(typeof toast==='function')toast('You are offline. Reconnect to use ChatMula chat and booking.')});
+  window.addEventListener('online',()=>{if(typeof toast==='function')toast('Internet connection restored. Checking ChatMula access…')});
+  // Keep the active screen visible above the Android keyboard without forcing a layout jump.
+  if(window.visualViewport){window.visualViewport.addEventListener('resize',()=>{const active=document.activeElement;if(active&&/INPUT|TEXTAREA/.test(active.tagName)){setTimeout(()=>{try{active.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(_){ }},60)}})}
+})();
+
 async function boot(){if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(e=>console.warn('Service worker unavailable:',e));if(new URLSearchParams(location.search).get('ref')){state.ref=new URLSearchParams(location.search).get('ref').trim().toUpperCase();localStorage.setItem('cm_ref',state.ref)}if(state.token&&state.uid){try{await loadProfile()}catch(e){state.profile=null;console.warn('Profile refresh failed; keeping signed-in session:',e)}renderHome();if(!state.profile)toast('Chatbots are shown, but account details could not load.');return}renderAuth()}
 // GitHub Pages project URLs sometimes open without the final slash. In that case,
 // relative root-level bot images resolve outside the repository. Normalize first.
