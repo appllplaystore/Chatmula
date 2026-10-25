@@ -122,7 +122,53 @@ function botReplyFor(turn,name){
  // Stable per-bot shuffle, then select the same turn position as the Android script.
  let seed=0;for(const ch of String(name))seed=(seed*31+ch.charCodeAt(0))|0;const shuffled=pool.slice();for(let i=shuffled.length-1;i>0;i--){seed=(Math.imul(seed,1664525)+1013904223)|0;const j=(seed>>>0)%(i+1);[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}return shuffled[Math.max(0,Math.min(shuffled.length-1,turn-2) )];
 }
-async function renderActivation(){state.page='activate';let settings=[];try{settings=await req('/rest/v1/site_settings?select=*&id=eq.main',{token:KEY})}catch{}const fee=Number(settings?.[0]?.activation_fee||100);shell(`<section class="hero"><h1>Activate ChatMula</h1><p>Complete your one-time M-Pesa activation to unlock chat and earnings.</p></section><section class="card"><div class="stat"><strong>${fmt(fee)}</strong><span>Activation fee</span></div><div class="notice">Enter the M-Pesa number that should receive the STK Push prompt. Keep this page open while payment is verified.</div><div id="activationError" class="notice error hidden"></div><form id="activationForm"><div class="field"><label>M-Pesa phone number</label><input id="activationPhone" inputmode="tel" placeholder="0712345678" required></div><button class="btn full">Pay with M-Pesa</button></form><button class="btn secondary full" id="activationBack" style="margin-top:8px">Back to bots</button></section>`,'chat');$('#activationBack').onclick=()=>renderHome();$('#activationForm').onsubmit=async e=>{e.preventDefault();const phone=normalizePhone($('#activationPhone').value),btn=e.submitter,err=$('#activationError');if(!phone){err.textContent='Enter a valid M-Pesa number.';err.classList.remove('hidden');return}btn.disabled=true;err.classList.add('hidden');try{const d=await req('/functions/v1/activate',{method:'POST',body:{phone}});if(d.alreadyActivated){await loadProfile();toast('Your account is already activated.');renderHome();return}if(!d.pendingId)throw Error(d.message||d.error||'The server did not return a payment reference.');state.pendingId=d.pendingId;state.pendingKind='activation';renderWaiting(d.pendingId,'activation')}catch(ex){err.textContent=ex.message;err.classList.remove('hidden')}finally{btn.disabled=false}}}
+async function renderActivation(){
+ state.page='activate';
+ let settings=[];
+ try{settings=await req('/rest/v1/site_settings?select=*&id=eq.main',{token:KEY})}catch{}
+ const fee=Number(settings?.[0]?.activation_fee||100);
+ const promos=[
+  ['James Maina  ·  07***541  ·  KSh 1,250','#00E5FF','#102A43'],
+  ['Amina Wanjiru  ·  07***284  ·  KSh 780','#FF80AB','#35162F'],
+  ['Brian Otieno  ·  07***693  ·  KSh 1,850','#80CBC4','#12352F'],
+  ['Faith Njeri  ·  07***175  ·  KSh 640','#FFD180','#3B2A14'],
+  ['Kevin Kiptoo  ·  07***826  ·  KSh 1,100','#B39DDB','#281D42'],
+  ['Mary Atieno  ·  07***430  ·  KSh 950','#80D8FF','#102E43'],
+  ['Daniel Mwangi  ·  07***918  ·  KSh 1,600','#A5D6A7','#173321'],
+  ['Grace Chebet  ·  07***362  ·  KSh 720','#F48FB1','#3B1829'],
+  ['Samuel Kamau  ·  07***704  ·  KSh 2,000','#FFE082','#3B3015'],
+  ['Mercy Achieng  ·  07***251  ·  KSh 680','#80CBC4','#12352F'],
+  ['Peter Mutua  ·  07***687  ·  KSh 1,400','#CE93D8','#321C3A'],
+  ['Esther Wambui  ·  07***143  ·  KSh 890','#90CAF9','#152C43']
+ ];
+ const taglines=['Teach foreigners Swahili and earn','Earn KSh 500+ per conversation','Turn your Swahili into real income','Chat with learners worldwide','Get paid for what you already know'];
+ const profile=state.profile||{};
+ const username=esc(state.username||profile.username||'—');
+ const email=esc(state.email||profile.email||'—');
+ const savedPhone=profile.phone||profile.phone_number||profile.mpesa_phone||localStorage.getItem('cm_phone')||'';
+ app.innerHTML=`<main class="activation-screen">
+  <section class="activation-hero" id="activationHero"><span class="activation-live">● LIVE</span><h1>Activate your ChatMula account</h1><p id="activationTagline">Teach foreigners Swahili and earn</p></section>
+  <section class="activation-card activation-fee"><span class="activation-label">One-time activation fee</span><strong id="activationFee">KSh ${fee.toLocaleString('en-KE',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong></section>
+  <section class="activation-card activation-account"><strong class="activation-username">Username: ${username}</strong><div class="activation-email">Email: ${email}</div><label for="activationPhone">M-Pesa number</label><input id="activationPhone" inputmode="tel" autocomplete="tel" placeholder="07XX XXX XXX" value="${esc(savedPhone)}"></section>
+  <section class="activation-card activation-earn"><span class="activation-label">Recent withdrawals</span><div class="activation-promo" id="activationPromo">James Maina  ·  07***541  ·  KSh 1,250</div></section>
+  <div id="activationError" class="activation-error hidden" role="alert"></div>
+  <button class="activation-pay" id="activationPay">Pay with M-Pesa</button>
+  <button class="activation-cancel" id="activationBack">Cancel</button>
+ </main>`;
+ let promoIndex=0,taglineIndex=0;
+ const promoEl=$('#activationPromo'),taglineEl=$('#activationTagline');
+ const promoTimer=setInterval(()=>{if(state.page!=='activate'){clearInterval(promoTimer);return}promoIndex=(promoIndex+1)%promos.length;const p=promos[promoIndex];promoEl.style.opacity='0';setTimeout(()=>{if(state.page!=='activate')return;promoEl.textContent=p[0];promoEl.style.color=p[1];promoEl.parentElement.style.background=p[2];promoEl.style.opacity='1'},180)},2600);
+ const taglineTimer=setInterval(()=>{if(state.page!=='activate'){clearInterval(taglineTimer);return}taglineIndex=(taglineIndex+1)%taglines.length;taglineEl.style.opacity='0';setTimeout(()=>{if(state.page!=='activate')return;taglineEl.textContent=taglines[taglineIndex];taglineEl.style.opacity='1'},220)},2400);
+ $('#activationBack').onclick=()=>{clearInterval(promoTimer);clearInterval(taglineTimer);renderHome()};
+ $('#activationPay').onclick=async()=>{
+  const phone=normalizePhone($('#activationPhone').value),btn=$('#activationPay'),err=$('#activationError');
+  if(!phone){err.textContent='Enter a valid M-Pesa number, e.g. 0712345678.';err.classList.remove('hidden');return}
+  localStorage.setItem('cm_phone',$('#activationPhone').value.trim());btn.disabled=true;btn.textContent='Sending prompt…';err.classList.add('hidden');
+  try{const d=await req('/functions/v1/activate',{method:'POST',body:{phone}});if(d.alreadyActivated){await loadProfile();toast('Your account is already activated.');clearInterval(promoTimer);clearInterval(taglineTimer);renderHome();return}if(!d.pendingId)throw Error(d.message||d.error||'The server did not return a payment reference.');state.pendingId=d.pendingId;state.pendingKind='activation';clearInterval(promoTimer);clearInterval(taglineTimer);renderWaiting(d.pendingId,'activation')}
+  catch(ex){err.textContent=ex.message;err.classList.remove('hidden')}
+  finally{if($('#activationPay')){btn.disabled=false;btn.textContent='Pay with M-Pesa'}}
+ };
+}
 function renderWaiting(id,kind){state.page='waiting';shell(`<section class="hero"><h1>Verifying payment</h1><p>Complete the M-Pesa prompt on your phone. This page will check the payment status.</p></section><section class="card"><div class="notice">Keep this page open. Verification runs every 5 seconds.</div><div id="waitingStatus" class="notice">Waiting for payment confirmation…</div><button class="btn secondary full" id="checkNow">Check status now</button><button class="btn ghost full" id="cancelWait" style="margin-top:8px">Return to bots</button></section>`,'chat');$('#cancelWait').onclick=()=>{clearTimeout(state.pollTimer);renderHome()};const check=async()=>{try{const path=kind==='activation'?'/functions/v1/check-activation?id=':'/functions/v1/check-signup?id=';const d=await req(path+encodeURIComponent(id),{token:KEY});const status=String(d.status||'').toUpperCase();if(status==='COMPLETED'){clearTimeout(state.pollTimer);$('#waitingStatus').className='notice success';$('#waitingStatus').textContent='Payment confirmed. Updating your account…';await loadProfile();toast('Payment confirmed.');renderHome();return}if(status==='FAILED'){clearTimeout(state.pollTimer);$('#waitingStatus').className='notice error';$('#waitingStatus').textContent='Payment was not completed. Return to activation and try again.';return}$('#waitingStatus').textContent='Status: '+(status||'PENDING')+'. Waiting for confirmation…'}catch(ex){$('#waitingStatus').textContent=ex.message}state.pollTimer=setTimeout(check,5000)};$('#checkNow').onclick=()=>{clearTimeout(state.pollTimer);check()};check()}
 async function boot(){if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(e=>console.warn('Service worker unavailable:',e));if(new URLSearchParams(location.search).get('ref')){state.ref=new URLSearchParams(location.search).get('ref').trim().toUpperCase();localStorage.setItem('cm_ref',state.ref)}if(state.token&&state.uid){try{await loadProfile()}catch(e){state.profile=null;console.warn('Profile refresh failed; keeping signed-in session:',e)}renderHome();if(!state.profile)toast('Chatbots are shown, but account details could not load.');return}renderAuth()}
 // GitHub Pages project URLs sometimes open without the final slash. In that case,

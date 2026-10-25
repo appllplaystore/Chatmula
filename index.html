@@ -19,6 +19,29 @@
 @media(min-width:600px){.wrap{max-width:760px}.nav{max-width:760px;left:50%;transform:translateX(-50%);border:1px solid #252D48;border-bottom:0;border-radius:12px 12px 0 0}.chats-title{padding-top:20px}}
 
 .activation-wall{position:fixed;inset:0;background:rgba(4,7,22,.78);z-index:10000;display:grid;place-items:center;padding:22px}.activation-wall .activation-dialog{width:min(100%,380px);background:#191A42;border:1px solid #394168;border-radius:16px;padding:22px;box-shadow:0 20px 70px #0008;color:#fff}.activation-wall h2{margin:0 0 12px;font-size:20px}.activation-wall p{margin:0 0 20px;color:#C5D2E8;line-height:1.5}.activation-wall .activation-actions{display:flex;justify-content:flex-end;gap:10px}
+
+/* Activation screen mirrored from Android activity_confirm.xml */
+.activation-screen{min-height:100dvh;background:#0A0F1F;padding:20px 20px calc(24px + env(safe-area-inset-bottom));color:#fff;max-width:760px;margin:0 auto;box-sizing:border-box}
+.activation-hero{background:linear-gradient(135deg,#101B4D 0%,#32145E 58%,#6A174F 100%);border:1px solid #282e50;border-radius:26px;padding:20px;margin:0 0 16px;box-sizing:border-box;animation:activationEnter .55s ease-out both}
+.activation-live{display:inline-block;background:#102A43;color:#00E5FF;border:1px solid #33566f;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;letter-spacing:.4px}
+.activation-hero h1{font-size:22px;line-height:1.25;margin:12px 0 6px;color:#fff;font-weight:800}
+.activation-hero p{font-size:14px;line-height:1.45;margin:0;color:#D1C4E9;min-height:21px;transition:opacity .28s}
+.activation-card{background:#11182D;border:1px solid #27324e;border-radius:18px;padding:18px;margin:0 0 16px;box-sizing:border-box;box-shadow:0 8px 24px #00000018}
+.activation-label{display:block;color:#9AA4BF;font-size:12px;line-height:1.4}
+.activation-fee strong{display:block;margin-top:6px;font-size:26px;line-height:1.3;font-weight:800;color:#fff}
+.activation-username{display:block;color:#fff;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.activation-email{margin-top:4px;color:#9AA4BF;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+.activation-account label{display:block;margin-top:16px;color:#9AA4BF;font-size:12px}
+.activation-account input{display:block;width:100%;box-sizing:border-box;margin-top:6px;padding:14px;border:1px solid #343d5d;border-radius:10px;background:#0D1426;color:#fff;font:inherit;outline:none;min-height:48px}
+.activation-account input::placeholder{color:#A0B0CC}.activation-account input:focus{border-color:#00E5FF;box-shadow:0 0 0 2px #00E5FF20}
+.activation-promo{margin-top:10px;padding:14px;border:1px solid #33425b;border-radius:16px;background:#102A43;color:#00E5FF;font-size:14px;line-height:1.5;font-weight:800;overflow-wrap:anywhere;transition:opacity .22s,background .22s,color .22s}
+.activation-error{margin:0 0 16px;background:#3A1414;border:1px solid #713333;color:#FFB4B4;border-radius:10px;padding:12px;font-size:14px;line-height:1.45}
+.activation-pay,.activation-cancel{display:block;width:100%;min-height:50px;border:0;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;box-sizing:border-box}
+.activation-pay{margin-top:20px;padding:16px;background:#FF4081;color:#fff;box-shadow:0 6px 18px #ff40812a}.activation-pay:disabled{opacity:.65}
+.activation-cancel{margin-top:10px;padding:12px;background:transparent;color:#00E5FF;border:1px solid transparent;font-size:14px}
+@keyframes activationEnter{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@media(min-width:520px){.activation-screen{padding-left:24px;padding-right:24px}.activation-hero{padding:24px}.activation-card{padding:20px}}
+
 </style>
 <title>Chatmula</title>
 </head>
