@@ -4,26 +4,18 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#6546e8"><meta name="description" content="ChatMula — conversations, connections and rewards.">
 <link rel="manifest" href="manifest.json"><link rel="icon" href="icon.jpg">
-<!-- Tailwind for the Play Store UI -->
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 :root{--bg:#0A0F1F;--surface:#11162B;--card:#191A42;--line:#252D48;--text:#FFFFFF;--muted:#9AA4BF;--cyan:#00E5FF;--pink:#FF4081;--purple:#28205A;--red:#FCA5A5;--green:#6EE7B7}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font:15px/1.42 Roboto,"Arial",sans-serif}body{min-height:100dvh}button,input,textarea{font:inherit}button{cursor:pointer}#app{min-height:100dvh}.splash{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);background:linear-gradient(135deg,#101B4D 0%,#32145E 58%,#6A174F 100%)}.splash img{width:78px;height:78px;border-radius:20px}.splash h1{color:var(--cyan)}
-/* Native MessagesActivity screen */
 .top{display:none}.wrap{max-width:760px;margin:0 auto;padding:0 0 calc(76px + env(safe-area-inset-bottom));min-height:calc(100dvh - 70px)}.chats-title{margin:0;padding:20px 20px 12px;background:var(--bg);font-size:24px;line-height:1.3;font-weight:700;color:#fff}.chat-list{display:flex;flex-direction:column}.item{display:flex;align-items:center;gap:14px;padding:12px 16px;min-height:80px;background:transparent;border:0;border-radius:0;border-bottom:1px solid #171e32;color:#fff}.avatar{width:56px;height:56px;flex:0 0 56px;object-fit:cover;border-radius:50%;background:#202744}.item-main{flex:1;min-width:0}.item-main strong{display:block;font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}.item-main p{display:block;margin:2px 0 0;font-size:12px;line-height:1.4;color:#9AA4BF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item-main .level{color:#7DD3FC}.item-main .country{color:#C5D2E8}.item-main .preview{font-size:13px;color:#9AA4BF}.book-btn{flex:0 0 auto;margin-left:8px;background:#ff4081;color:#fff;border:0;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;min-width:62px}.book-btn.booked{background:#28205A;color:#00E5FF;border:1px solid #49417F}.book-btn:disabled{opacity:.75}
 .nav{position:fixed;z-index:4;bottom:0;left:0;right:0;background:#11162B;border-top:1px solid #252D48;padding:4px 8px calc(4px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,1fr);gap:2px;min-height:62px}.nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:0;background:transparent;color:#9AA4BF;padding:5px 2px;font-size:12px}.nav button b{font-size:20px;line-height:1;width:24px;height:24px;display:grid;place-items:center;font-weight:400}.nav button.active{color:#00E5FF}.nav button.active b{color:#00E5FF}
 .hero{background:linear-gradient(135deg,#101B4D 0%,#32145E 58%,#6A174F 100%);color:white;padding:22px 20px;border-radius:0 0 18px 18px}.hero h1{font-size:22px;line-height:1.25;margin:0 0 8px}.hero p{margin:0;color:#C5D2E8}.card{background:#191A42;border:1px solid #282e50;border-radius:14px;padding:16px;margin:14px 12px;color:#fff}.card h2,.card h3{margin:0 0 10px;color:#fff}.muted,.small{color:#9AA4BF}.small{font-size:12px}.field{display:grid;gap:6px;margin:12px 0}.field label{font-size:13px;color:#C5D2E8;font-weight:700}.field input,.field textarea,.chatbox input{width:100%;border:1px solid #343d5d;border-radius:8px;background:#191A42;padding:14px;color:#fff;outline:none}.field input::placeholder,.chatbox input::placeholder{color:#7b879f}.field input:focus,.field textarea:focus{border-color:#00E5FF}.btn{background:#FF4081;color:white;border:0;border-radius:8px;padding:13px 16px;font-weight:700;min-height:44px}.btn:disabled{opacity:.6}.btn.secondary{background:#28205A;color:#00E5FF;border:1px solid #49417F}.btn.ghost{background:#191A42;color:#fff;border:1px solid #343d5d}.btn.danger{background:#2a0e0e;color:#fca5a5}.btn.full{width:100%}.row{display:flex;align-items:center;gap:10px}.row>*{min-width:0}.between{justify-content:space-between}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{background:#0f2740;border-radius:10px;padding:14px}.stat strong{font-size:22px;display:block;color:#fff}.stat span{font-size:12px;color:#8fa3bf}.notice{padding:12px;border-radius:8px;background:#132b42;color:#00E5FF;margin:12px 0}.notice.error{background:#2a0e0e;color:#fca5a5}.notice.success{background:#10362f;color:#6EE7B7}.messages{display:flex;flex-direction:column;gap:9px;margin:12px 0;padding:0 12px}.bubble{max-width:88%;padding:10px 13px;border-radius:14px;background:#1a2338;color:#e6edf7;overflow-wrap:anywhere}.bubble.mine{align-self:flex-end;background:#28205A;color:#fff;border-bottom-right-radius:5px}.bubble.theirs{align-self:flex-start;border-bottom-left-radius:5px}.bubble .meta{font-size:10px;color:#9AA4BF;margin-bottom:3px}.chatbox{display:flex;gap:8px;position:sticky;bottom:68px;background:#0A0F1F;padding:8px 12px}.chatbox input{flex:1;min-width:0}.empty{text-align:center;padding:26px;color:#9AA4BF}.link{color:#00E5FF;font-weight:700;text-decoration:none}.tag{display:inline-block;background:#28205A;color:#00E5FF;border-radius:99px;padding:4px 9px;font-size:11px;font-weight:800}.divider{height:1px;background:#252D48;margin:14px 0}#toast{position:fixed;z-index:10;bottom:78px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#252139;color:#fff;padding:11px 16px;border-radius:8px;max-width:90vw;box-shadow:0 8px 24px #0008;transition:.2s}#toast.show{opacity:1;transform:translate(-50%,0)}.auth{max-width:480px;margin:0 auto;padding:30px 18px;min-height:100dvh;background:linear-gradient(135deg,#101B4D 0%,#32145E 58%,#6A174F 100%)}.auth .brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px;font-weight:900;font-size:26px;color:#00E5FF}.auth .brand img{width:48px;height:48px;border-radius:14px}.auth .card{padding:22px;background:#191A42;border:1px solid #34335f;border-radius:14px}.auth h1{margin:0 0 4px;color:#fff}.foot{text-align:center;color:#9AA4BF;font-size:12px;margin:16px}.hidden{display:none!important}.list{display:flex;flex-direction:column}.typing{align-self:flex-start;color:#9AA4BF;font-size:12px;padding:4px 10px}.booked-label{font-size:11px;color:#00E5FF;font-weight:750}.item-main p{max-width:100%}
-
 .spinner{width:32px;height:32px;margin-top:48px;border:3px solid #49305f;border-top-color:#FF4081;border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 .center{text-align:center}.choice{display:flex;align-items:center;justify-content:center;padding:28px;background:linear-gradient(135deg,#101B4D 0%,#32145E 58%,#6A174F 100%)}.choice-inner{width:100%;max-width:440px}.choice h1{font-size:25px;text-align:center;color:#e6edf7;margin:0}.choice .muted{font-size:14px;margin:10px 0 32px}.choice .btn{padding:16px;min-height:52px}.choice .btn+.btn{margin-top:12px}.btn.intro{margin-top:16px!important;background:#6A174F;color:#fff}.auth-brand{text-align:center;margin:20px 0 28px}.wordmark{color:#00E5FF;font-size:26px;font-weight:900;letter-spacing:.12em}.tagline{color:#C5D2E8;font-size:13px;margin-top:4px}.login-subtitle{color:#8fa3bf;font-size:14px;margin-top:6px}.auth-form-wrap{max-width:480px;margin:0 auto}.auth-form-wrap .field input{background:#232A55;border:0;border-radius:3px;padding:16px;min-height:52px}.auth-form-wrap .field{margin:0 0 14px}.auth-form-wrap .btn{padding:16px}.auth-link{display:block;width:100%;border:0;background:transparent;color:#00E5FF;font-weight:700;padding:12px 8px;text-align:center}.show-password{display:flex;gap:8px;align-items:center;color:#C5D2E8;margin:-6px 0 14px;font-size:14px}.show-password input{accent-color:#FF4081;width:18px;height:18px}.helper{font-size:12px;color:#C5D2E8;margin:-6px 0 14px}
-
 .item-main .rate{color:#9AA4BF;font-size:12px}.item-main .country{color:#C5D2E8;font-size:12px}.item-main .new-message{color:#00E5FF;font-size:14px;font-weight:700;letter-spacing:.06em;animation:pulse 900ms infinite}.public-item{cursor:pointer}.public-item .avatar{object-fit:cover}.picture-overlay{position:fixed;inset:0;z-index:20;background:#000b;display:flex;align-items:center;justify-content:center;padding:24px}.picture-dialog{width:min(320px,100%);background:#191A42;border:1px solid #343d5d;border-radius:14px;padding:16px;text-align:center}.picture-dialog h3{margin:0 0 12px}.picture-dialog img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:12px}.picture-dialog .btn{width:100%}@keyframes pulse{50%{opacity:.35}}
-
 @media(min-width:600px){.wrap{max-width:760px}.nav{max-width:760px;left:50%;transform:translateX(-50%);border:1px solid #252D48;border-bottom:0;border-radius:12px 12px 0 0}.chats-title{padding-top:20px}}
-
 .activation-wall{position:fixed;inset:0;background:rgba(4,7,22,.78);z-index:10000;display:grid;place-items:center;padding:22px}.activation-wall .activation-dialog{width:min(100%,380px);background:#191A42;border:1px solid #394168;border-radius:16px;padding:22px;box-shadow:0 20px 70px #0008;color:#fff}.activation-wall h2{margin:0 0 12px;font-size:20px}.activation-wall p{margin:0 0 20px;color:#C5D2E8;line-height:1.5}.activation-wall .activation-actions{display:flex;justify-content:flex-end;gap:10px}
-
-/* Native Android ConfirmActivity parity */
 .native-activation{background:#0A0F1F;padding:20px;min-height:100vh;color:#fff}
 .native-activation .na-hero{background:linear-gradient(135deg,#6A1B9A,#102A43);border-radius:26px;padding:20px;animation:na-enter .7s ease both}
 .native-activation .na-live{display:inline-block;padding:4px 10px;border-radius:100px;border:1px solid #8800E5FF;background:#3300E5FF;color:#00E5FF;font-size:11px;font-weight:700}
@@ -50,9 +42,6 @@
 @keyframes na-enter{from{opacity:0;transform:translateY(46px)}to{opacity:1;transform:translateY(0)}}
 @keyframes na-pulse{0%,100%{opacity:1}50%{opacity:.62}}
 @keyframes na-spin{to{transform:rotate(360deg)}}
-
-
-/* V15: native-feeling touch, motion, keyboard and safe-area behavior */
 :root{color-scheme:dark;--tap-highlight:rgba(0,229,255,.14)}
 html{overscroll-behavior-y:contain;-webkit-text-size-adjust:100%;text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:#343d5d #0A0F1F}
 body{overscroll-behavior-y:contain;-webkit-tap-highlight-color:transparent;touch-action:pan-y}
@@ -75,9 +64,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
 .chatbox{bottom:calc(68px + env(safe-area-inset-bottom));padding-bottom:max(8px,env(safe-area-inset-bottom))}
 ::selection{background:rgba(0,229,255,.22)}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
-
-
-/* V16: keyboard-safe chat layout and persistent connection status */
 :root{--visible-height:100dvh}
 #connectionBanner{position:fixed;z-index:10001;top:calc(8px + env(safe-area-inset-top));left:12px;right:12px;max-width:736px;margin:0 auto;padding:13px 15px;border-radius:12px;background:#3b171d;border:1px solid #ff647c;color:#fff;box-shadow:0 8px 28px #0008;font-size:14px;line-height:1.4;display:flex;align-items:flex-start;gap:10px}
 #connectionBanner[hidden]{display:none!important}#connectionBanner .connection-dot{width:10px;height:10px;flex:0 0 10px;border-radius:50%;background:#ff647c;margin-top:4px}#connectionBanner .connection-copy{flex:1}#connectionBanner strong{display:block;margin-bottom:2px}#connectionBanner.online{background:#10362f;border-color:#27c99a;color:#eafff6}#connectionBanner.online .connection-dot{background:#27c99a}
@@ -92,22 +78,18 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
 .wrap.chat-screen~.nav{display:none}
 @media(min-width:600px){.wrap.chat-screen{height:var(--visible-height)}}
 @media(prefers-reduced-motion:reduce){.wrap.chat-screen .messages{scroll-behavior:auto}}
-
-/* Play Store Gate Specific Styles */
 .hide { display: none !important; }
 #download-ring { transition: stroke-dashoffset 0.1s linear; }
 .review-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px; overflow: hidden; flex-shrink: 0; background-color: #E2E8F0; }
 .review-avatar img { width: 100%; height: 100%; object-fit: cover; }
-
-/* Native Splash Screen */
 #splash-screen { transition: opacity 0.4s ease-out; background: linear-gradient(135deg,#101B4D 0%,#32145E 58%,#6A174F 100%); }
 </style>
 <title>Chatmula</title>
 </head>
 <body>
 
-<!-- PLAY STORE GATE (Inline styles guarantee it is white, never black) -->
-<div id="play-store-gate" class="hide fixed inset-0 z-[9999] overflow-y-auto pb-20 font-sans" style="background-color: #ffffff; color: #0f172a; font-family: 'Roboto', sans-serif;">
+<!-- PLAY STORE GATE (NO 'hide' class by default) -->
+<div id="play-store-gate" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999; background-color: #ffffff; overflow-y: auto; padding-bottom: 80px; font-family: 'Roboto', sans-serif; display: block;">
     <div class="flex items-center justify-between p-4 sticky top-0 bg-white/90 backdrop-blur-md z-10">
         <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
         <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg>
@@ -132,7 +114,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
             </div>
         </div>
         
-        <!-- INSTALL BUTTONS -->
         <div class="flex gap-2 mb-6" id="pre-install-buttons">
             <button id="btn-store-install" class="flex-1 bg-[#0056D2] text-white font-semibold text-lg py-3.5 rounded-full shadow-soft active:scale-95 transition-transform">Install</button>
         </div>
@@ -141,13 +122,11 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
             <button disabled id="btn-installing" class="flex-1 bg-gray-200 text-gray-400 font-semibold text-lg py-2.5 rounded-full flex items-center justify-center gap-2">Downloading...</button>
         </div>
         
-        <!-- POST INSTALL BUTTONS -->
         <div class="flex gap-3 mb-6 hide" id="post-install-buttons">
             <button onclick="mockUninstall()" class="flex-1 bg-white text-[#0056D2] font-semibold text-lg py-3 rounded-full border border-gray-300">Uninstall</button>
             <button id="btn-open-app" class="flex-1 bg-[#0056D2] text-white font-semibold text-lg py-3 rounded-full">Open</button>
         </div>
 
-        <!-- INSTALLED PROMPT -->
         <div id="installed-prompt" class="hide mb-6 transition-all duration-300 opacity-0 -translate-y-2">
             <div class="bg-[#1e1e1e] rounded-2xl p-5 flex flex-col gap-3 shadow-lg border border-gray-700 w-full relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00E5FF] to-[#FF4081]"></div>
@@ -164,7 +143,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
             </div>
         </div>
 
-        <!-- THE REST OF THE CONTENT -->
         <div id="post-install-content" class="hide">
             <div class="mb-8 border-t border-gray-100 pt-6">
                 <h3 class="font-bold text-xl text-gray-900 mb-2">What's new</h3>
@@ -185,17 +163,34 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
             </div>
         </div>
         <div id="pre-install-content">
-            <div class="flex justify-between items-center text-center py-5 mb-6 border-y border-gray-100" id="stats-row">
-                <div class="flex-1 flex flex-col items-center"><div class="flex items-center gap-1"><span class="font-bold text-base">4.8</span><svg class="w-4 h-4 text-gray-800" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div><span class="text-[11px] text-gray-600 mt-1">15.2K reviews</span></div>
-                <div class="w-px h-10 bg-gray-200"></div>
-                <div class="flex-1 flex flex-col items-center"><svg class="w-5 h-5 mb-1 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg><span class="font-bold text-xs">500K+</span></div>
-                <div class="w-px h-10 bg-gray-200"></div>
-                <div class="flex-1 flex flex-col items-center"><div class="border border-gray-600 rounded px-1.5 text-[11px] font-bold mb-1">12+</div><span class="text-[11px] text-gray-600">Rated for 12+</span></div>
+            <!-- 100% Correct Play Store Stats Row -->
+            <div class="flex items-center justify-between text-center py-5 mb-6 border-y border-gray-100" id="stats-row">
+                <!-- Rating -->
+                <div class="flex-1 flex flex-col items-center justify-center">
+                    <div class="flex items-center gap-1 text-base font-bold text-gray-900">
+                        4.8 
+                        <svg class="w-4 h-4 text-gray-800" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    </div>
+                    <span class="text-[11px] text-gray-600 mt-1">15.2K reviews</span>
+                </div>
+                <!-- Divider -->
+                <div class="w-px h-8 bg-gray-200"></div>
+                <!-- Downloads -->
+                <div class="flex-1 flex flex-col items-center justify-center">
+                    <svg class="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    <span class="font-bold text-xs mt-1 text-gray-900">500K+</span>
+                    <span class="text-[11px] text-gray-600 mt-0.5">Downloads</span>
+                </div>
+                <!-- Divider -->
+                <div class="w-px h-8 bg-gray-200"></div>
+                <!-- Age -->
+                <div class="flex-1 flex flex-col items-center justify-center">
+                    <div class="border border-gray-600 rounded px-1.5 text-[11px] font-bold text-gray-900">12+</div>
+                    <span class="text-[11px] text-gray-600 mt-1">Rated for 12+</span>
+                </div>
             </div>
             
-            <!-- REALISTIC SCREENSHOTS -->
             <div class="flex gap-4 overflow-x-auto hide-scrollbar mb-8 pb-4 snap-x px-2">
-                <!-- Screenshot 1: Chat UI -->
                 <div class="w-[180px] h-[360px] bg-[#0A0F1F] rounded-[2rem] border-[6px] border-gray-800 flex-shrink-0 p-3 snap-center relative overflow-hidden shadow-xl flex flex-col">
                     <div class="w-16 h-1 bg-gray-600 rounded-full mx-auto mb-4 mt-1"></div>
                     <div class="flex items-center gap-2 mb-4 border-b border-gray-700 pb-2">
@@ -210,7 +205,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                     <div class="h-8 bg-gray-800 rounded-full mt-2 flex items-center px-3"><span class="text-[10px] text-gray-500">Type message...</span></div>
                 </div>
 
-                <!-- Screenshot 2: Earnings -->
                 <div class="w-[180px] h-[360px] bg-[#0A0F1F] rounded-[2rem] border-[6px] border-gray-800 flex-shrink-0 p-3 snap-center relative overflow-hidden shadow-xl flex flex-col">
                     <div class="w-16 h-1 bg-gray-600 rounded-full mx-auto mb-4 mt-1"></div>
                     <div class="text-center mt-4">
@@ -234,7 +228,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                     <button class="w-full bg-[#FF4081] text-white text-[10px] font-bold py-2 rounded-full mt-auto mb-2">Withdraw to M-Pesa</button>
                 </div>
 
-                <!-- Screenshot 3: Global connection -->
                 <div class="w-[180px] h-[360px] bg-[#0A0F1F] rounded-[2rem] border-[6px] border-gray-800 flex-shrink-0 p-3 snap-center relative overflow-hidden shadow-xl flex flex-col items-center justify-center">
                     <div class="w-16 h-1 bg-gray-600 rounded-full mx-auto absolute top-4"></div>
                     <div class="w-24 h-24 rounded-full border-2 border-dashed border-[#00E5FF] flex items-center justify-center mb-4 relative">
@@ -264,7 +257,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                 </div>
             </div>
             
-            <!-- SPONSORED (ONLY JUMIA) -->
             <div class="mb-8 border-t border-gray-100 pt-8">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="font-bold text-xl text-gray-900">Sponsored <span class="font-normal text-gray-500 text-sm mx-1">•</span> Suggested for you</h3>
@@ -281,7 +273,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                 </div>
             </div>
 
-            <!-- RATINGS AND REVIEWS -->
             <div class="border-t border-gray-100 pt-8 mb-8">
                 <h3 class="font-bold text-xl text-gray-900 mb-4">Ratings and reviews</h3>
                 <div class="flex gap-4 items-center mb-8">
@@ -295,9 +286,7 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                     </div>
                 </div>
 
-                <!-- INITIAL VISIBLE REVIEWS -->
                 <div class="space-y-7">
-                    <!-- Review 1 (Foreigner) -->
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="review-avatar"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop" alt="David"></div>
@@ -307,7 +296,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                         <p class="text-sm text-gray-600 leading-relaxed">I've been using ChatMula to learn Swahili for my upcoming trip to Nairobi. The Kenyan tutors are so friendly, patient, and the connection is very fast. Highly recommended for language learners!</p>
                     </div>
                     
-                    <!-- Review 2 (Kenyan) -->
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="review-avatar"><img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=100&h=100&fit=crop" alt="Faith"></div>
@@ -317,7 +305,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                         <p class="text-sm text-gray-600 leading-relaxed">The app pays well. I earn a decent side income just by chatting with foreigners and teaching them my language. Withdrawals go straight to M-Pesa instantly. Asante ChatMula!</p>
                     </div>
                     
-                    <!-- Review 3 (Foreigner) -->
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="review-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" alt="Michael"></div>
@@ -327,7 +314,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                         <p class="text-sm text-gray-600 leading-relaxed">Excellent platform. It's like a language exchange but way more structured. Made some great Kenyan friends while learning. The UI is clean and simple.</p>
                     </div>
 
-                    <!-- Review 4 (Kenyan) -->
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="review-avatar" style="background-color: #0D9488;">K</div>
@@ -338,9 +324,7 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                     </div>
                 </div>
 
-                <!-- HIDDEN REVIEWS CONTAINER -->
                 <div id="more-reviews" class="space-y-7 hide mt-7">
-                    <!-- Review 5 (Foreigner) -->
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="review-avatar"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" alt="Sarah"></div>
@@ -350,7 +334,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                         <p class="text-sm text-gray-600 leading-relaxed">A great way to practice Swahili. It can take a minute to find the right tutor, but once you do, the conversations are very valuable. Very smooth experience.</p>
                     </div>
 
-                    <!-- Review 6 (Foreigner) -->
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="review-avatar"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop" alt="James"></div>
@@ -360,7 +343,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                         <p class="text-sm text-gray-600 leading-relaxed">Trying to learn a new language before my safari trip. The bots are helpful, but the human connections are even better. The activation fee is worth it.</p>
                     </div>
 
-                    <!-- Review 7 (Kenyan) -->
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="review-avatar" style="background-color: #D97706;">B</div>
@@ -370,7 +352,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                         <p class="text-sm text-gray-600 leading-relaxed">The interface is beautiful and the app runs flawlessly on my phone. I've recommended this to all my friends. Great job to the developers!</p>
                     </div>
 
-                    <!-- Review 8 (Foreigner) -->
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="review-avatar"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop" alt="Emma"></div>
@@ -380,7 +361,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                         <p class="text-sm text-gray-600 leading-relaxed">It's fun and educational. The interactive chats really help with pronunciation. I feel much more confident speaking Swahili now. 5 stars!</p>
                     </div>
 
-                    <!-- Review 9 (Kenyan) -->
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="review-avatar" style="background-color: #0D9488; color: white; display:flex; align-items:center; justify-content:center; font-weight:600;">J</div>
@@ -390,7 +370,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                         <p class="text-sm text-gray-600 leading-relaxed">Best app so far. No hidden charges and the M-Pesa prompt comes instantly. Thank you for the quick service. Keep up the good work.</p>
                     </div>
 
-                    <!-- Review 10 (Foreigner) -->
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="review-avatar"><img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop" alt="Tom"></div>
@@ -400,7 +379,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                         <p class="text-sm text-gray-600 leading-relaxed">Very impressed with the quality of the language tutors. It's a fantastic concept. I would love to see more video call features in the future.</p>
                     </div>
 
-                    <!-- Review 11 (Foreigner) -->
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="review-avatar"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop" alt="Lukas"></div>
@@ -410,7 +388,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                         <p class="text-sm text-gray-600 leading-relaxed">Learning Swahili has never been this fun. The bots are good but the human tutors are amazing. Very reliable connection and great audio quality.</p>
                     </div>
 
-                    <!-- Review 12 (Kenyan) -->
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="review-avatar" style="background-color: #B45309; color: white; display:flex; align-items:center; justify-content:center; font-weight:600;">M</div>
@@ -420,7 +397,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                         <p class="text-sm text-gray-600 leading-relaxed">I've been using ChatMula for a few months now and it's a legit way to make extra income. The customer support is also very responsive when you need help.</p>
                     </div>
 
-                    <!-- Review 13 (Foreigner) -->
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="review-avatar"><img src="https://images.unsplash.com/photo-1523824921871-d6f1a15151f1?w=100&h=100&fit=crop" alt="Chloe"></div>
@@ -430,7 +406,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                         <p class="text-sm text-gray-600 leading-relaxed">The app is very well built. It runs smoothly on my older phone too. I just wish there were more tutors online during my timezone.</p>
                     </div>
 
-                    <!-- Review 14 (Kenyan) -->
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="review-avatar" style="background-color: #1D4ED8; color: white; display:flex; align-items:center; justify-content:center; font-weight:600;">D</div>
@@ -441,8 +416,7 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
                     </div>
                 </div>
 
-                <!-- TOGGLE BUTTON -->
-                <button id="btn-see-all" onclick="toggleReviews()" class="text-[#0056D2] font-semibold text-sm mt-6 block">See all 15,204 reviews</button>
+                <button id="btn-see-all" class="text-[#0056D2] font-semibold text-sm mt-6 block">See all 15,204 reviews</button>
             </div>
 
             <div class="border-t border-gray-100 pt-8 mb-8">
@@ -458,16 +432,13 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
     </div>
 </div>
 
-<!-- NATIVE SPLASH SCREEN -->
 <div id="splash-screen" class="hide fixed inset-0 z-[9998] flex flex-col items-center justify-center opacity-0">
     <img src="icon.jpg" class="w-24 h-24 rounded-3xl object-cover mb-4 shadow-lg border border-white/10" alt="ChatMula">
     <h1 class="text-white text-xl font-bold tracking-wide font-sans">ChatMula</h1>
 </div>
 
-<!-- APP CONTENT -->
 <div id="app-content" class="hide">
     <div id="app">
-        <!-- Fallback loading screen while JS runs -->
         <main class="splash">
             <img src="icon.jpg" alt="ChatMula">
             <h1>CHATMULA</h1>
@@ -480,7 +451,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="connectionBanner" role="status" aria-live="assertive" hidden><span class="connection-dot" aria-hidden="true"></span><div class="connection-copy"><strong id="connectionTitle">No internet connection</strong><span id="connectionMessage">Reconnect to the internet to book or chat. Your current conversation is still on this device.</span></div></div>
 
-<!-- SECURITY CHECK MODAL (Small Login) -->
 <div id="auth-modal" class="hide fixed inset-0 z-[20000] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
     <div class="bg-[#191A42] border border-[#343d5d] rounded-2xl w-full max-w-sm p-6 shadow-2xl transform scale-95 transition-transform duration-300" id="auth-modal-content">
         <div class="flex items-center justify-between mb-4">
@@ -496,5 +466,541 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
     </div>
 </div>
 
-<script src="app-script.js"></script>
+<script>
+/* ChatMula PWA client. All logic bundled into one file to prevent 404 errors. */
+'use strict';
+const API='https://hiftjunvppgrlmdcvleo.supabase.co';
+const KEY='sb_publishable_rY8X9teF9-Uxy_bb__DGDA_KBCag4RB';
+const $=s=>document.querySelector(s);const app=$('#app');
+const state={page:'',user:null,profile:null,token:localStorage.getItem('cm_token')||'',refresh:localStorage.getItem('cm_refresh')||'',uid:localStorage.getItem('cm_uid')||'',username:localStorage.getItem('cm_username')||'',email:localStorage.getItem('cm_email')||'',ref:localStorage.getItem('cm_ref')||new URLSearchParams(location.search).get('ref')||'',messages:[],bot:null,botHistory:[],pollTimer:null,botReplyTimer:null,botTyping:false};
+
+const urlRef = new URLSearchParams(location.search).get('ref');
+if (urlRef) {
+    state.ref = urlRef.trim().toUpperCase();
+    localStorage.setItem('cm_ref', state.ref);
+}
+
+let pendingWithdrawalData = null;
+
+const bots=[["Alex Carter","male","USA","4.7","bot_alex_carter.jpg",["Hey 😊 How has your day been so far?","What do you normally enjoy doing when you finally get some quiet time?","I like that. People usually reveal a lot about themselves through the little things they enjoy.","What kind of music fits your mood when you want to relax?","If tomorrow was completely free, how would you spend it?","Would you rather have a long conversation at night or a quick chat during the day?"],"Alex","Swahili beginner"],["Jordan Brooks","male","Canada","4.6","bot_jordan_brooks.jpg",["Yo 😄 What has been keeping you busy today?","Are you more into football, music, movies, gaming, business, tech, or something completely different?","What team do you support, if you follow football?","Football conversations can get serious very quickly 😂. Who is your favourite player?","What is the last movie or series that actually held your attention?","What kind of music do you play when you are in a good mood?"],"Jordan","Swahili beginner"],["Morgan Bennett","male","UK","4.5","bot_morgan_bennett.jpg",["What's up 😄 How is your day going?","Are you usually the person who starts conversations or waits for someone else?","What makes a conversation instantly interesting for you?","Are you into sports? If yes, which one?","What is the most competitive thing you have ever done?","Do you enjoy business and money topics, or do you avoid them?"],"Morgan","Swahili beginner"],["Sam Reid","male","Canada","4.8","bot_sam_reid.jpg",["Hi 😊 How are you feeling today?","What usually helps you relax when life gets busy?","Do you enjoy quiet places or busy environments more?","What is your favourite kind of evening?","Do you like listening to other people's stories?","What is one story from your life that always makes people laugh?"],"Sam","Swahili beginner"],["Charlie Mitchell","male","USA","4.4","bot_charlie_mitchell.jpg",["Hey 😄 What is happening on your side?","What is your favourite way to spend a free evening?","Do you follow football or another sport?","Who is your favourite team or player?","What food would you order without even checking the menu?","Do you enjoy cooking or are you better at finding good places to eat? 😂"],"Charlie","Swahili beginner"],["Ethan Walsh","male","USA","4.6","bot_ethan_walsh.jpg",["Hey 👋 How's your day been?","What do you usually get up to when you're not working?","I like that. People always surprise me with what they enjoy.","Is there a place you've been wanting to visit for a while?","If you had a completely free weekend, what would you do?","What's one thing you've been thinking about lately?"],"Ethan","Swahili beginner"],["Liam Foster","male","UK","4.5","bot_liam_foster.jpg",["Hey there 😊 what's keeping you busy today?","Are you more of a morning person or a night owl?","I find that says a lot about someone.","What kind of music do you have on repeat lately?","If money weren't a concern, what would you spend your time doing?","What's something small that always cheers you up?"],"Liam","Swahili beginner"],["Noah Sinclair","male","Canada","4.8","bot_noah_sinclair.jpg",["Hey 😊 how's everything going?","What do you do when you need to recharge?","I feel like rest is underrated these days.","Do you prefer quiet nights in or going out with friends?","What's a hobby you've picked up recently?","What's something you're really proud of, even if it seems small?"],"Noah","Swahili beginner"],["Caleb Rhodes","male","USA","4.4","bot_caleb_rhodes.jpg",["Hey 👋 what's up?","Got any plans for the week?","Nice. I like hearing what people are into.","Do you follow any sports, or not really your thing?","What kind of food could you eat any day?","What's the best thing that happened to you this week?"],"Caleb","Swahili beginner"],["Mason Clarke","male","UK","4.7","bot_mason_clarke.jpg",["Hey 😊 how's your day treating you?","What's something you've been working on lately?","That sounds interesting. What's the hardest part?","Do you like being busy or do you prefer calmer days?","If you could learn one skill instantly, what would it be?","What's one thing you'd like to change about your routine?"],"Mason","Swahili beginner"],["Taylor Parker","female","UK","4.9","bot_taylor_parker.jpg",["Hi 😊 What kind of day are you having?","What usually makes you feel comfortable with someone new?","I think being able to laugh together helps a lot.","What is your favourite kind of conversation?","Would you rather spend a weekend near the ocean or somewhere quiet inland?","If you could travel anywhere tomorrow, where would you go?"],"Taylor","Swahili beginner"],["Riley Price","female","USA","4.6","bot_riley_price.jpg",["Hello 😊 How are things on your side today?","Are you a morning person or do you become more energetic at night?","What is the first thing you usually do when you get home?","What kind of food do you never get tired of?","Do you cook often or prefer someone else to handle the kitchen?","What Kenyan place would you happily visit again?"],"Riley","Swahili beginner"],["Casey Collins","female","Canada","4.7","bot_casey_collins.jpg",["Hey 😊 What has made you smile today?","What kind of things do you enjoy talking about with new people?","Are you more interested in music, movies, food, travel, or random stories?","What song have you played more than once recently?","Do you have a favourite place to relax?","What would your ideal Saturday look like?"],"Casey","Swahili beginner"],["Jamie Grant","female","UK","4.5","bot_jamie_grant.jpg",["Hey there 😊 What are you up to today?","What kind of personality do you normally click with?","Are you naturally talkative or quiet until you know someone?","What kind of music would you play on a road trip?","If you could take a road trip tomorrow, where would you go?","What snack would definitely come along for the ride? 😂"],"Jamie","Swahili beginner"],["Avery Hayes","female","USA","4.8","bot_avery_hayes.jpg",["Hey, how are you doing?","What is keeping you busy these days?","Do you enjoy your work, or is it mainly something that pays the bills?","What kind of career would you choose if money was not a concern?","What skill do you think everyone should learn?","Are you interested in technology or do you prefer keeping things simple?"],"Avery","Swahili beginner"],["Olivia Stone","female","Canada","4.9","bot_olivia_stone.jpg",["Hi 😊 how are you feeling today?","What's been on your mind this week?","I love that. Sometimes the simple things stick with us.","What do you do to unwind after a long day?","Is there a song that always lifts your mood?","What's something kind someone has done for you recently?"],"Olivia","Swahili beginner"],["Emma Hart","female","USA","4.7","bot_emma_hart.jpg",["Hey 😊 what's going on with you today?","Are you into movies, music, or something else entirely?","I like a good mix — depends on the mood.","What's the last thing that made you laugh out loud?","Do you enjoy cooking, or is that not really your thing?","What's one goal you're working toward right now?"],"Emma","Swahili beginner"],["Sophie Lane","female","UK","4.6","bot_sophie_lane.jpg",["Hi 👋 how's your week going?","Are you close with your family, or more independent?","Both are valid — depends on the people, I think.","What do you value most in a friendship?","Do you like travelling, or are you more of a homebody?","What's something you'd love to try if you had the chance?"],"Sophie","Swahili beginner"],["Chloe Vance","female","Canada","4.8","bot_chloe_vance.jpg",["Hey there 😊 how are you doing?","What's something you've been curious about lately?","I love that. Curiosity keeps life interesting.","Do you prefer deep conversations or lighter ones?","What's one thing you wish people asked you more often?","What's a memory that always makes you smile?"],"Chloe","Swahili beginner"],["Mia Winters","female","USA","4.5","bot_mia_winters.jpg",["Hi 😊 what have you been up to?","Are you a planner or do you go with the flow?","I feel like each has its place, honestly.","What's your favourite way to spend a quiet evening?","Do you have a favourite place in the world?","What's one thing you'd like to be better at?"],"Mia","Swahili beginner"]];
+
+function orderedBots(){
+ const key='cm_bot_order_'+(state.uid||'guest');
+ try{const saved=JSON.parse(localStorage.getItem(key)||'null');if(Array.isArray(saved)&&saved.length===bots.length){const byName=new Map(bots.map(b=>[b[0],b]));const ordered=saved.map(n=>byName.get(n)).filter(Boolean);if(ordered.length===bots.length)return ordered}}catch{}
+ const ordered=bots.slice();for(let i=ordered.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ordered[i],ordered[j]]=[ordered[j],ordered[i]]}
+ try{localStorage.setItem(key,JSON.stringify(ordered.map(b=>b[0])))}catch{}return ordered;
+}
+function esc(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),3200)}
+function showConnectionBanner(message='Reconnect to the internet to book or chat. Your current conversation is still on this device.',online=false){const b=$('#connectionBanner');if(!b)return;b.hidden=false;b.classList.toggle('online',!!online);$('#connectionTitle').textContent=online?'Connection restored':'No internet connection';$('#connectionMessage').textContent=message}
+function hideConnectionBanner(){const b=$('#connectionBanner');if(b)b.hidden=true}
+function showActivationWall(){if(document.querySelector('.activation-wall'))return;const layer=document.createElement('div');layer.className='activation-wall';layer.setAttribute('role','dialog');layer.setAttribute('aria-modal','true');layer.setAttribute('aria-labelledby','activationWallTitle');layer.innerHTML=`<div class="activation-dialog"><h2 id="activationWallTitle">Activate your account</h2><p>Pay a one-time activation fee with M-Pesa to unlock chat and earnings.</p><div class="activation-actions"><button class="btn full" id="payActivationWall">Pay activation</button></div></div>`;document.body.appendChild(layer);$('#payActivationWall').onclick=()=>{layer.remove();navigate('activate')}}
+function saveAuth(data){state.token=data.access_token||state.token;state.refresh=data.refresh_token||state.refresh;state.uid=data.user?.id||state.uid;const meta=data.user?.user_metadata||{};state.username=meta.username||state.username;state.email=data.user?.email||state.email;state.ref=meta.referral_code||state.ref;for(const [k,v] of Object.entries({cm_token:state.token,cm_refresh:state.refresh,cm_uid:state.uid,cm_username:state.username,cm_email:state.email,cm_ref:state.ref}))if(v)localStorage.setItem(k,v)}
+function logout(){for(const k of ['cm_token','cm_refresh','cm_uid','cm_username','cm_email','cm_ref'])localStorage.removeItem(k);Object.assign(state,{token:'',refresh:'',uid:'',username:'',email:'',profile:null});renderAuth()}
+async function req(path,{method='GET',body,token=state.token,prefer}={}){const headers={'Content-Type':'application/json','Accept':'application/json','apikey':KEY};if(token)headers.Authorization='Bearer '+token;else headers.Authorization='Bearer '+KEY;if(prefer)headers.Prefer=prefer;let res;try{res=await fetch(API+path,{method,headers,body:body===undefined?undefined:JSON.stringify(body)})}catch(e){if(typeof showConnectionBanner==='function')showConnectionBanner('Could not reach ChatMula. Check your data or Wi-Fi and try again.');throw new Error('Network error. Check your internet connection and try again.')}const text=await res.text();let data;try{data=text?JSON.parse(text):null}catch{data=text}if(!res.ok){if(res.status===401&&state.refresh&&path!=='/auth/v1/token?grant_type=refresh_token'){try{const fresh=await req('/auth/v1/token?grant_type=refresh_token',{method:'POST',token:KEY,body:{refresh_token:state.refresh}});saveAuth(fresh);return req(path,{method,body,token:state.token,prefer})}catch{}}throw new Error(data?.message||data?.msg||data?.error_description||data?.error||`Request failed (${res.status})`)}return data}
+async function signIn(email,password){const d=await req('/auth/v1/token?grant_type=password',{method:'POST',token:KEY,body:{email,password}});saveAuth(d);try{await loadProfile()}catch(e){state.profile=null;console.warn('Profile could not be loaded; showing chatbot list anyway:',e)}renderHome();if(!state.profile)toast('You are signed in. Some account details could not load, but you can still view chatbots.')}
+async function loadProfile(){if(!state.uid||!state.token)return null;const rows=await req('/rest/v1/profiles?id=eq.'+encodeURIComponent(state.uid)+'&select=*');state.profile=Array.isArray(rows)?rows[0]||null:null;return state.profile}
+function fmt(n){return 'KSh '+Number(n||0).toLocaleString('en-KE',{minimumFractionDigits:2,maximumFractionDigits:2})}
+
+function shell(content,active='bots'){
+ const chatScreen=active==='bot'||active==='chat'||active==='public';app.innerHTML=`<main class="wrap ${chatScreen?'chat-screen':''}"><h1 class="chats-title">${active==='bots'||active==='bot'?'Chats':active==='chat'||active==='public'?'Public Chat':active==='wallet'?'Wallet':active==='invite'?'Invite':active==='account'?'Account':active==='activate'||active==='waiting'?'Activate your account':'Chats'}</h1>${content}</main><nav class="nav"><button data-page="chat" class="${active==='bots'||active==='bot'||active==='chat'||active==='public'?'active':''}"><b aria-hidden="true">▣</b><span>Chat</span></button><button data-page="wallet" class="${active==='wallet'?'active':''}"><b aria-hidden="true">▤</b><span>Wallet</span></button><button data-page="invite" class="${active==='invite'?'active':''}"><b aria-hidden="true">♧</b><span>Invite</span></button></nav>`;
+ app.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>navigate(b.dataset.page));
+}
+
+function renderAuth(){
+ state.page='welcome';
+ app.innerHTML=`<main class="splash"><img src="icon.jpg" alt="ChatMula"><h1>CHATMULA</h1><p>Chat. Earn. Connect.</p><div class="spinner" aria-label="Loading"></div></main>`;
+ setTimeout(()=>{if(state.page==='welcome')renderAuthChoice()},1500);
+}
+
+function renderAuthChoice(){
+ state.page='auth-choice';
+ app.innerHTML=`<main class="auth choice"><div class="choice-inner"><h1>Welcome to ChatMula</h1><p class="muted center">Log in to your account or create a new one.</p><button class="btn full" id="openSignup">Register</button><button class="btn secondary full" id="openLogin">Login</button><button class="btn intro full" id="watchIntro">← Back to intro video</button></div></main>`;
+ $('#openSignup').onclick=()=>renderAuthForm('signup');
+ $('#openLogin').onclick=()=>renderAuthForm('login');
+ $('#watchIntro').onclick=()=>{state.page='welcome';app.innerHTML=`<main class="splash"><img src="icon.jpg" alt="ChatMula"><h1>CHATMULA</h1><p>Chat. Earn. Connect.</p><div class="spinner" aria-label="Loading"></div></main>`;setTimeout(()=>{if(state.page==='welcome')renderAuthChoice()},1500)};
+}
+
+function renderAuthForm(mode){
+ state.page=mode==='signup'?'signup':'login';
+ const signup=mode==='signup';
+ app.innerHTML=`<main class="auth"><div class="auth-brand"><div class="wordmark">CHATMULA</div>${signup?'<div class="tagline">Chat. Earn. Connect.</div>':'<div class="login-subtitle">Welcome back</div>'}</div><section class="auth-form-wrap"><div id="authError" class="notice error hidden"></div><form id="authForm" novalidate>${signup?`<div class="field"><input id="username" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]{3,24}" placeholder="Username" aria-label="Username" required></div>`:''}<div class="field"><input id="email" type="email" required autocomplete="email" placeholder="Email" aria-label="Email"></div><div class="field"><input id="password" type="password" required minlength="6" autocomplete="${signup?'new-password':'current-password'}" placeholder="${signup?'Password (min 6)':'Password'}" aria-label="Password"></div>${signup?`<label class="show-password"><input id="showPassword" type="checkbox"> <span>Show password</span></label><div class="field"><input id="referral" maxlength="32" value="${esc(state.ref)}" autocomplete="off" placeholder="Referral code (optional)" aria-label="Referral code (optional)"></div><p class="helper">If a friend invited you, enter their code here.</p><div class="field"><input id="phone" inputmode="tel" autocomplete="tel" placeholder="M-Pesa Number" aria-label="M-Pesa Number" required></div>`:''}<button class="btn full" id="authSubmit">${signup?'Create Account':'Login'}</button></form><button class="auth-link" id="authSwitch">${signup?'Already have an account? Login':'Create a new account'}</button>${signup?'<button class="auth-link" id="authBack">← Back</button>':'<button class="auth-link" id="authBack">← Back</button>'}</section></main>`;
+ $('#authBack').onclick=renderAuthChoice;
+ $('#authSwitch').onclick=()=>renderAuthForm(signup?'login':'signup');
+ if(signup)$('#showPassword').onchange=()=>{$('#password').type=$('#showPassword').checked?'text':'password'};
+ $('#authForm').onsubmit=async e=>{e.preventDefault();const btn=$('#authSubmit'),err=$('#authError');btn.disabled=true;err.classList.add('hidden');try{const email=$('#email').value.trim(),password=$('#password').value;if(!email||!password)throw Error('Enter your email and password.');if(signup){const username=$('#username').value.trim(),phone=normalizePhone($('#phone').value),referral=$('#referral').value.trim().toUpperCase();if(!/^[A-Za-z0-9_]{3,24}$/.test(username))throw Error('Username must be 3–24 characters using letters, numbers or _ only.');if(password.length<6)throw Error('Password must be at least 6 characters.');if(!phone)throw Error('Enter a valid M-Pesa number.');const d=await req('/functions/v1/signup',{method:'POST',token:KEY,body:{username,email,password,phone,...(referral?{referral}:{})}});if(d.access_token){saveAuth(d);try{await loadProfile()}catch(ex){state.profile=null;console.warn('Profile could not be loaded:',ex)}renderHome();if(!state.profile)toast('Account created. Some account details could not load.')}else{toast(d.message||'Account request submitted. Please sign in when your account is ready.');renderAuthForm('login')}}else{try{await signIn(email,password)}catch(ex){if(/invalid login credentials|invalid email or password|invalid password/i.test(ex.message))throw Error('Invalid email or password');throw ex}}}catch(ex){err.textContent=ex.message;err.classList.remove('hidden')}finally{if($('#authSubmit'))$('#authSubmit').disabled=false}};
+}
+
+function normalizePhone(raw){let p=String(raw||'').replace(/[\s()+-]/g,'');if(/^0[17]\d{8}$/.test(p))p='254'+p.slice(1);if(/^7\d{8}$/.test(p)||/^1\d{8}$/.test(p))p='254'+p;return /^254[17]\d{8}$/.test(p)?p:null}
+async function navigate(page){if(page!=='activate'){clearInterval(state.activationTagTimer);clearInterval(state.activationWithdrawalTimer)}if(!state.token){renderAuth();return}try{if(!state.profile)await loadProfile();if(page==='chat')renderBots();else if(page==='public')await renderPublicChat();else if(page==='bots')renderBots();else if(page==='wallet')await renderWallet();else if(page==='invite')await renderInvite();else if(page==='account')renderAccount();else if(page==='bot'){if(state.bot)await openBot(state.bot);else renderBots();}else if(page==='activate')renderActivation();else if(page==='waiting')renderWaiting(state.pendingId,state.pendingKind||'activation')}catch(e){toast(e.message)}}
+async function renderHome(){return renderBots()}
+
+async function requireLiveConnection(){
+ if(!navigator.onLine){showConnectionBanner();return false}
+ if(!state.token||!state.uid){toast('Please sign in before booking or opening chat.');return false}
+ let timeoutId;
+ try{
+  const probe=req('/rest/v1/profiles?id=eq.'+encodeURIComponent(state.uid)+'&select=id&limit=1');
+  const result=await Promise.race([probe,new Promise((_,reject)=>{timeoutId=setTimeout(()=>reject(new Error('Connection check timed out')),7000)})]);
+  if(!Array.isArray(result)||result.length===0)throw new Error('Account could not be verified');
+  hideConnectionBanner();return true;
+ }catch(e){showConnectionBanner('ChatMula could not be reached. Check your data or Wi-Fi, then try again.');return false}
+ finally{if(timeoutId)clearTimeout(timeoutId)}
+}
+
+async function renderPublicChat(){if(!await requireLiveConnection())return;state.page='public';try{if(!state.profile)await loadProfile();const pp=state.profile||{},until=pp.chatbot_until?new Date(pp.chatbot_until):null;if(!pp.has_paid||(until&&until>Date.now())){if(!pp.has_paid){renderHome();showActivationWall();return}toast('Public chat unlocks after your pairing period.');renderHome();return}const rows=await req('/rest/v1/messages?select=*&order=created_at.asc');state.messages=Array.isArray(rows)?rows:[];shell(`<section class="card chat-screen-card"><div class="row between"><div><h2>Public chat</h2><p class="muted small">Keep conversations respectful.</p></div><button class="btn secondary" id="refresh">Refresh</button></div><div class="messages" id="messages">${state.messages.map(m=>`<div class="bubble ${m.sender_id===state.uid?'mine':'theirs'}"><div class="meta">${esc(m.sender_username||'Member')} · ${esc(m.created_at?new Date(m.created_at).toLocaleString(): '')}</div>${esc(m.content||'')}${(m.sender_id===state.uid||state.profile?.is_admin)?`<div><button class="link" data-delete="${Number(m.id)}">Delete</button></div>`:''}</div>`).join('')||'<div class="empty">No messages yet. Start the conversation.</div>'}</div><form class="chatbox" id="sendForm"><input id="messageText" maxlength="2000" placeholder="Write a message…" autocomplete="off" required><button class="btn">Send</button></form></section>`,'chat');$('#refresh').onclick=()=>renderPublicChat();app.querySelectorAll('[data-delete]').forEach(b=>b.onclick=async()=>{if(!confirm('Delete this message?'))return;try{await req('/rest/v1/messages?id=eq.'+encodeURIComponent(b.dataset.delete),{method:'DELETE'});await renderPublicChat()}catch(e){toast(e.message)}});$('#sendForm').onsubmit=async e=>{e.preventDefault();const input=$('#messageText'),text=input.value.trim();if(!text)return;const btn=e.submitter;btn.disabled=true;try{await req('/rest/v1/messages',{method:'POST',body:{sender_id:state.uid,sender_username:state.username,content:text},prefer:'return=minimal'});input.value='';await renderPublicChat()}catch(ex){toast(ex.message)}finally{btn.disabled=false}};const box=$('#messages');box.scrollTop=box.scrollHeight}catch(e){shell(`<div class="notice error">${esc(e.message)}</div><button class="btn" id="back">Back</button>`);$('#back').onclick=()=>renderHome()}}
+
+async function renderWallet(){
+  state.page='wallet';
+  if(!state.profile) await loadProfile();
+  const p=state.profile||{};
+  const defaultPhone = p.phone || p.phone_number || localStorage.getItem('cm_draft_phone') || '';
+
+  shell(`<section class="hero"><h1>Your wallet</h1><p>Track your earnings and request withdrawals.</p></section>
+  <section class="card">
+    <p class="muted">Available balance</p>
+    <h1>${fmt(p.wallet_balance)}</h1>
+    <div class="grid2">
+      <div class="stat"><strong>${fmt(p.total_earned)}</strong><span>Total earned</span></div>
+      <div class="stat"><strong>${fmt(p.total_withdrawn)}</strong><span>Total withdrawn</span></div>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Request withdrawal</h2>
+    <p class="muted small">You can change the M-Pesa number below if needed.</p>
+    <div id="walletError" class="notice error hidden"></div>
+    <form id="withdrawForm">
+      <div class="field">
+        <label>M-Pesa phone number</label>
+        <input id="withdrawPhone" inputmode="tel" value="${esc(defaultPhone)}" placeholder="0712345678" required>
+      </div>
+      <div class="field">
+        <label>Amount (KSh)</label>
+        <input id="withdrawAmount" type="number" min="100" max="${Math.max(0,Number(p.wallet_balance||0))}" step="1" required>
+      </div>
+      <p class="muted small" id="withdrawHint">Minimum withdrawal: KSh 100. Available: ${fmt(p.wallet_balance)}.</p>
+      <button class="btn full">Submit withdrawal request</button>
+    </form>
+    <button class="btn secondary full" id="walletRefresh" style="margin-top:8px">Refresh balance</button>
+  </section>`,'wallet');
+
+  $('#walletRefresh').onclick=()=>renderWallet();
+  $('#withdrawAmount').oninput=()=>{
+    const a=Number($('#withdrawAmount').value||0),bal=Number(p.wallet_balance||0),h=$('#withdrawHint');
+    if(h) h.textContent=bal<100?'Withdrawals start at KSh 100. Your available balance is '+fmt(bal)+'.':a<100?'Minimum withdrawal is KSh 100.':a>bal?'Insufficient balance. You have '+fmt(bal)+' available.':'You can withdraw this amount.';
+  };
+  $('#withdrawForm').onsubmit=async e=>{
+    e.preventDefault();
+    const phone = normalizePhone($('#withdrawPhone').value);
+    const amount = Number($('#withdrawAmount').value);
+    const err = $('#walletError');
+    err.classList.add('hidden');
+    if(!phone) { err.textContent='Enter a valid M-Pesa phone number.'; err.classList.remove('hidden'); return; }
+    if(!Number.isFinite(amount)||amount<100) { err.textContent='Minimum withdrawal is KSh 100.'; err.classList.remove('hidden'); return; }
+    const available = Number(state.profile?.wallet_balance||0);
+    if(available<100) { err.textContent='Your available balance is below the KSh 100 minimum.'; err.classList.remove('hidden'); return; }
+    if(amount>available) { err.textContent='Insufficient wallet balance. Available: '+fmt(available)+'.'; err.classList.remove('hidden'); return; }
+    pendingWithdrawalData = { phone, amount };
+    openAuthModal();
+  }
+}
+
+function openAuthModal() {
+    const modal = document.getElementById('auth-modal');
+    const content = document.getElementById('auth-modal-content');
+    document.getElementById('authPassword').value = '';
+    document.getElementById('authError').classList.add('hidden');
+    modal.classList.remove('hide');
+    setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); }, 10);
+    setTimeout(() => document.getElementById('authPassword').focus(), 300);
+}
+
+function closeAuthModal() {
+    const modal = document.getElementById('auth-modal');
+    const content = document.getElementById('auth-modal-content');
+    modal.classList.add('opacity-0');
+    content.classList.add('scale-95');
+    setTimeout(() => { modal.classList.add('hide'); }, 300);
+    pendingWithdrawalData = null;
+}
+
+async function confirmWithdraw() {
+    const password = document.getElementById('authPassword').value;
+    const err = document.getElementById('authError');
+    const btn = document.getElementById('btn-auth-confirm');
+    if (!password) { err.textContent = "Please enter your password."; err.classList.remove('hidden'); return; }
+    btn.disabled = true;
+    btn.textContent = "Verifying...";
+    err.classList.add('hidden');
+    try {
+        const idempotencyKey = crypto.randomUUID();
+        const result = await req('/functions/v1/withdraw', {
+            method:'POST',
+            body: { phone: pendingWithdrawalData.phone, amount: pendingWithdrawalData.amount, idempotencyKey: idempotencyKey, password: password }
+        });
+        toast(result.message || 'Withdrawal request submitted.');
+        localStorage.setItem('cm_draft_phone', pendingWithdrawalData.phone);
+        closeAuthModal();
+        await renderWallet(); 
+    } catch (ex) {
+        err.textContent = ex.message || 'Incorrect password.';
+        err.classList.remove('hidden');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = "Confirm Withdrawal";
+    }
+}
+
+function renderInvite(){if(!state.profile)await loadProfile();const p=state.profile||{};if(!p.has_paid){renderHome();showActivationWall();return}state.page='invite';let settings=[];try{settings=await req('/rest/v1/site_settings?select=*&id=eq.main', {token:KEY})}catch{}const base=(settings?.[0]?.website_url||'https://chatmula.co.ke').replace(/\/$/,'');const code=p.referral_code||state.ref||'';const link=code?`${base}/?ref=${encodeURIComponent(code)}`:'';shell(`<section class="hero"><h1>Invite your people</h1><p>Share your referral link and invite friends to join ChatMula.</p></section><section class="card"><h2>Your referral code</h2><div class="stat"><strong>${esc(code||'Not available')}</strong><span>Share this code with friends</span></div><div class="field"><label>Your referral link</label><input id="refLink" readonly value="${esc(link)}"></div><div class="grid2"><button class="btn" id="copyLink">Copy link</button><button class="btn secondary" id="shareLink">Share link</button></div><p class="muted small">Referral eligibility and rewards are calculated by the existing backend.</p></section>`,'invite');$('#copyLink').onclick=async()=>{try{await navigator.clipboard.writeText(link);toast('Referral link copied.')}catch{ $('#refLink').select();document.execCommand('copy');toast('Referral link copied.')}};$('#shareLink').onclick=async()=>{if(navigator.share){try{await navigator.share({title:'Join ChatMula',text:'Join me on ChatMula!',url:link})}catch{}}else{try{await navigator.clipboard.writeText(link);toast('Link copied.')}catch{toast(link)}}}}
+function renderAccount(){state.page='account';const p=state.profile||{};shell(`<section class="hero"><h1>Account</h1><p>Manage your ChatMula session.</p></section><section class="card"><div class="row"><div class="avatar" style="display:grid;place-items:center;font-size:24px">👤</div><div class="item-main"><strong>${esc(state.username||'ChatMula member')}</strong><p>${esc(state.email)}</p></div></div><div class="divider"></div><div class="row between"><span class="muted">Activation</span><strong>${p.has_paid?'Active':'Not active'}</strong></div><div class="row between" style="margin-top:12px"><span class="muted">Account role</span><strong>${p.is_admin?'Administrator':'Member'}</strong></div><div class="row between" style="margin-top:12px"><span class="muted">Referral code</span><strong>${esc(p.referral_code||'—')}</strong></div><div class="divider"></div>${!p.has_paid?'<button class="btn full" id="accountActivate">Activate account</button>':''}<button class="btn danger full" id="logout" style="margin-top:8px">Sign out</button></section><p class="muted small">This PWA uses your existing ChatMula account and Supabase backend. Browser push notifications are not included.</p>`,'account');$('#logout').onclick=logout;if($('#accountActivate'))$('#accountActivate').onclick=()=>navigate('activate')}
+
+window.addEventListener('error',function(e){console.error('ChatMula UI error',e.error||e.message);if(app&&!app.querySelector('.fatal-error')){const d=document.createElement('div');d.className='notice error fatal-error';d.style.margin='16px';d.textContent='ChatMula could not display this screen: '+(e.message||'unknown error')+'. Reload the page or contact support if it continues.';app.appendChild(d)}});
+function botStoreKey(){return 'cm_bot_state_'+(state.uid||'guest')}
+function readBotState(){try{return JSON.parse(localStorage.getItem(botStoreKey())||'{}')}catch{return {}}}
+function writeBotState(v){localStorage.setItem(botStoreKey(),JSON.stringify(v))}
+function botHistoryKey(bot){return 'cm_bot_'+state.uid+'_'+String(bot[6]||bot[0]).toLowerCase()}
+function hasRepliedToAnyBot(){return orderedBots().some(b=>{try{return JSON.parse(localStorage.getItem(botHistoryKey(b))||'[]').some(m=>m.mine)}catch{return false}})}
+function botIsEnded(bot){const s=readBotState();return !!(s.ended&&s.ended[String(bot[6]||bot[0]).toLowerCase()])}
+function countryWithFlag(country){return country==='USA'?'USA 🇺🇸':country==='Canada'?'Canada 🇨🇦':country==='UK'?'UK 🇬🇧':country}
+function renderBots(){
+ const bs=readBotState(),booked=bs.bookedName,bookedAt=Number(bs.bookedAt||0),remaining=Math.max(0,30000-(Date.now()-bookedAt));state.page='bots';
+ const order=orderedBots(),rows=[];
+ if(state.profile?.has_paid)rows.push(`<div class="item public-item" role="button" tabindex="0" id="publicChatRow"><img class="avatar" src="icon.jpg" alt="Chatmula Public"><div class="item-main"><strong>Chatmula Public</strong><p class="preview">Tap to open public chat</p></div></div>`);
+ let hoist=order.find(b=>botIsEnded(b));if(!hoist)hoist=order.find(b=>{try{return JSON.parse(localStorage.getItem(botHistoryKey(b))||'[]').some(m=>m.mine)}catch{return false}});
+ const list=hoist?[hoist,...order.filter(b=>b!==hoist)]:order;
+ for(const b of list){
+   const key=String(b[6]||b[0]).toLowerCase();let history=[];try{history=JSON.parse(localStorage.getItem(botHistoryKey(b))||'[]')}catch{}
+   const replied=history.some(m=>m.mine),ended=botIsEnded(b),visual=(bs.visual||[]).includes(key),isBooked=booked===b[0],wait=isBooked&&remaining>0;
+   let label='Book',preview='',buttonClass='';
+   if(ended){label='View';preview='● New message';}
+   else if(replied){label='Chat';preview='Tap to continue';}
+   else if(isBooked){if(wait){label='Booking…';preview='Booking… '+Math.ceil(remaining/1000)+'s';buttonClass='booked'}else{label='Chat';preview='Tap to chat'}}
+   else if(visual){label='Booked';preview='Booked — '+(b[6]||b[0].split(' ')[0])+' will reach out';buttonClass='booked'}
+   rows.push(`<div class="item"><img class="avatar bot-avatar" data-picture="${esc(b[0])}" src="${esc(b[4])}" alt="${esc(b[0])}" loading="lazy" onerror="this.onerror=null;this.src='icon.jpg';this.alt='ChatMula'"><div class="item-main"><strong>${esc(b[0])}</strong><p class="rate">$5 per 20 min · ⭐ ${esc(b[3])}</p><p class="level">${esc(b[7]||'Swahili beginner')}</p><p class="country">${esc(countryWithFlag(b[2]))}</p>${preview?`<p class="preview ${ended?'new-message':''}">${esc(preview)}</p>`:''}</div><button class="book-btn ${buttonClass}" data-bot="${esc(b[0])}" ${wait?'disabled':''}>${label}</button></div>`);
+ }
+ shell(`<section class="chat-list">${rows.join('')}</section>`,'bots');
+ const publicRow=$('#publicChatRow');if(publicRow){publicRow.onclick=()=>navigate('public');publicRow.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();navigate('public')}}}
+ app.querySelectorAll('[data-bot]').forEach(btn=>btn.onclick=()=>handleBotTap(bots.find(b=>b[0]===btn.dataset.bot)));
+ app.querySelectorAll('[data-picture]').forEach(img=>img.onclick=()=>showBotPicture(img.dataset.picture));
+ if(remaining>0){clearTimeout(state.botReplyTimer);state.botReplyTimer=setTimeout(()=>{if(state.page==='bots')renderBots()},1000)}
+}
+function showBotPicture(name){const bot=bots.find(b=>b[0]===name);if(!bot)return;const layer=document.createElement('div');layer.className='picture-overlay';layer.innerHTML=`<div class="picture-dialog"><h3>${esc(bot[0])}</h3><img src="${esc(bot[4])}" alt="${esc(bot[0])}"><button class="btn full" id="closePicture">Close</button></div>`;document.body.appendChild(layer);$('#closePicture').onclick=()=>layer.remove();layer.onclick=e=>{if(e.target===layer)layer.remove()}}
+async function handleBotTap(bot){
+ if(!bot)return;
+ if(!await requireLiveConnection())return;
+ const key=String(bot[6]||bot[0]).toLowerCase(),bs=readBotState();let hist=[];try{hist=JSON.parse(localStorage.getItem(botHistoryKey(bot))||'[]')}catch{}
+ const ended=botIsEnded(bot),replied=hist.some(m=>m.mine);
+ if(ended){if(!state.profile?.has_paid){showActivationWall();return}openBot(bot,true);return}
+ if(replied){openBot(bot,true);return}
+ if(bs.bookedName===bot[0]){const rem=Math.max(0,30000-(Date.now()-Number(bs.bookedAt||0)));if(rem>0){renderBots();return}openBot(bot,true);return}
+ if(!hasRepliedToAnyBot()){
+   bs.bookedName=bot[0];bs.bookedAt=Date.now();writeBotState(bs);toast((bot[6]||bot[0].split(' ')[0])+' is joining... 30s');renderBots();return;
+ }
+ if(!navigator.onLine){toast('Internet connection required to book another chatbot.');return}
+ if(!state.profile?.has_paid){showActivationWall();return}
+ bs.visual=Array.isArray(bs.visual)?bs.visual:[];if(bs.visual.includes(key)){toast((bot[6]||bot[0])+' will reach out soon');return}bs.visual.push(key);writeBotState(bs);toast('Booked — '+(bot[6]||bot[0])+' will reach out');renderBots();
+}
+async function openBot(bot,connectionChecked=false){if(!bot)return;if(!connectionChecked&&!await requireLiveConnection())return;state.bot=bot;try{state.botHistory=JSON.parse(localStorage.getItem(botHistoryKey(bot))||'[]')}catch{state.botHistory=[]}state.botTyping=false;renderBotChat();if(!state.botHistory.length){state.botTyping=true;renderBotChat();const delay=2500+Math.floor(Math.random()*1500);clearTimeout(state.botReplyTimer);state.botReplyTimer=setTimeout(()=>{if(state.page!=='bot')return;state.botTyping=false;state.botHistory.push({mine:false,text:'Hey 👋'});saveBotHistory();renderBotChat()},delay)}}
+function saveBotHistory(){if(state.bot&&state.uid)localStorage.setItem(botHistoryKey(state.bot),JSON.stringify(state.botHistory||[]))}
+function renderBotChat(){
+ if(!state.bot){renderBots();return}state.page='bot';const bot=state.bot,history=state.botHistory||[],ended=botIsEnded(bot);
+ shell(`<section class="card chat-screen-card"><div class="row"><img class="avatar" src="./${bot[4]}" alt="${esc(bot[0])}" onerror="this.onerror=null;this.src='./icon.jpg';this.alt='ChatMula bot'"><div class="item-main"><strong>${esc(bot[0])}</strong><p>$5 per 20 min · ⭐ ${bot[3]} · ${esc(bot[7]||'Swahili beginner')} · ${esc(countryWithFlag(bot[2]))}</p></div><button class="btn secondary" id="backBots">Back</button></div><div class="messages" id="botMessages">${history.map(m=>`<div class="bubble ${m.mine?'mine':'theirs'}">${esc(m.text)}</div>`).join('')}${state.botTyping?`<div class="typing" id="botTyping">${esc(bot[6]||bot[0].split(' ')[0])} is typing…</div>`:''}</div>${ended?`<div class="notice">Wait for ${esc(bot[6]||bot[0].split(' ')[0])} to resume chat.</div>`:''}<form class="chatbox" id="botForm"><input id="botText" maxlength="1200" placeholder="${ended?'Conversation paused':'Message '+esc(bot[6]||bot[0].split(' ')[0])+'…'}" ${ended||state.botTyping?'disabled':''} required><button class="btn" ${ended||state.botTyping?'disabled':''}>Send</button></form></section>`,'bot');
+ $('#backBots').onclick=()=>{clearTimeout(state.botReplyTimer);state.botTyping=false;renderBots()};const box=$('#botMessages');box.scrollTop=box.scrollHeight;
+ $('#botForm').onsubmit=e=>{
+  e.preventDefault();const input=$('#botText'),text=input.value.trim();if(!text||state.botTyping||botIsEnded(bot))return;
+  state.botHistory.push({mine:true,text});saveBotHistory();const turns=state.botHistory.filter(m=>m.mine).length;
+  state.botTyping=true;renderBotChat();const reply=botReplyFor(turns,bot[6]||bot[0].split(' ')[0]);
+  const base=turns===1?6000:turns===2?8000:turns===3?9000:turns===4?8000:3500;
+  const spread=turns===1?4000:turns===2||turns===3?4500:turns===4?4000:1500;
+  const delay=base+Math.floor(Math.random()*(spread+1))+Math.min(2500,text.length*25);
+  state.botReplyTimer=setTimeout(()=>{if(state.page!=='bot'||!state.bot)return;state.botTyping=false;state.botHistory.push({mine:false,text:reply});if(turns>=5){const bs=readBotState();bs.ended=bs.ended||{};bs.ended[String(bot[6]||bot[0]).toLowerCase()]=true;writeBotState(bs)}saveBotHistory();renderBotChat()},delay);
+ };
+}
+function botReplyFor(turn,name){
+ if(turn>=5){const waves=['👋 Later!','👋 See you later!','Alright, later 😊 👋','👋 Talk later!'];return waves[Math.floor(Math.random()*waves.length)]}
+ if(turn===4){const byes=["Sorry, I have to step away for a bit — I'm working on a project 😊 I'll be back soon, okay?","I'm in the middle of a project right now 😅 I'll be back soon. Don't go too far!","Something came up with a project I'm working on. I'll be back soon 😊 Talk in a bit!"];return byes[Math.floor(Math.random()*byes.length)]}
+ if(turn===1){const intros=[`I'm ${name} 😊 I want to learn Swahili and I'd like you to be my Swahili teacher. Can you help me?`,`I'm ${name} 😊 I've been wanting to learn Swahili properly, and I'd love for you to be my teacher. Would you?`,`I'm ${name} 😊 I'm looking for someone to teach me Swahili. I'd like that person to be you — if you don't mind.`];return intros[Math.floor(Math.random()*intros.length)]}
+ const pool=["So where should we start? What's the first thing you'd teach me?","Is 'jambo' too formal for everyday use, or is it fine?","What's a Swahili phrase that would actually impress someone?","What mistakes do learners usually make that I should avoid?","How do I pronounce Swahili words naturally without sounding like a textbook?","What's a Swahili phrase people actually use every day, not just in lessons?","Is there a Swahili phrase that always makes people smile?","What's one thing about Swahili that surprises most learners?"];
+ let seed=0;for(const ch of String(name))seed=(seed*31+ch.charCodeAt(0))|0;const shuffled=pool.slice();for(let i=shuffled.length-1;i>0;i--){seed=(Math.imul(seed,1664525)+1013904223)|0;const j=(seed>>>0)%(i+1);[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}return shuffled[Math.max(0,Math.min(shuffled.length-1,turn-2) )];
+}
+
+async function renderActivation(){
+ state.page='activate';let settings=[];try{settings=await req('/rest/v1/site_settings?select=*&id=eq.main',{token:KEY})}catch{}
+ const fee=Number(settings?.[0]?.activation_fee||100),profile=state.profile||{};
+ const username=profile.username||state.username||'—',email=profile.email||state.email||'—';
+ const savedPhone=profile.phone||profile.phone_number||localStorage.getItem('cm_draft_phone')||'';
+ const withdrawals=[
+  ['James Maina  ·  07***541  ·  KSh 1,250','#00E5FF','#102A43'],['Amina Wanjiru  ·  07***284  ·  KSh 780','#FFFFFF','#6A1B9A'],['Brian Otieno  ·  07***693  ·  KSh 1,850','#FFF176','#4E342E'],['Faith Njeri  ·  07***175  ·  KSh 640','#B9F6CA','#1B5E20'],['Kevin Kiptoo  ·  07***826  ·  KSh 1,100','#FFCCBC','#880E4F'],['Mary Atieno  ·  07***430  ·  KSh 950','#D1C4E9','#283593'],['Daniel Mwangi  ·  07***918  ·  KSh 1,600','#00E5FF','#102A43'],['Grace Chebet  ·  07***362  ·  KSh 720','#FFFFFF','#6A1B9A'],['Samuel Kamau  ·  07***704  ·  KSh 2,000','#FFF176','#4E342E'],['Mercy Achieng  ·  07***251  ·  KSh 680','#B9F6CA','#1B5E20'],['Peter Mutua  ·  07***687  ·  KSh 1,400','#FFCCBC','#880E4F'],['Esther Wambui  ·  07***143  ·  KSh 890','#D1C4E9','#283593'],['Joseph Ouma  ·  07***592  ·  KSh 1,150','#00E5FF','#102A43'],['Lydia Jepkoech  ·  07***318  ·  KSh 610','#FFFFFF','#6A1B9A'],['Dennis Kariuki  ·  07***465  ·  KSh 1,750','#FFF176','#4E342E'],['Joyce Muthoni  ·  07***837  ·  KSh 830','#B9F6CA','#1B5E20']
+ ];
+ const taglines=['Teach foreigners Swahili and earn','Earn KSh 500+ per conversation','Turn your Swahili into real income','Chat with learners worldwide','Get paid for what you already know'];
+ app.innerHTML=`<main class="native-activation">
+  <div class="na-hero"><span class="na-live">● LIVE</span><h1 class="na-title">Activate your ChatMula account</h1><p class="na-tagline" id="naTagline">Teach foreigners Swahili and earn</p></div>
+  <div class="na-card"><span class="na-label">One-time activation fee</span><div class="na-fee" id="naFee">KSh ${fee.toFixed(2)}</div></div>
+  <div class="na-card"><p class="na-account">Username: ${esc(username)}</p><p class="na-email">Email: ${esc(email)}</p><div class="na-field"><label class="na-label" for="activationPhone">M-Pesa number</label><input class="na-input" id="activationPhone" inputmode="tel" autocomplete="tel" placeholder="07XX XXX XXX" value="${esc(savedPhone)}"></div></div>
+  <div class="na-card"><span class="na-label">Recent withdrawals</span><div class="na-withdraw" id="naWithdrawal">${withdrawals[0][0]}</div></div>
+  <div id="activationError" class="na-error hidden" role="alert"></div>
+  <button class="na-pay" id="activationPay">Pay with M-Pesa</button><button class="na-cancel" id="activationBack">Cancel</button>
+ </main>`;
+ let ti=0,wi=0;clearInterval(state.activationTagTimer);clearInterval(state.activationWithdrawalTimer);
+ state.activationTagTimer=setInterval(()=>{const el=$('#naTagline');if(!el||state.page!=='activate'){clearInterval(state.activationTagTimer);return}el.style.opacity='0';el.style.transform='translateY(-8px)';setTimeout(()=>{if(!el||state.page!=='activate')return;ti=(ti+1)%taglines.length;el.textContent=taglines[ti];el.style.transform='translateY(0)';el.style.opacity='1'},280)},2400);
+ state.activationWithdrawalTimer=setInterval(()=>{const el=$('#naWithdrawal');if(!el||state.page!=='activate'){clearInterval(state.activationWithdrawalTimer);return}el.style.opacity='0';setTimeout(()=>{if(!el||state.page!=='activate')return;wi=(wi+1)%withdrawals.length;el.textContent=withdrawals[wi][0];el.style.color=withdrawals[wi][1];el.style.background=withdrawals[wi][2];el.style.opacity='1'},220)},2600);
+ $('#activationBack').onclick=()=>{clearInterval(state.activationTagTimer);clearInterval(state.activationWithdrawalTimer);renderHome()};
+ $('#activationPay').onclick=async()=>{const phone=normalizePhone($('#activationPhone').value),btn=$('#activationPay'),err=$('#activationError');if(!phone){err.textContent='Enter a valid M-Pesa number, e.g. 0712345678.';err.classList.remove('hidden');return}if(!state.token){err.textContent='Your session expired. Please log in again.';err.classList.remove('hidden');return}btn.disabled=true;btn.textContent='Sending prompt…';err.classList.add('hidden');localStorage.setItem('cm_draft_phone',$('#activationPhone').value.trim());try{const d=await req('/functions/v1/activate',{method:'POST',body:{phone}});if(d.alreadyActivated){await loadProfile();toast('Your account is already activated!');renderHome();return}if(!d.pendingId)throw Error(d.message||d.error||'No pending ID from server. Try again.');state.pendingId=d.pendingId;state.pendingKind='activation';clearInterval(state.activationTagTimer);clearInterval(state.activationWithdrawalTimer);renderWaiting(d.pendingId,'activation',Number(d.activationFee||fee))}catch(ex){err.textContent=ex.message||'Payment could not be started. Try again.';err.classList.remove('hidden')}finally{if($('#activationPay')){btn.disabled=false;btn.textContent='Pay with M-Pesa'}}};
+}
+function renderWaiting(id,kind,fee=100){
+ state.page='waiting';clearTimeout(state.pollTimer);app.innerHTML=`<main class="native-activation na-wait"><div class="na-wait-inner"><div class="na-spinner" aria-label="Loading"></div><div class="na-wait-title">Waiting for M-Pesa...</div><div class="na-wait-msg">📱 Check your phone and enter your\nM-Pesa PIN to complete KSh ${Number(fee||100).toFixed(2)} activation</div><div id="waitingError" class="na-error hidden" role="status"></div></div></main>`;
+ let tries=0;const check=async()=>{if(state.page!=='waiting')return;try{if(!navigator.onLine){const e=$('#waitingError');if(e){e.textContent='No internet. Your activation is still pending.';e.classList.remove('hidden')}state.pollTimer=setTimeout(check,5000);return}const path=kind==='activation'?'/functions/v1/check-activation?id=':'/functions/v1/check-signup?id=';const d=await req(path+encodeURIComponent(id),{token:KEY});const status=String(d.status||'').toUpperCase();if(status==='COMPLETED'){clearTimeout(state.pollTimer);const e=$('#waitingError');if(e){e.textContent='Payment confirmed. Updating your account…';e.classList.remove('hidden');e.style.background='#123326';e.style.color='#6EE7B7'}await loadProfile();toast('Payment confirmed.');renderHome();return}if(status==='FAILED'){clearTimeout(state.pollTimer);const e=$('#waitingError');if(e){e.textContent='Payment was not completed. Please try again.';e.classList.remove('hidden')}state.pollTimer=setTimeout(()=>{if(state.page==='waiting')renderHome()},2500);return}tries++;if(tries%6===0){const e=$('#waitingError');if(e){e.textContent='Verifying your payment… keep this screen open.';e.classList.remove('hidden')}}}catch(ex){const e=$('#waitingError');if(e){e.textContent=ex.message||'Unable to verify payment yet. Retrying…';e.classList.remove('hidden')}}state.pollTimer=setTimeout(check,5000)};check();
+}
+
+(function installNativeInteractionLayer(){
+  if(window.__chatmulaNativeLayerInstalled)return;window.__chatmulaNativeLayerInstalled=true;
+  const canVibrate=()=>!!(navigator.vibrate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  document.addEventListener('pointerdown',function(ev){
+    const target=ev.target&&ev.target.closest&&ev.target.closest('button,.btn,.book-btn,.nav button,.item,[role="button"]');
+    if(!target||target.disabled||target.getAttribute('aria-disabled')==='true')return;
+    if(canVibrate() && ev.pointerType==='touch') { try{navigator.vibrate(8)}catch(_){ } }
+    if(ev.pointerType==='touch' && target.matches('button,.btn,.book-btn,.nav button,[role="button"]')){
+      const rect=target.getBoundingClientRect();const size=Math.max(rect.width,rect.height)*1.65;
+      const ripple=document.createElement('span');ripple.className='ripple';ripple.style.width=size+'px';ripple.style.height=size+'px';
+      ripple.style.left=(ev.clientX-rect.left-size/2)+'px';ripple.style.top=(ev.clientY-rect.top-size/2)+'px';
+      target.querySelectorAll(':scope > .ripple').forEach(n=>n.remove());target.appendChild(ripple);
+      ripple.addEventListener('animationend',()=>ripple.remove(),{once:true});
+    }
+  },{passive:true});
+  window.addEventListener('offline',()=>showConnectionBanner());
+  window.addEventListener('online',()=>showConnectionBanner('Internet is back. ChatMula will check the connection when you try to chat.',true));
+  if(!navigator.onLine)showConnectionBanner();
+  const syncVisibleHeight=()=>{
+    const vv=window.visualViewport;const h=vv?vv.height:window.innerHeight;
+    document.documentElement.style.setProperty('--visible-height',Math.max(240,h)+'px');
+    const active=document.activeElement;
+    if(active&&/INPUT|TEXTAREA/.test(active.tagName)){
+      const card=active.closest('.chat-screen-card');const list=card&&card.querySelector('.messages');
+      requestAnimationFrame(()=>{try{active.scrollIntoView({block:'nearest',behavior:'auto'});if(list)list.scrollTop=list.scrollHeight}catch(_){}});
+    }
+  };
+  if(window.visualViewport){window.visualViewport.addEventListener('resize',syncVisibleHeight);window.visualViewport.addEventListener('scroll',syncVisibleHeight)}
+  window.addEventListener('resize',syncVisibleHeight);window.addEventListener('orientationchange',()=>setTimeout(syncVisibleHeight,250));
+  document.addEventListener('focusin',e=>{if(e.target&&/INPUT|TEXTAREA/.test(e.target.tagName))setTimeout(syncVisibleHeight,120)});
+  document.addEventListener('focusout',()=>setTimeout(syncVisibleHeight,180));syncVisibleHeight();
+})();
+
+/* =============== PLAY STORE & PWA BOOT LOGIC =============== */
+const playStoreGate = document.getElementById('play-store-gate');
+const appContent = document.getElementById('app-content');
+const splashScreen = document.getElementById('splash-screen');
+
+let fakeInterval = null;
+let deferredPrompt = null;
+let waitingForPrompt = false;
+
+const _ua = navigator.userAgent || '';
+const _isAndroid = /Android/i.test(_ua);
+const _isIOS = /iPhone|iPad|iPod/i.test(_ua);
+const _isChromeBrowser = /Chrome\/\d+/i.test(_ua) && !/Edg|OPR|SamsungBrowser|Firefox/i.test(_ua);
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+const _wasInstalled = localStorage.getItem('chatmula_installed_v5') === '1';
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (waitingForPrompt) {
+        waitingForPrompt = false;
+        triggerRealInstall();
+    }
+});
+
+window.addEventListener('appinstalled', () => {
+    localStorage.setItem('chatmula_installed_v5', '1');
+    clearInterval(fakeInterval);
+    showInstalledState();
+});
+
+function showInstallState(){
+    document.getElementById('pre-install-buttons').classList.remove('hide');
+    document.getElementById('downloading-buttons').classList.add('hide');
+    document.getElementById('post-install-buttons').classList.add('hide');
+    document.getElementById('download-text').classList.add('hide');
+    document.getElementById('ring-svg').classList.add('hidden');
+    document.getElementById('stats-row').classList.remove('hide');
+    document.getElementById('post-install-content').classList.add('hide');
+    document.getElementById('pre-install-content').classList.remove('hide');
+    updateProgressUI(0); 
+}
+
+function showInstalledState(){
+    document.getElementById('pre-install-buttons').classList.add('hide');
+    document.getElementById('downloading-buttons').classList.add('hide');
+    document.getElementById('post-install-buttons').classList.remove('hide');
+    document.getElementById('download-text').classList.add('hide');
+    document.getElementById('ring-svg').classList.add('hidden');
+    document.getElementById('stats-row').classList.add('hide');
+    document.getElementById('post-install-content').classList.remove('hide');
+    document.getElementById('pre-install-content').classList.remove('hide');
+}
+
+function mockUninstall(){
+    localStorage.removeItem('chatmula_installed_v5');
+    showInstallState();
+}
+
+function setRating(r){
+    document.querySelectorAll('.rate-star').forEach((s,i)=>{
+        if(i<r){ s.classList.remove('text-gray-300'); s.classList.add('text-yellow-400'); s.setAttribute('fill','currentColor'); }
+        else { s.classList.remove('text-yellow-400'); s.classList.add('text-gray-300'); s.setAttribute('fill','none'); }
+    });
+    if(r>0){ const b = document.getElementById('btn-write-review'); b.innerText = `Thanks for rating ${r} stars!`; b.classList.remove('text-[#0056D2]'); b.classList.add('text-green-600'); }
+}
+
+// FIXED: Smooth scroll to reveal the new reviews
+function toggleReviews() {
+    const extra = document.getElementById('more-reviews');
+    const btn = document.getElementById('btn-see-all');
+    if (extra.classList.contains('hide')) {
+        extra.classList.remove('hide');
+        btn.innerText = "Show less";
+        // Scroll down to the first new review
+        setTimeout(() => {
+            extra.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 50);
+    } else {
+        extra.classList.add('hide');
+        btn.innerText = "See all 15,204 reviews";
+        // Scroll back up to the button
+        btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+// Attach event listener robustly
+document.getElementById('btn-see-all').addEventListener('click', toggleReviews);
+
+document.getElementById('btn-store-install').addEventListener('click', () => {
+    startFakeDownload();
+    if (deferredPrompt) {
+        triggerRealInstall();
+    } else {
+        waitingForPrompt = true;
+    }
+});
+
+function triggerRealInstall() {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+            // appinstalled event will handle the UI change
+        }
+        deferredPrompt = null;
+        if (localStorage.getItem('chatmula_installed_v5') !== '1') {
+            showInstallState();
+        }
+    });
+}
+
+function startFakeDownload() {
+    document.getElementById('pre-install-buttons').classList.add('hide');
+    document.getElementById('downloading-buttons').classList.remove('hide');
+    document.getElementById('download-text').classList.remove('hide');
+    document.getElementById('ring-svg').classList.remove('hidden');
+
+    const startTime = Date.now();
+    const duration = 30000; // 30 seconds
+
+    clearInterval(fakeInterval);
+    fakeInterval = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min((elapsed / duration) * 100, 100); 
+        updateProgressUI(progress);
+
+        if (elapsed >= duration) {
+            clearInterval(fakeInterval);
+            document.getElementById('download-text').classList.add('hide');
+            
+            // Force the UI to show "Installed" even if Chrome didn't prompt
+            if (localStorage.getItem('chatmula_installed_v5') !== '1') {
+                showInstallState();
+            } else {
+                showInstalledState();
+            }
+        }
+    }, 50);
+}
+
+function updateProgressUI(progress) {
+    const ring = document.getElementById('download-ring');
+    const pct = document.getElementById('download-percent');
+    if(ring) ring.style.strokeDashoffset = 301.59 - (progress / 100) * 301.59;
+    if(pct) pct.innerText = Math.floor(progress) + "% of 10 MB";
+}
+
+// Open button - Shows the "App is installed" prompt (ZambiaCash style)
+document.getElementById('btn-open-app').addEventListener('click', () => {
+    const promoText = document.getElementById('installed-promo-text');
+    
+    // If the user arrived via a referral link, show their actual code
+    if (state.ref) {
+        promoText.innerText = `Your referral code: ${state.ref}`;
+    } else {
+        promoText.innerText = `Use promo code: CHAT2026`;
+    }
+
+    const prompt = document.getElementById('installed-prompt');
+    prompt.classList.remove('hide');
+    
+    // Slide it down smoothly
+    setTimeout(() => {
+        prompt.classList.remove('opacity-0', '-translate-y-2');
+        prompt.classList.add('opacity-100', 'translate-y-0');
+    }, 10);
+
+    // Auto-hide after 8 seconds
+    setTimeout(() => {
+        prompt.classList.remove('opacity-100', 'translate-y-0');
+        prompt.classList.add('opacity-0', '-translate-y-2');
+        setTimeout(() => {
+            prompt.classList.add('hide');
+        }, 300);
+    }, 8000);
+});
+
+// Register Service Worker immediately on load
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(e => console.warn('Service worker unavailable:', e));
+    });
+}
+
+// Boot sequence
+if (isStandalone) {
+    playStoreGate.classList.add('hide');
+    appContent.classList.remove('hide');
+    proceedToAppBoot();
+} else if (_wasInstalled) {
+    playStoreGate.classList.add('hide');
+    appContent.classList.remove('hide');
+    proceedToAppBoot();
+} else {
+    // Play Store is already visible by default
+    playStoreGate.classList.remove('hide');
+    showInstallState();
+}
+
+async function proceedToAppBoot(){
+    if(new URLSearchParams(location.search).get('ref')){
+        state.ref=new URLSearchParams(location.search).get('ref').trim().toUpperCase();
+        localStorage.setItem('cm_ref',state.ref);
+    }
+    if(state.token&&state.uid){
+        try{await loadProfile()}catch(e){state.profile=null;console.warn('Profile refresh failed; keeping signed-in session:',e)}
+        renderHome();
+        if(!state.profile)toast('Chatbots are shown, but account details could not load.');
+        return
+    }
+    renderAuth()
+}
+
+const lastPathPart=location.pathname.split('/').pop();
+if(location.protocol.startsWith('http') && location.pathname!=='/' && !location.pathname.endsWith('/') && !lastPathPart.includes('.')) {
+  location.replace(location.pathname+'/'+location.search+location.hash);
+}
+</script>
 </body></html>

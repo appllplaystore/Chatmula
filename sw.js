@@ -1,15 +1,12 @@
-const CACHE_NAME = 'chatmula-v4'; // Bumped to v4 to clear old broken caches
+const CACHE_NAME = 'chatmula-v6'; // Bumped to v5 to clear old broken caches
 
-// The core files required to boot the app
 const APP_SHELL = [
   './',
   './index.html',
-  './app-script.js',
   './manifest.json',
   './icon.jpg',
   './icon-192.png',
   './icon-512.png',
-  // Bot images
   './bot_alex_carter.jpg',
   './bot_jordan_brooks.jpg',
   './bot_morgan_bennett.jpg',
@@ -32,14 +29,12 @@ const APP_SHELL = [
   './bot_mia_winters.jpg'
 ];
 
-// 1. Install Event: Cache the app shell
 self.addEventListener('install', (event) => {
-  self.skipWaiting(); // Force the new SW to take over immediately
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return Promise.all(
         APP_SHELL.map((url) => {
-          // Catch errors so if one image is missing, the whole install doesn't fail
           return cache.add(url).catch((err) => console.warn('Failed to cache:', url, err));
         })
       );
@@ -47,9 +42,8 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// 2. Activate Event: Clean up old caches
 self.addEventListener('activate', (event) => {
-  self.clients.claim(); // Take control of all open pages immediately
+  self.clients.claim();
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -64,33 +58,25 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. Fetch Event: Serve assets properly
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // 🚨 CRITICAL: DO NOT CACHE SUPABASE API CALLS 🚨
-  // We want wallet balances, messages, and withdrawals to ALWAYS be live and fresh.
   if (url.origin.includes('supabase.co')) {
-    return; // Let the browser handle it normally (Network Only)
+    return; 
   }
 
-  // For HTML navigation requests (page refreshes)
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request).catch(() => {
-        // If offline, serve the cached index.html
         return caches.match('./index.html');
       })
     );
     return;
   }
 
-  // For static assets (app-script.js, images, fonts)
-  // Stale-While-Revalidate: Return cached instantly for native speed, update in background
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request).then((networkResponse) => {
-        // If the network request is successful, update the cache for next time
         if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
@@ -98,11 +84,8 @@ self.addEventListener('fetch', (event) => {
           });
         }
         return networkResponse;
-      }).catch(() => { 
-        /* Ignore network errors if we have a cached version */ 
-      });
+      }).catch(() => { });
 
-      // Return the cached response immediately if we have it, otherwise wait for network
       return cachedResponse || fetchPromise;
     })
   );
