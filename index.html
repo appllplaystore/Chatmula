@@ -4,15 +4,30 @@
 <title>ChatMula</title><meta name="theme-color" content="#0056D2"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png" type="image/png">
 <script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Roboto','Arial','sans-serif']},colors:{playBlue:'#0056D2',playGreen:'#01875f'},boxShadow:{soft:'0 10px 40px -10px rgba(0,0,0,.08)'}}}}</script>
-<style>.hide{display:none!important}body{font-family:Roboto,Arial,sans-serif}.hide-scrollbar::-webkit-scrollbar{display:none}#download-ring{transition:stroke-dashoffset .1s linear}button:disabled{opacity:.55;cursor:default}.review-avatar{width:56px;height:56px;flex:0 0 56px;border-radius:50%;overflow:hidden;background:#eef2f7;display:flex;align-items:center;justify-content:center}.review-avatar img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}.review-entry{padding-bottom:2px}.native-toast{animation:toastIn .25s ease-out}@keyframes toastIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}</style>
+<style>.hide{display:none!important}body{font-family:Roboto,Arial,sans-serif}.hide-scrollbar::-webkit-scrollbar{display:none}#download-ring{transition:stroke-dashoffset .12s linear}button:disabled{opacity:.55;cursor:default}.review-avatar{width:56px;height:56px;flex:0 0 56px;border-radius:50%;overflow:hidden;background:#eef2f7;display:flex;align-items:center;justify-content:center}.review-avatar img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}.review-entry{padding-bottom:2px}.native-toast{animation:toastIn .25s ease-out}@keyframes toastIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}.rate-star{background:transparent;border:0;font-size:1.875rem;line-height:1;padding:4px 8px;cursor:pointer;transition:color .15s ease,transform .12s ease,filter .12s ease;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;-webkit-user-select:none}.rate-star:hover{transform:scale(1.12)}.rate-star:active{transform:scale(.94)}.rate-star:focus-visible{outline:2px solid #0056D2;outline-offset:3px;border-radius:8px}</style>
+
+<script>
+  window.__cmDeferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    window.__cmDeferredPrompt = e;
+    try { window.dispatchEvent(new Event('cm-install-ready')); } catch (_) {}
+  });
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    navigator.serviceWorker.register('./sw.js').catch(function (e) {
+      console.warn('ChatMula service worker registration failed:', e);
+    });
+  }
+</script>
 </head><body class="bg-white text-slate-900 antialiased">
 <div id="toast" class="hide fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-slate-800 text-white text-sm px-5 py-3 rounded-xl shadow-lg text-center max-w-[90vw]" role="status" aria-live="polite"></div>
+
 <div id="browser-warning" class="hide fixed inset-0 z-[10000] bg-slate-900 flex flex-col items-center justify-center p-6 text-center font-sans">
   <div class="w-20 h-20 bg-blue-500/20 rounded-full flex items-center justify-center mb-6">
     <svg class="w-10 h-10 text-blue-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.6 1.8 13.3 11.5c.4.4 1 .4 1.4 0l3.1-3.1C16.4 5.5 13.3 3.2 9.8 2.3L3.6 1.8Z"/><path d="M3.6 22.2 13.3 12.5c.4-.4 1-.4 1.4 0l3.1 3.1c-1.4 2.9-4.5 5.2-8 6.1l-6.2.5Z"/><path d="M2.4 2.7C2.1 3.1 2 3.6 2 4.2v15.6c0 .6.1 1.1.4 1.5L13.3 12 2.4 2.7Z"/><path d="M17.8 8.4 14.7 11.5l3.1 4.1c.4-.4.6-.9.6-1.5V9.9c0-.6-.2-1.1-.6-1.5Z"/></svg>
   </div>
-  <h2 class="text-2xl font-bold text-white mb-2">Open in Chrome</h2>
-  <p class="text-gray-400 mb-8 text-sm leading-relaxed max-w-xs mx-auto">To download ChatMula, you must open this link in Google Chrome to continue.</p>
+  <h2 id="browser-warning-title" class="text-2xl font-bold text-white mb-2">Open in Chrome</h2>
+  <p id="browser-warning-desc" class="text-gray-400 mb-8 text-sm leading-relaxed max-w-xs mx-auto">To download ChatMula, you must open this link in Google Chrome to continue.</p>
   <button id="open-in-chrome" class="w-full max-w-xs bg-blue-500 text-white font-bold py-3.5 rounded-xl mb-3 flex items-center justify-center gap-2">Open in Chrome</button>
   <button id="copy-link-help" class="w-full max-w-xs bg-slate-800 text-white font-bold py-3.5 rounded-xl border border-slate-700">Copy Link</button>
 </div>
@@ -20,13 +35,13 @@
 <header class="flex items-center justify-between p-4 sticky top-0 bg-white/95 backdrop-blur z-10"><button id="back-btn" aria-label="Back" class="text-3xl leading-none text-gray-700">‹</button><span class="text-gray-700 font-medium">App details</span><button id="more-btn" aria-label="More options" class="text-2xl text-gray-700">⋮</button></header>
 <section class="p-5">
 <div class="flex gap-4 mb-6 items-center"><div class="relative w-[104px] h-[104px] shrink-0 flex items-center justify-center"><svg id="ring-svg" class="hide w-full h-full -rotate-90 absolute inset-0 z-10" viewBox="0 0 104 104"><circle cx="52" cy="52" r="48" stroke="#F1F5F9" stroke-width="5" fill="none"/><circle id="download-ring" cx="52" cy="52" r="48" stroke="#0056D2" stroke-width="2.5" fill="none" stroke-dasharray="301.59" stroke-dashoffset="301.59" stroke-linecap="round"/></svg><img src="icon-192.png" alt="ChatMula" class="w-[88px] h-[88px] rounded-2xl shadow-soft border border-gray-100 object-cover"></div><div class="flex flex-col justify-center"><h1 class="text-2xl font-bold text-gray-900 leading-tight">ChatMula</h1><p class="text-playBlue font-semibold text-sm mt-1">ChatMula Global</p><p class="text-gray-500 text-xs mt-1">Communication</p></div></div>
-<div id="download-text" class="hide mb-4"><span id="download-percent" class="text-sm font-semibold text-gray-700">0% of 10 MB</span><div class="flex items-center gap-1 mt-1 text-playGreen"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span id="status-small" class="text-xs font-semibold">Downloading</span></div></div>
+<div id="download-text" class="hide mb-4"><span id="download-percent" class="text-sm font-semibold text-gray-700">0 MB of 10 MB · 0%</span><div class="flex items-center gap-1 mt-1 text-playGreen"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span id="status-small" class="text-xs font-semibold">Downloading</span></div></div>
 <div class="flex gap-2 mb-6" id="pre-install-buttons"><button id="btn-store-install" class="flex-1 bg-playBlue text-white font-semibold text-lg py-3.5 rounded-full shadow-soft active:scale-95 transition-transform">Install</button></div>
-<div class="flex gap-2 mb-6 hide" id="downloading-buttons"><button id="btn-cancel-install" class="flex-1 bg-white text-playBlue font-semibold text-lg py-2.5 rounded-full border-2 border-gray-200">Cancel</button><button disabled class="flex-1 bg-gray-100 text-gray-500 font-semibold text-lg py-2.5 rounded-full">Downloading…</button></div>
+<div class="flex gap-2 mb-6 hide" id="downloading-buttons"><button id="btn-cancel-install" class="flex-1 bg-white text-playBlue font-semibold text-lg py-2.5 rounded-full border-2 border-gray-200">Cancel</button><button id="download-status-btn" disabled class="flex-1 bg-gray-100 text-gray-500 font-semibold text-lg py-2.5 rounded-full">Downloading…</button></div>
 <div class="flex gap-3 mb-6 hide" id="post-install-buttons"><button id="btn-uninstall" class="flex-1 bg-white text-playBlue font-semibold text-lg py-3 rounded-full border border-gray-300">Reset status</button><button id="btn-open-app" class="flex-1 bg-playBlue text-white font-semibold text-lg py-3 rounded-full">Open</button></div>
-<div id="installed-prompt" class="hide mb-6"><div class="bg-[#1e1e1e] rounded-2xl p-5 flex flex-col gap-3 shadow-lg border border-gray-700"><div class="flex items-center gap-4"><img src="icon-192.png" alt="ChatMula" class="w-12 h-12 rounded-xl object-cover"><div><p class="text-white font-bold text-base">App is installed</p><p class="text-gray-400 text-xs mt-1">Find ChatMula on your home screen or in your app drawer.</p></div></div></div></div>
+<div id="installed-prompt" class="hide mb-6"><div class="bg-[#1e1e1e] rounded-2xl p-5 flex flex-col gap-3 shadow-lg border border-gray-700"><div class="flex items-center gap-4"><img src="icon-192.png" alt="ChatMula" class="w-12 h-12 rounded-xl object-cover"><div><p class="text-white font-bold text-base">App is installed</p><p class="text-gray-400 text-xs mt-1">Find ChatMula on your home screen or in your app drawer.</p></div></div><div class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-3 text-center"><p id="inline-ref-code" class="text-yellow-400 font-extrabold text-sm">Use referral code: 2026</p></div></div></div>
 <div class="grid grid-cols-3 items-stretch text-center py-5 mb-6 border-y border-gray-100" id="stats-row">
-<div class="flex flex-col items-center justify-center border-r border-gray-200 px-1"><div class="flex items-center gap-1"><span class="font-bold text-base">4.8</span><svg class="w-4 h-4 text-gray-800" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72a1 1 0 01.588-1.81h3.461a1 1 0 00.951-.69z"/></svg></div><span class="text-[11px] text-gray-600 mt-1">12.4K reviews</span></div>
+<div class="flex flex-col items-center justify-center border-r border-gray-200 px-1"><div class="flex items-center gap-1"><span class="font-bold text-base">4.8</span><svg class="w-4 h-4 text-playBlue" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72a1 1 0 01.588-1.81h3.461a1 1 0 00.951-.69z"/></svg></div><span class="text-[11px] text-gray-600 mt-1">12.4K reviews</span></div>
 <div class="flex flex-col items-center justify-center border-r border-gray-200 px-1"><svg class="w-5 h-5 mb-1 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg><span class="font-bold text-xs">1M+</span><span class="text-[11px] text-gray-600 mt-1">Downloads</span></div>
 <div class="flex flex-col items-center justify-center px-1"><div class="border border-gray-600 rounded px-1.5 text-[11px] font-bold mb-1">12+</div><span class="text-[11px] text-gray-600">Rated for 12+</span></div></div>
 <div class="flex items-center gap-3 rounded-xl border border-gray-100 p-4 mb-6"><div class="w-8 h-8 flex-shrink-0 flex items-center justify-center text-[#188038]"><svg width="22" height="24" viewBox="0 0 24 26" fill="none" aria-hidden="true"><path d="M12 1.8 21 5v7.1c0 5.6-3.8 9.7-9 12.1-5.2-2.4-9-6.5-9-12.1V5l9-3.2Z" fill="#188038"/><path d="m7.7 12.7 2.7 2.7 5.9-6" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="flex-1"><div class="font-semibold text-sm">Play Protect</div><div class="text-xs text-gray-500 mt-1">Google Play Protect helps check apps for harmful behaviour.</div></div><span class="text-gray-400">›</span></div>
@@ -40,54 +55,422 @@
 <div class="mb-8 border-t border-gray-100 pt-8"><h3 class="font-bold text-xl text-gray-900 mb-3">Data safety</h3><p class="text-sm text-gray-600 leading-relaxed mb-4">Safety starts with understanding how developers collect and share your data.</p><div class="border border-gray-200 rounded-xl p-5 space-y-5"><div class="flex items-start gap-4"><svg class="w-6 h-6 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg><div><p class="text-sm font-semibold text-gray-900">Data sharing</p><p class="text-xs text-gray-500 mt-1">Check ChatMula's privacy policy and connected services for details about data sharing.</p></div></div><div class="flex items-start gap-4"><svg class="w-6 h-6 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg><div><p class="text-sm font-semibold text-gray-900">Data types</p><p class="text-xs text-gray-500 mt-1">Account, profile, and conversation information may be processed to provide app features.</p></div></div><div class="flex items-start gap-4"><svg class="w-6 h-6 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg><div><p class="text-sm font-semibold text-gray-900">Connection security</p><p class="text-xs text-gray-500 mt-1">Data protection depends on the services and connection used.</p></div></div></div></div>
 <div class="mb-8 border-t border-gray-100 pt-6"><h2 class="font-bold text-xl text-gray-900 mb-2">What's new</h2><p class="text-sm text-gray-500 mb-4">Latest version</p><ul class="text-sm text-gray-700 space-y-2 font-medium"><li>• Improved app experience</li><li>• Performance and stability improvements</li></ul></div>
 <div class="mb-8 border-t border-gray-100 pt-8"><h3 class="font-bold text-xl text-gray-900 mb-3">About this app</h3><p class="text-sm text-gray-600 leading-relaxed mb-4">ChatMula brings local language teachers and international learners together. Practise Swahili, English and other languages through friendly conversations, learn everyday expressions and cultural context, and offer language help to eligible learners. Local speakers may earn from eligible teaching sessions; earnings are subject to the app’s terms and availability. Some features require an internet connection and account activation.</p><div class="flex gap-2 flex-wrap"><span class="border border-gray-300 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-700">Education</span><span class="border border-gray-300 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-700">Language exchange</span></div></div>
-<div class="border-t border-gray-100 pt-8 mb-8"><h3 class="font-bold text-xl text-gray-900 mb-4">Ratings and reviews</h3><div class="flex gap-4 items-center mb-8"><div class="flex flex-col items-center"><span class="text-5xl font-light text-gray-900">4.8</span><div class="flex text-gray-800 my-1">★★★★★</div><span class="text-xs text-gray-500">12,432</span></div><div class="flex-1 space-y-1"><div class="flex items-center gap-2"><span class="text-xs text-gray-700 w-3">5</span><div class="flex-1 bg-gray-200 rounded-full h-1"><div class="bg-playBlue h-1 rounded-full" style="width: 88%"></div></div></div><div class="flex items-center gap-2"><span class="text-xs text-gray-700 w-3">4</span><div class="flex-1 bg-gray-200 rounded-full h-1"><div class="bg-playBlue h-1 rounded-full" style="width: 8%"></div></div></div><div class="flex items-center gap-2"><span class="text-xs text-gray-700 w-3">3</span><div class="flex-1 bg-gray-200 rounded-full h-1"><div class="bg-playBlue h-1 rounded-full" style="width: 2%"></div></div></div><div class="flex items-center gap-2"><span class="text-xs text-gray-700 w-3">2</span><div class="flex-1 bg-gray-200 rounded-full h-1"><div class="bg-playBlue h-1 rounded-full" style="width: 1%"></div></div></div><div class="flex items-center gap-2"><span class="text-xs text-gray-700 w-3">1</span><div class="flex-1 bg-gray-200 rounded-full h-1"><div class="bg-playBlue h-1 rounded-full" style="width: 1%"></div></div></div></div></div><div class="space-y-7">
-<div class="review-entry"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop" alt="David Jenkins" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">David Jenkins</p><p class="text-[11px] text-gray-500">2 days ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-amber-500">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">I've been using ChatMula to learn Swahili. The Kenyan tutors are so friendly and the connection is very fast. Highly recommended!</p></div>
-<div class="review-entry"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=100&h=100&fit=crop" alt="Faith Wambui" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">Faith Wambui</p><p class="text-[11px] text-gray-500">3 days ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-amber-500">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">The app pays well. I earn a decent side income just by chatting. Withdrawals go straight to M-Pesa instantly. Asante!</p></div>
-<div class="review-entry"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" alt="Michael Torres" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">Michael Torres</p><p class="text-[11px] text-gray-500">1 week ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-amber-500">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">Excellent platform. It's like a language exchange but way more structured. Made some great Kenyan friends.</p></div>
-<div class="review-entry"><div class="flex items-center gap-3 mb-2"><div class="review-avatar" style="background:#0d9488;color:#fff;font-weight:700;font-size:22px">K</div><div><p class="text-sm font-semibold text-gray-900">Kevin Omondi</p><p class="text-[11px] text-gray-500">1 week ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-amber-500">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">Very smooth app. The M-Pesa integration is flawless. I love that I can monetize my Swahili skills easily.</p></div>
-<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" alt="Sarah Williams" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">Sarah Williams</p><p class="text-[11px] text-gray-500">2 weeks ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-amber-500">★★★★☆</span></div><p class="text-sm text-gray-600 leading-relaxed">A great way to practice Swahili. It can take a minute to find the right tutor, but the conversations are very valuable.</p></div>
-<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop" alt="James Peterson" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">James Peterson</p><p class="text-[11px] text-gray-500">2 weeks ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-amber-500">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">Trying to learn a new language before my safari trip. The bots are helpful, but the human connections are even better.</p></div>
-<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar" style="background:#d97706;color:#fff;font-weight:700;font-size:22px">B</div><div><p class="text-sm font-semibold text-gray-900">Brian Kipchumba</p><p class="text-[11px] text-gray-500">3 weeks ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-amber-500">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">The interface is beautiful and the app runs flawlessly on my phone. I've recommended this to all my friends.</p></div>
-<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop" alt="Emma Watson" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">Emma Watson</p><p class="text-[11px] text-gray-500">1 month ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-amber-500">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">It's fun and educational. The interactive chats really help with pronunciation. I feel much more confident speaking Swahili now.</p></div>
-<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar" style="background:#0d9488;color:#fff;font-weight:700;font-size:22px">J</div><div><p class="text-sm font-semibold text-gray-900">John Mwangi</p><p class="text-[11px] text-gray-500">1 month ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-amber-500">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">Best app so far. No hidden charges and the M-Pesa prompt comes instantly. Thank you for the quick service.</p></div>
-<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop" alt="Tom Reynolds" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">Tom Reynolds</p><p class="text-[11px] text-gray-500">2 months ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-amber-500">★★★★☆</span></div><p class="text-sm text-gray-600 leading-relaxed">Very impressed with the quality of the language tutors. It's a fantastic concept.</p></div>
-<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar" style="background:#d97706;color:#fff;font-weight:700;font-size:22px">M</div><div><p class="text-sm font-semibold text-gray-900">Mary Atieno</p><p class="text-[11px] text-gray-500">2 months ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-amber-500">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">I've been using ChatMula for a few months now and it's a legit way to make extra income. The customer support is great.</p></div>
-<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1523824921871-d6f1a15151f1?w=100&h=100&fit=crop" alt="Chloe Dubois" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">Chloe Dubois</p><p class="text-[11px] text-gray-500">3 months ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-amber-500">★★★★☆</span></div><p class="text-sm text-gray-600 leading-relaxed">The app is very well built. It runs smoothly on my older phone too. I just wish there were more tutors online.</p></div>
-<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar" style="background:#1d4ed8;color:#fff;font-weight:700;font-size:22px">D</div><div><p class="text-sm font-semibold text-gray-900">Dennis Kiptoo</p><p class="text-[11px] text-gray-500">3 months ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-amber-500">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">Fast withdrawals, no delays. The app is very stable. I highly recommend it to anyone looking for a side hustle.</p></div>
-<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar" style="background:#db2777;color:#fff;font-weight:700;font-size:22px">A</div><div><p class="text-sm font-semibold text-gray-900">Aisha Ahmed</p><p class="text-[11px] text-gray-500">4 months ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-amber-500">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">Safi sana! The best platform to teach Swahili and earn. Highly recommended for students.</p></div>
+<div class="border-t border-gray-100 pt-8 mb-8"><h3 class="font-bold text-xl text-gray-900 mb-4">Ratings and reviews</h3><div class="flex gap-4 items-center mb-8"><div class="flex flex-col items-center"><span class="text-5xl font-light text-gray-900">4.8</span><div class="flex text-playBlue my-1">★★★★★</div><span class="text-xs text-gray-500">12,432</span></div><div class="flex-1 space-y-1"><div class="flex items-center gap-2"><span class="text-xs text-gray-700 w-3">5</span><div class="flex-1 bg-gray-200 rounded-full h-1"><div class="bg-playBlue h-1 rounded-full" style="width: 88%"></div></div></div><div class="flex items-center gap-2"><span class="text-xs text-gray-700 w-3">4</span><div class="flex-1 bg-gray-200 rounded-full h-1"><div class="bg-playBlue h-1 rounded-full" style="width: 8%"></div></div></div><div class="flex items-center gap-2"><span class="text-xs text-gray-700 w-3">3</span><div class="flex-1 bg-gray-200 rounded-full h-1"><div class="bg-playBlue h-1 rounded-full" style="width: 2%"></div></div></div><div class="flex items-center gap-2"><span class="text-xs text-gray-700 w-3">2</span><div class="flex-1 bg-gray-200 rounded-full h-1"><div class="bg-playBlue h-1 rounded-full" style="width: 1%"></div></div></div><div class="flex items-center gap-2"><span class="text-xs text-gray-700 w-3">1</span><div class="flex-1 bg-gray-200 rounded-full h-1"><div class="bg-playBlue h-1 rounded-full" style="width: 1%"></div></div></div></div></div><div class="space-y-7">
+<div class="review-entry"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop" alt="David Jenkins" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">David Jenkins</p><p class="text-[11px] text-gray-500">2 days ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-playBlue">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">I've been using ChatMula to learn Swahili. The Kenyan tutors are so friendly and the connection is very fast. Highly recommended!</p></div>
+<div class="review-entry"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=100&h=100&fit=crop" alt="Faith Wambui" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">Faith Wambui</p><p class="text-[11px] text-gray-500">3 days ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-playBlue">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">The app pays well. I earn a decent side income just by chatting. Withdrawals go straight to M-Pesa instantly. Asante!</p></div>
+<div class="review-entry"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" alt="Michael Torres" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">Michael Torres</p><p class="text-[11px] text-gray-500">1 week ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-playBlue">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">Excellent platform. It's like a language exchange but way more structured. Made some great Kenyan friends.</p></div>
+<div class="review-entry"><div class="flex items-center gap-3 mb-2"><div class="review-avatar" style="background:#0d9488;color:#fff;font-weight:700;font-size:22px">K</div><div><p class="text-sm font-semibold text-gray-900">Kevin Omondi</p><p class="text-[11px] text-gray-500">1 week ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-playBlue">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">Very smooth app. The M-Pesa integration is flawless. I love that I can monetize my Swahili skills easily.</p></div>
+<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" alt="Sarah Williams" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">Sarah Williams</p><p class="text-[11px] text-gray-500">2 weeks ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-playBlue">★★★★☆</span></div><p class="text-sm text-gray-600 leading-relaxed">A great way to practice Swahili. It can take a minute to find the right tutor, but the conversations are very valuable.</p></div>
+<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop" alt="James Peterson" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">James Peterson</p><p class="text-[11px] text-gray-500">2 weeks ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-playBlue">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">Trying to learn a new language before my safari trip. The bots are helpful, but the human connections are even better.</p></div>
+<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar" style="background:#d97706;color:#fff;font-weight:700;font-size:22px">B</div><div><p class="text-sm font-semibold text-gray-900">Brian Kipchumba</p><p class="text-[11px] text-gray-500">3 weeks ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-playBlue">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">The interface is beautiful and the app runs flawlessly on my phone. I've recommended this to all my friends.</p></div>
+<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop" alt="Emma Watson" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">Emma Watson</p><p class="text-[11px] text-gray-500">1 month ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-playBlue">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">It's fun and educational. The interactive chats really help with pronunciation. I feel much more confident speaking Swahili now.</p></div>
+<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar" style="background:#0d9488;color:#fff;font-weight:700;font-size:22px">J</div><div><p class="text-sm font-semibold text-gray-900">John Mwangi</p><p class="text-[11px] text-gray-500">1 month ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-playBlue">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">Best app so far. No hidden charges and the M-Pesa prompt comes instantly. Thank you for the quick service.</p></div>
+<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop" alt="Tom Reynolds" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">Tom Reynolds</p><p class="text-[11px] text-gray-500">2 months ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-playBlue">★★★★☆</span></div><p class="text-sm text-gray-600 leading-relaxed">Very impressed with the quality of the language tutors. It's a fantastic concept.</p></div>
+<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar" style="background:#d97706;color:#fff;font-weight:700;font-size:22px">M</div><div><p class="text-sm font-semibold text-gray-900">Mary Atieno</p><p class="text-[11px] text-gray-500">2 months ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-playBlue">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">I've been using ChatMula for a few months now and it's a legit way to make extra income. The customer support is great.</p></div>
+<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar"><img src="https://images.unsplash.com/photo-1523824921871-d6f1a15151f1?w=100&h=100&fit=crop" alt="Chloe Dubois" class="w-full h-full object-cover"></div><div><p class="text-sm font-semibold text-gray-900">Chloe Dubois</p><p class="text-[11px] text-gray-500">3 months ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-playBlue">★★★★☆</span></div><p class="text-sm text-gray-600 leading-relaxed">The app is very well built. It runs smoothly on my older phone too. I just wish there were more tutors online.</p></div>
+<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar" style="background:#1d4ed8;color:#fff;font-weight:700;font-size:22px">D</div><div><p class="text-sm font-semibold text-gray-900">Dennis Kiptoo</p><p class="text-[11px] text-gray-500">3 months ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-playBlue">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">Fast withdrawals, no delays. The app is very stable. I highly recommend it to anyone looking for a side hustle.</p></div>
+<div class="review-entry hide"><div class="flex items-center gap-3 mb-2"><div class="review-avatar" style="background:#db2777;color:#fff;font-weight:700;font-size:22px">A</div><div><p class="text-sm font-semibold text-gray-900">Aisha Ahmed</p><p class="text-[11px] text-gray-500">4 months ago</p></div></div><div class="flex items-center gap-1 mb-2"><span class="text-sm text-playBlue">★★★★★</span></div><p class="text-sm text-gray-600 leading-relaxed">Safi sana! The best platform to teach Swahili and earn. Highly recommended for students.</p></div>
 </div><button id="btn-see-all" class="text-playBlue font-semibold text-sm mt-6 block">See all 12,432 reviews</button></div>
-<div class="border-t border-gray-100 pt-6"><h2 class="font-bold text-xl mb-1 text-gray-900">Rate this app</h2><p class="text-sm text-gray-500 mb-5">Tell others what you think</p><div class="flex justify-between items-center px-2"><span class="text-3xl text-gray-300">☆</span><span class="text-3xl text-gray-300">☆</span><span class="text-3xl text-gray-300">☆</span><span class="text-3xl text-gray-300">☆</span><span class="text-3xl text-gray-300">☆</span></div></div>
+
+<div class="border-t border-gray-100 pt-6" id="rate-section">
+  <h2 class="font-bold text-xl mb-1 text-gray-900">Rate this app</h2>
+  <p class="text-sm text-gray-500 mb-3">Tell others what you think</p>
+  <div class="flex justify-between items-center px-2" id="rate-stars" role="radiogroup" aria-label="Rate ChatMula from 1 to 5 stars">
+    <button type="button" class="rate-star text-3xl text-gray-300" data-value="1" aria-label="1 star" aria-checked="false" role="radio">☆</button>
+    <button type="button" class="rate-star text-3xl text-gray-300" data-value="2" aria-label="2 stars" aria-checked="false" role="radio">☆</button>
+    <button type="button" class="rate-star text-3xl text-gray-300" data-value="3" aria-label="3 stars" aria-checked="false" role="radio">☆</button>
+    <button type="button" class="rate-star text-3xl text-gray-300" data-value="4" aria-label="4 stars" aria-checked="false" role="radio">☆</button>
+    <button type="button" class="rate-star text-3xl text-gray-300" data-value="5" aria-label="5 stars" aria-checked="false" role="radio">☆</button>
+  </div>
+  <p id="rate-live-label" class="text-xs text-gray-500 mt-2 text-center" aria-live="polite"></p>
+
+  <div id="rating-box" class="hide mt-5 bg-slate-50 border border-gray-200 rounded-xl p-5">
+    <p id="rating-box-label" class="text-sm font-semibold text-gray-900 mb-1">You rated ChatMula 5 stars</p>
+    <p class="text-xs text-gray-500 mb-3">Tell others what you think (optional)</p>
+    <textarea id="rating-text" rows="3" maxlength="500" class="w-full border border-gray-300 rounded-lg p-3 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-playBlue/25 focus:border-playBlue" placeholder="Write your review…"></textarea>
+    <div class="flex gap-2 mt-3">
+      <button id="rating-cancel" type="button" class="flex-1 bg-white text-gray-700 font-semibold py-2.5 rounded-full border border-gray-300 active:scale-95 transition-transform">Cancel</button>
+      <button id="rating-submit" type="button" class="flex-1 bg-playBlue text-white font-semibold py-2.5 rounded-full active:scale-95 transition-transform">Submit rating</button>
+    </div>
+  </div>
+</div>
 </section></main>
+
+<div id="installed-modal" class="hide fixed inset-0 z-[10001] bg-black/60 flex items-center justify-center p-6" role="dialog" aria-modal="true" aria-labelledby="installed-modal-title">
+  <div class="bg-[#1e1e1e] rounded-2xl p-5 w-full max-w-sm shadow-2xl border border-gray-700 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
+    <div class="flex items-center gap-4 mb-4">
+      <img src="icon-192.png" alt="ChatMula" class="w-14 h-14 rounded-xl object-cover">
+      <div>
+        <p id="installed-modal-title" class="text-white font-bold text-base">App is installed</p>
+        <p class="text-gray-400 text-xs mt-1">Open ChatMula from your home screen or app drawer.</p>
+      </div>
+    </div>
+    <div class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-3 text-center">
+      <p id="modal-ref-code" class="text-yellow-400 font-extrabold text-sm">Use referral code: 2026</p>
+    </div>
+    <button id="modal-close" class="mt-4 w-full bg-slate-700 text-white font-bold py-3 rounded-xl">Got it</button>
+    <button id="modal-continue" class="mt-2 w-full bg-transparent text-cyan-400 text-sm font-semibold py-2">Continue in browser instead</button>
+  </div>
+</div>
+
 <script>
 (()=>{
  const $=id=>document.getElementById(id), installBtn=$('btn-store-install'), pre=$('pre-install-buttons'), downloading=$('downloading-buttons'), post=$('post-install-buttons'), status=$('download-text'), pct=$('download-percent'), small=$('status-small'), ring=$('ring-svg'), openBtn=$('btn-open-app'), promptCard=$('installed-prompt'), toast=$('toast'), stats=$('stats-row'), preContent=$('pre-install-content'), postContent=$('post-install-content');
- let deferredPrompt=null, installed=false, waitingForPrompt=false, progressTimer=null, promptTimeout=null, toastTimer=null;
+ const downloadStatusBtn=$('download-status-btn');
+ let deferredPrompt=window.__cmDeferredPrompt||null;
+ let installed=false, waitingForPrompt=false, actuallyInstalled=false;
+ let progressTimer=null, promptTimeout=null, installingTimer=null, toastTimer=null;
+
+ // --- Referral persistence -------------------------------------------------
+ try {
+   const incomingRef = new URLSearchParams(location.search).get('ref');
+   if (incomingRef && incomingRef.trim()) localStorage.setItem('cm_ref', incomingRef.trim());
+ } catch (_) {}
+
+ function referralCode(){
+   let saved = '';
+   try { saved = (localStorage.getItem('cm_ref') || '').trim(); } catch (_) {}
+   return saved || '2026';
+ }
+ function updateRefDisplays(){
+   const label = 'Use referral code: ' + referralCode();
+   const inline = $('inline-ref-code'); if (inline) inline.textContent = label;
+   const modal  = $('modal-ref-code');  if (modal)  modal.textContent  = label;
+ }
+
+ // --- Platform & browser detection ----------------------------------------
  const standalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
  const ua=navigator.userAgent||'';
  const isAndroid=/Android/i.test(ua);
  const isIOS=/iPhone|iPad|iPod/i.test(ua);
- const isInAppBrowser=/FBAN|FBAV|FB4A|FB_IAB|Instagram|musical_ly|BytedanceWebview|TikTok|Line|Snapchat|LinkedIn|Pinterest|WhatsApp|Telegram|GSA/i.test(ua)||/; wv\)/i.test(ua)||(isIOS&&!/Safari/i.test(ua)&&!/CriOS|FxiOS/i.test(ua));
- function openInChrome(){if(isAndroid){const url=new URL(window.location.href);window.location.href='intent://'+url.host+url.pathname+url.search+url.hash+'#Intent;scheme=https;package=com.android.chrome;end';return;}if(isIOS){window.location.href=window.location.href.replace(/^https?:\/\//,'x-safari-https://');return;}window.location.reload();}
- async function copyLinkAndShowHelp(){try{if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(window.location.href);alert('Link copied!\n\nPaste it into Chrome\'s address bar to continue.');}else{throw new Error('Clipboard unavailable')}}catch(e){try{const input=document.createElement('textarea');input.value=window.location.href;input.style.position='fixed';input.style.opacity='0';document.body.appendChild(input);input.select();document.execCommand('copy');input.remove();alert('Link copied!\n\nPaste it into Chrome\'s address bar to continue.');}catch(_){alert('Please copy the URL from the address bar and paste it into Chrome.')}}}
+
+ // In-app / embedded browsers (cannot trigger PWA install)
+ const inAppRegex = /FBAN|FBAV|FB4A|FB_IAB|Instagram|musical_ly|BytedanceWebview|TikTok|Line|Snapchat|LinkedIn|Pinterest|WhatsApp|Telegram|GSA|Twitter|Discord|Reddit|Slack|Messenger|Viber|WeChat|MicroMessenger|QQ\/|QQBrowser|Baidu|baiduboxapp|Weibo|KAKAOTALK|NAVER|KakaoTalk/i;
+
+ const isAndroidInApp   = isAndroid && (inAppRegex.test(ua) || /; wv\)/i.test(ua));
+ // Safari on iOS is the ONLY browser that can Add to Home Screen.
+ // Any other iOS browser (Chrome, Firefox, Edge, Opera) is a WebKit wrapper.
+ const isIOSSafari      = isIOS && /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|MXiOS|DuckDuckGo/i.test(ua);
+ const isIOSNonSafariBr = isIOS && !isIOSSafari && /CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|MXiOS|DuckDuckGo/i.test(ua);
+ const isIOSInApp       = isIOS && !isIOSSafari && !isIOSNonSafariBr;
+
+ // What kind of warning is needed?
+ const needsOpenInChrome = isAndroidInApp && !standalone();
+ const needsOpenInSafari = (isIOSInApp || isIOSNonSafariBr) && !standalone();
+ const needsBrowserSwitch = needsOpenInChrome || needsOpenInSafari;
+
+ // --- Configure warning overlay based on platform -------------------------
+ function configureBrowserWarning(){
+   if(!needsBrowserSwitch) return;
+   const title=$('browser-warning-title'), desc=$('browser-warning-desc'), openBtnWarn=$('open-in-chrome');
+   if(needsOpenInSafari){
+     if(title) title.textContent='Open in Safari';
+     if(desc)  desc.textContent='To install ChatMula on iPhone or iPad, open this link in Safari.';
+     if(openBtnWarn) openBtnWarn.textContent='Open in Safari';
+   } else {
+     if(title) title.textContent='Open in Chrome';
+     if(desc)  desc.textContent='To install ChatMula, open this link in Google Chrome.';
+     if(openBtnWarn) openBtnWarn.textContent='Open in Chrome';
+   }
+   $('browser-warning').classList.remove('hide');
+   const mainEl=document.querySelector('main'); if(mainEl) mainEl.classList.add('hide');
+ }
+
+ // --- Open in correct browser ---------------------------------------------
+ function openInChrome(){
+   // Android → intent:// to Chrome
+   if(isAndroid){
+     const url=new URL(window.location.href);
+     window.location.href='intent://'+url.host+url.pathname+url.search+url.hash+'#Intent;scheme=https;package=com.android.chrome;end';
+     return;
+   }
+   // iOS → x-safari-https:// scheme opens Safari
+   if(isIOS){
+     window.location.href=window.location.href.replace(/^https?:\/\//,'x-safari-https://');
+     return;
+   }
+   window.location.reload();
+ }
+ async function copyLinkAndShowHelp(){
+   try{
+     if(navigator.clipboard&&navigator.clipboard.writeText){
+       await navigator.clipboard.writeText(window.location.href);
+       alert('Link copied!\n\nPaste it into your browser\'s address bar to continue.');
+     } else { throw new Error('Clipboard unavailable'); }
+   }catch(e){
+     try{
+       const input=document.createElement('textarea');
+       input.value=window.location.href;
+       input.style.position='fixed'; input.style.opacity='0';
+       document.body.appendChild(input); input.select();
+       document.execCommand('copy'); input.remove();
+       alert('Link copied!\n\nPaste it into your browser\'s address bar to continue.');
+     }catch(_){
+       alert('Please copy the URL from the address bar and paste it into your browser.');
+     }
+   }
+ }
  $('open-in-chrome').addEventListener('click',openInChrome);
  $('copy-link-help').addEventListener('click',copyLinkAndShowHelp);
- if(isInAppBrowser&&!standalone()){ $('browser-warning').classList.remove('hide'); document.querySelector('main').classList.add('hide'); }
+
+ // Show warning if needed BEFORE any other UI runs
+ configureBrowserWarning();
+
  function say(msg){toast.textContent=msg;toast.classList.remove('hide');toast.classList.add('native-toast');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.add('hide'),5000)}
- function progressUI(n){$('download-ring').style.strokeDashoffset=301.59-(n/100)*301.59;pct.textContent=Math.floor(n)+'% of 10 MB';}
- function showInstallState(message){clearInterval(progressTimer);clearTimeout(promptTimeout);installed=false;waitingForPrompt=false;pre.classList.remove('hide');downloading.classList.add('hide');post.classList.add('hide');status.classList.add('hide');ring.classList.add('hide');promptCard.classList.add('hide');stats.classList.remove('hide');preContent.classList.remove('hide');postContent.classList.add('hide');installBtn.disabled=false;installBtn.textContent='Install';progressUI(0);if(message)say(message)}
- function showInstalledState(){clearInterval(progressTimer);clearTimeout(promptTimeout);installed=true;waitingForPrompt=false;localStorage.setItem('pwa_installed','1');pre.classList.add('hide');downloading.classList.add('hide');post.classList.remove('hide');status.classList.add('hide');ring.classList.add('hide');stats.classList.add('hide');preContent.classList.remove('hide');postContent.classList.remove('hide');promptCard.classList.remove('hide');promptCard.classList.remove('opacity-0','-translate-y-2');}
- function startProgress(){pre.classList.add('hide');post.classList.add('hide');downloading.classList.remove('hide');status.classList.remove('hide');ring.classList.remove('hide');small.textContent='Downloading';let start=Date.now(),duration=30000;clearInterval(progressTimer);progressTimer=setInterval(()=>{let n=Math.min((Date.now()-start)/duration*100,100);progressUI(n);if(n>=100){clearInterval(progressTimer);if(!installed){showInstallState('Chrome has not confirmed installation. Use the browser install prompt if it appears, or open Chrome menu ⋮ and choose Install app / Add to Home screen.')}}},100)}
- function requestPrompt(){if(!deferredPrompt){waitingForPrompt=true;return;}const ev=deferredPrompt;deferredPrompt=null;waitingForPrompt=false;try{ev.prompt();ev.userChoice.then(choice=>{if(choice&&choice.outcome==='accepted'){small.textContent='Waiting for browser installation confirmation';clearTimeout(promptTimeout);promptTimeout=setTimeout(()=>{if(!installed)showInstallState()},8000)}else showInstallState()}).catch(()=>showInstallState())}catch(e){showInstallState()}}
- window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(waitingForPrompt)requestPrompt()});
- window.addEventListener('appinstalled',()=>{localStorage.setItem('pwa_installed','1');showInstalledState();say('The browser confirmed that ChatMula was installed.')});
- if(standalone()||localStorage.getItem('pwa_installed')==='1'){showInstalledState()}
- installBtn.addEventListener('click',()=>{if(standalone()){showInstalledState();return}startProgress();requestPrompt()});
+
+ // --- Play-Store-style progress -------------------------------------------
+ function progressUI(n){
+   const MB=10, currentMB=(n/100*MB).toFixed(1);
+   $('download-ring').style.strokeDashoffset=301.59-(n/100)*301.59;
+   pct.textContent=currentMB+' MB of '+MB+' MB · '+Math.floor(n)+'%';
+ }
+ function resetDownloadBtn(){ if(downloadStatusBtn) downloadStatusBtn.textContent='Downloading…'; }
+
+ function showInstallState(message){
+   clearInterval(progressTimer);clearTimeout(promptTimeout);clearTimeout(installingTimer);
+   progressTimer=null;promptTimeout=null;installingTimer=null;
+   installed=false;waitingForPrompt=false;
+   pre.classList.remove('hide');downloading.classList.add('hide');post.classList.add('hide');
+   status.classList.add('hide');ring.classList.add('hide');promptCard.classList.add('hide');
+   stats.classList.remove('hide');
+   if(preContent)preContent.classList.remove('hide');
+   if(postContent)postContent.classList.add('hide');
+   installBtn.disabled=false;installBtn.textContent='Install';
+   resetDownloadBtn();
+   progressUI(0);
+   if(message)say(message);
+ }
+
+ function showInstalledState(){
+   clearInterval(progressTimer);clearTimeout(promptTimeout);clearTimeout(installingTimer);
+   progressTimer=null;promptTimeout=null;installingTimer=null;
+   installed=true;waitingForPrompt=false;
+   localStorage.setItem('pwa_installed','1');
+   pre.classList.add('hide');downloading.classList.add('hide');post.classList.remove('hide');
+   status.classList.add('hide');ring.classList.add('hide');stats.classList.add('hide');
+   if(preContent)preContent.classList.remove('hide');
+   if(postContent)postContent.classList.remove('hide');
+   promptCard.classList.remove('hide');
+   promptCard.classList.remove('opacity-0','-translate-y-2');
+   updateRefDisplays();
+ }
+
+ function startProgress(){
+   pre.classList.add('hide');post.classList.add('hide');
+   downloading.classList.remove('hide');status.classList.remove('hide');ring.classList.remove('hide');
+   small.textContent='Downloading';resetDownloadBtn();
+   const DURATION=18000;
+   const start=Date.now();
+   clearInterval(progressTimer);
+   progressTimer=setInterval(()=>{
+     const elapsed=Date.now()-start;
+     const linear=Math.min(elapsed/DURATION*100,100);
+     let eased=linear>85?85+(linear-85)*0.65:linear;
+     const jitter=Math.sin(elapsed/320)*1.1;
+     const display=Math.max(0,Math.min(100,eased+jitter));
+     progressUI(display);
+     if(linear>=100){
+       clearInterval(progressTimer);progressTimer=null;
+       progressUI(100);
+       small.textContent='Installing';
+       pct.textContent='Installing…';
+       if(downloadStatusBtn)downloadStatusBtn.textContent='Installing…';
+       installingTimer=setTimeout(()=>{
+         if(actuallyInstalled){ showInstalledState(); say('ChatMula installed. Tap Open to continue.'); }
+         else {
+           installingTimer=setTimeout(()=>{
+             if(actuallyInstalled){ showInstalledState(); say('ChatMula installed. Tap Open to continue.'); }
+             else { showInstallState('Installation was not completed. Tap Install to try again.'); }
+           },2500);
+         }
+       },1500);
+     }
+   },80);
+ }
+
+ function requestPrompt(){
+   if(!deferredPrompt){waitingForPrompt=true;return;}
+   const ev=deferredPrompt;deferredPrompt=null;window.__cmDeferredPrompt=null;waitingForPrompt=false;
+   try{
+     ev.prompt();
+     ev.userChoice.then(choice=>{
+       if(choice&&choice.outcome==='accepted'){
+         // Chrome installs in the background; appinstalled will fire.
+       } else {
+         showInstallState('Installation cancelled. Tap Install to try again.');
+       }
+     }).catch(()=>showInstallState('Installation cancelled. Tap Install to try again.'));
+   }catch(e){showInstallState('Installation could not start. Tap Install to try again.')}
+ }
+
+ // --- iOS Safari: Add to Home Screen instructions -------------------------
+ function showIosInstallInstructions(){
+   let layer=document.getElementById('ios-install-layer');
+   if(layer) return;
+   layer=document.createElement('div');
+   layer.id='ios-install-layer';
+   layer.className='fixed inset-0 z-[10002] bg-black/70 flex items-center justify-center p-5';
+   layer.setAttribute('role','dialog');
+   layer.setAttribute('aria-modal','true');
+   layer.innerHTML=`
+     <div class="bg-[#1e1e1e] rounded-2xl p-5 w-full max-w-sm shadow-2xl border border-gray-700 text-white relative">
+       <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
+       <div class="flex items-center gap-3 mb-4">
+         <img src="icon-192.png" alt="ChatMula" class="w-12 h-12 rounded-xl object-cover">
+         <div>
+           <p class="font-bold text-base">Install ChatMula</p>
+           <p class="text-gray-400 text-xs mt-0.5">Add to Home Screen</p>
+         </div>
+       </div>
+       <p class="text-sm text-gray-300 mb-4">Follow these steps in Safari:</p>
+       <ol class="text-sm text-gray-300 mb-4 space-y-2 list-decimal list-inside">
+         <li>Tap the <strong>Share</strong> button <span class="text-playBlue">(⎋)</span> at the bottom of the screen</li>
+         <li>Scroll down and tap <strong>Add to Home Screen</strong></li>
+         <li>Tap <strong>Add</strong> to finish</li>
+       </ol>
+       <div class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-3 mb-4 text-center">
+         <p class="text-yellow-400 font-extrabold text-sm">Your referral code: ${referralCode()}</p>
+       </div>
+       <button id="ios-install-close" class="w-full bg-playBlue text-white font-bold py-3 rounded-xl">Got it</button>
+     </div>
+   `;
+   document.body.appendChild(layer);
+   layer.querySelector('#ios-install-close').onclick=()=>layer.remove();
+   layer.addEventListener('click',e=>{ if(e.target===layer) layer.remove(); });
+ }
+
+ // --- Install button behaviour per platform ------------------------------
+ installBtn.addEventListener('click',()=>{
+   if(standalone()){ showInstalledState(); return; }
+   if(actuallyInstalled || localStorage.getItem('pwa_installed')==='1'){ showInstalledState(); return; }
+   // iOS Safari: cannot install via Chrome prompt — show Add to Home Screen guide
+   if(isIOSSafari){ showIosInstallInstructions(); return; }
+   // Anywhere else (Android/desktop): Play Store-style download + native prompt
+   startProgress();
+   requestPrompt();
+ });
+
  $('btn-cancel-install').addEventListener('click',()=>showInstallState());
- openBtn.addEventListener('click',()=>{if(standalone()){window.location.href='./app.html';return}say('To open ChatMula, return to your home screen or app drawer and tap the installed ChatMula icon. A webpage cannot reliably force-launch the installed PWA.')});
+
+ // --- Open button --------------------------------------------------------
+ function showInstalledPromptModal(){
+   updateRefDisplays();
+   const modal=$('installed-modal');
+   if(!modal)return;
+   modal.classList.remove('hide');
+   clearTimeout(showInstalledPromptModal._t);
+   showInstalledPromptModal._t=setTimeout(()=>modal.classList.add('hide'),15000);
+ }
+ openBtn.addEventListener('click',()=>{
+   if(standalone()){window.location.href='./app.html';return}
+   showInstalledPromptModal();
+ });
+ (function wireModal(){
+   const modal=$('installed-modal'); if(!modal)return;
+   const close=$('modal-close'); if(close)close.addEventListener('click',()=>{clearTimeout(showInstalledPromptModal._t);modal.classList.add('hide')});
+   const cont=$('modal-continue'); if(cont)cont.addEventListener('click',()=>{clearTimeout(showInstalledPromptModal._t);modal.classList.add('hide');window.location.href='./app.html'});
+   modal.addEventListener('click',e=>{if(e.target===modal){clearTimeout(showInstalledPromptModal._t);modal.classList.add('hide')}});
+ })();
+
+ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;window.__cmDeferredPrompt=e;if(waitingForPrompt)requestPrompt()});
+ window.addEventListener('appinstalled',()=>{
+   actuallyInstalled=true;
+   localStorage.setItem('pwa_installed','1');
+   window.__cmDeferredPrompt=null;
+   if(progressTimer) return;
+   showInstalledState();
+   say('The browser confirmed that ChatMula was installed.');
+ });
+
+ if(standalone()||localStorage.getItem('pwa_installed')==='1'){showInstalledState()}
+ updateRefDisplays();
+
  $('btn-uninstall').addEventListener('click',()=>say('This page cannot uninstall ChatMula. Remove it from your device app settings or browser app settings.'));
  $('back-btn').addEventListener('click',()=>{if(history.length>1)history.back();else say('You are viewing ChatMula app details.')});
  $('more-btn').addEventListener('click',()=>say('ChatMula app details'));
  $('btn-see-all').addEventListener('click',()=>{const hidden=[...document.querySelectorAll('.review-entry.hide')],b=$('btn-see-all');if(hidden.length){hidden.forEach(el=>el.classList.remove('hide'));b.textContent='Show less'}else{document.querySelectorAll('.review-entry').forEach((el,i)=>{if(i>=4)el.classList.add('hide')});b.textContent='See all 12,432 reviews'}});
- document.querySelectorAll('.rate-star').forEach((star,i)=>star.addEventListener('click',()=>{document.querySelectorAll('.rate-star').forEach((s,j)=>{s.classList.toggle('text-amber-400',j<=i);s.classList.toggle('text-gray-300',j>i)});say('Thanks for rating ChatMula '+(i+1)+' stars. This demo rating is not submitted to a store.') }));
+
+ // --- Live rating stars + rating box -------------------------------------
+ (function initRating(){
+   const stars = Array.from(document.querySelectorAll('.rate-star'));
+   if (!stars.length) return;
+   const liveLabel = $('rate-live-label');
+   const box       = $('rating-box');
+   const boxLabel  = $('rating-box-label');
+   const textarea  = $('rating-text');
+   const cancelBtn = $('rating-cancel');
+   const submitBtn = $('rating-submit');
+
+   let savedRating = 0, savedText = '';
+   try { savedRating = parseInt(localStorage.getItem('cm_rating')||'0',10)||0; savedText = localStorage.getItem('cm_rating_text')||''; } catch(_) {}
+   let currentRating = savedRating;
+   let hoverRating   = 0;
+
+   const wordFor = n => ['','Poor','Below average','Average','Good','Excellent'][n] || '';
+
+   function paint(value){
+     stars.forEach((s,i)=>{
+       const v = i+1;
+       const filled = v <= value;
+       s.textContent = filled ? '★' : '☆';
+       s.classList.toggle('text-playBlue', filled);
+       s.classList.toggle('text-gray-300', !filled);
+       s.setAttribute('aria-checked', currentRating === v ? 'true':'false');
+     });
+   }
+   function updateLiveLabel(value, mode){
+     if(!liveLabel) return;
+     if(!value){ liveLabel.textContent = currentRating ? `Your rating: ${currentRating} ${currentRating===1?'star':'stars'}` : ''; return; }
+     liveLabel.textContent = (mode==='hover' ? `Tap to rate ${value} ${value===1?'star':'stars'}` : `${value} ${value===1?'star':'stars'} — ${wordFor(value)}`);
+   }
+   function openBox(n){
+     if(!box) return;
+     if(boxLabel) boxLabel.textContent = `You rated ChatMula ${n} ${n===1?'star':'stars'}`;
+     if(textarea){ textarea.value = savedText || ''; }
+     box.classList.remove('hide');
+     if(textarea) setTimeout(()=>{ try{ textarea.focus({preventScroll:true}) }catch(_){ textarea.focus() } }, 60);
+   }
+   function closeBox(){ if(box) box.classList.add('hide'); }
+
+   paint(currentRating);
+   updateLiveLabel(0, 'saved');
+
+   stars.forEach(star=>{
+     const v = parseInt(star.dataset.value,10);
+     star.addEventListener('mouseenter',()=>{ hoverRating = v; paint(hoverRating); updateLiveLabel(hoverRating,'hover'); });
+     star.addEventListener('mouseleave',()=>{ hoverRating = 0; paint(currentRating); updateLiveLabel(0,'saved'); });
+     star.addEventListener('touchstart',()=>{ hoverRating = v; paint(hoverRating); updateLiveLabel(hoverRating,'hover'); },{passive:true});
+     const commit = ()=>{
+       currentRating = v; hoverRating = 0;
+       try{ localStorage.setItem('cm_rating', String(v)); }catch(_){}
+       paint(currentRating);
+       updateLiveLabel(v,'commit');
+       openBox(v);
+     };
+     star.addEventListener('click', commit);
+     star.addEventListener('keydown',e=>{
+       if(e.key==='ArrowRight'||e.key==='ArrowUp'){ e.preventDefault(); const next = Math.min(5,v+1); const el = stars[next-1]; if(el) el.focus(); hoverRating=next; paint(next); updateLiveLabel(next,'hover'); }
+       else if(e.key==='ArrowLeft'||e.key==='ArrowDown'){ e.preventDefault(); const prev = Math.max(1,v-1); const el = stars[prev-1]; if(el) el.focus(); hoverRating=prev; paint(prev); updateLiveLabel(prev,'hover'); }
+       else if(e.key==='Escape'){ hoverRating=0; paint(currentRating); updateLiveLabel(0,'saved'); }
+     });
+   });
+   const group = document.getElementById('rate-stars');
+   if(group) group.addEventListener('mouseleave',()=>{ if(hoverRating){ hoverRating=0; paint(currentRating); updateLiveLabel(0,'saved'); } });
+
+   if(cancelBtn) cancelBtn.addEventListener('click', ()=>{ closeBox(); });
+   if(submitBtn) submitBtn.addEventListener('click', ()=>{
+     if(!currentRating){ say('Pick a star rating first.'); return; }
+     const text = (textarea && textarea.value || '').trim();
+     savedText = text;
+     try{
+       localStorage.setItem('cm_rating', String(currentRating));
+       localStorage.setItem('cm_rating_text', text);
+       localStorage.setItem('cm_rating_at', new Date().toISOString());
+     }catch(_){}
+     closeBox();
+     say('Thanks! Your '+currentRating+'-star rating was saved on this device.');
+   });
+ })();
 })();
 </script></body></html>
