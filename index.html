@@ -329,6 +329,7 @@
          // Chrome didn't fire the prompt at all (in-app browser, etc.) -> fake install
          showInstallingPhase();
        } else {
+         // Prompt fired but wasn't accepted, or failed -> reset to install
          showInstallState();
          say('Installation was not completed. Try again.');
        }
