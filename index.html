@@ -2,6 +2,7 @@
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <script>
+  // 1. ABSOLUTE REDIRECT: If opened from home screen, go straight to app
   (function(){
     try {
       var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
@@ -19,9 +20,7 @@
 <style>.hide{display:none!important}body{font-family:Roboto,Arial,sans-serif}.hide-scrollbar::-webkit-scrollbar{display:none}#download-ring{transition:stroke-dashoffset .1s linear}button:disabled{opacity:.55;cursor:default}.review-avatar{width:56px;height:56px;flex:0 0 56px;border-radius:50%;overflow:hidden;background:#eef2f7;display:flex;align-items:center;justify-content:center}.review-avatar img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}.review-entry{padding-bottom:2px}.native-toast{animation:toastIn .25s ease-out}@keyframes toastIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}.rate-star{background:transparent;border:0;font-size:1.875rem;line-height:1;padding:4px 8px;cursor:pointer;transition:color .15s ease,transform .12s ease,filter .12s ease;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;-webkit-user-select:none}.rate-star:hover{transform:scale(1.12)}.rate-star:active{transform:scale(.94)}.rate-star:focus-visible{outline:2px solid #0056D2;outline-offset:3px;border-radius:8px}</style>
 <script>
   if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-    navigator.serviceWorker.register('./sw.js').catch(function (e) {
-      console.warn('ChatMula SW registration failed:', e);
-    });
+    navigator.serviceWorker.register('./sw.js').catch(function (e) {});
   }
 </script>
 </head><body class="bg-white text-slate-900 antialiased">
@@ -90,21 +89,22 @@
 </div>
 </section></main>
 
-<div id="installed-modal" class="hide fixed inset-0 z-[10001] bg-black/60 flex items-center justify-center p-6" role="dialog" aria-modal="true" aria-labelledby="installed-modal-title">
+<!-- OPEN MODAL WITH DIRECT LINK TO APP -->
+<div id="installed-modal" class="hide fixed inset-0 z-[10001] bg-black/60 flex items-center justify-center p-6" role="dialog" aria-modal="true">
   <div class="bg-[#1e1e1e] rounded-2xl p-5 w-full max-w-sm shadow-2xl border border-gray-700 relative overflow-hidden">
     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
     <div class="flex items-center gap-4 mb-4">
       <img src="icon-192.png" alt="ChatMula" class="w-14 h-14 rounded-xl object-cover">
       <div>
-        <p id="installed-modal-title" class="text-white font-bold text-base">App is installed</p>
-        <p class="text-gray-400 text-xs mt-1">Open ChatMula from your home screen or app drawer.</p>
+        <p class="text-white font-bold text-base">App is installed</p>
+        <p class="text-gray-400 text-xs mt-1">Tap below to launch ChatMula.</p>
       </div>
     </div>
-    <div class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-3 text-center">
+    <div class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-3 text-center mb-4">
       <p id="modal-ref-code" class="text-yellow-400 font-extrabold text-sm">Use referral code: 2026</p>
     </div>
-    <button id="modal-close" class="mt-4 w-full bg-slate-700 text-white font-bold py-3 rounded-xl">Got it</button>
-    <button id="modal-continue" class="mt-2 w-full bg-transparent text-cyan-400 text-sm font-semibold py-2">Continue in browser instead</button>
+    <button id="modal-continue" class="w-full bg-playBlue text-white font-bold py-3.5 rounded-xl text-lg mb-2 shadow-soft">Open App</button>
+    <button id="modal-close" class="w-full bg-slate-700 text-white font-bold py-3 rounded-xl text-sm">Close</button>
   </div>
 </div>
 
@@ -117,17 +117,15 @@
  const openBtn=$('btn-open-app'), uninstallBtn=$('btn-uninstall');
  const promptCard=$('installed-prompt'), toast=$('toast'), stats=$('stats-row');
 
- // ==== State ====
  let deferredPrompt = null;
  let waitingForPrompt = false;
  let actuallyInstalled = false;
- let promptEverFired = false;     // did beforeinstallprompt fire this session?
+ let promptEverFired = false;
  let progressTimer = null;
  let installingTimer = null;
  let installingPhaseActive = false;
  let toastTimer = null;
 
- // --- Referral persistence ---
  try {
    const incomingRef = new URLSearchParams(location.search).get('ref');
    if (incomingRef && incomingRef.trim()) localStorage.setItem('cm_ref', incomingRef.trim());
@@ -144,7 +142,6 @@
    const modal  = $('modal-ref-code');  if (modal)  modal.textContent  = label;
  }
 
- // --- Platform detection (iOS Safari only — that's the only case we special-handle now) ---
  const standalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
  const ua=navigator.userAgent||'';
  const isIOS=/iPhone|iPad|iPod/i.test(ua);
@@ -155,14 +152,12 @@
    clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.add('hide'),4000);
  }
 
- // --- Progress: Play Store format "4.5 MB of 10 MB" ---
  function progressUI(percent){
    $('download-ring').style.strokeDashoffset=301.59-(percent/100)*301.59;
    const mb = (percent/100*10).toFixed(1);
    pct.textContent = mb + ' MB of 10 MB';
  }
 
- // --- Reset to Install state ---
  function showInstallState(){
    clearInterval(progressTimer); progressTimer = null;
    clearTimeout(installingTimer); installingTimer = null;
@@ -180,7 +175,6 @@
    progressUI(0);
  }
 
- // --- Installed state ---
  function showInstalledState(){
    clearInterval(progressTimer); progressTimer = null;
    clearTimeout(installingTimer); installingTimer = null;
@@ -197,7 +191,6 @@
    updateRefDisplays();
  }
 
- // --- Installing phase (Play Store: download → installing → open) ---
  function showInstallingPhase(){
    if(installingPhaseActive) return;
    installingPhaseActive = true;
@@ -219,7 +212,6 @@
    }, 2000);
  }
 
- // --- Fake download (25s) ---
  function startFakeDownload(){
    pre.classList.add('hide');
    post.classList.add('hide');
@@ -241,14 +233,10 @@
      if (elapsed >= duration) {
        clearInterval(progressTimer); progressTimer = null;
        if (actuallyInstalled) {
-         // Real install happened during download → installing phase → installed
          showInstallingPhase();
        } else if (!promptEverFired) {
-         // Browser can't fire beforeinstallprompt (in-app, iOS, Firefox, etc.)
-         // → fake the install so user reaches the Open state
          showInstallingPhase();
        } else {
-         // Prompt was available but user didn't accept → revert to Install
          showInstallState();
          say('Installation was not completed. Try again.');
        }
@@ -256,12 +244,10 @@
    }, 80);
  }
 
- // ==== Chrome install prompt (ZambiaCash pattern) ====
  window.addEventListener('beforeinstallprompt', (e) => {
    e.preventDefault();
    promptEverFired = true;
    deferredPrompt = e;
-   console.log('[ChatMula] beforeinstallprompt fired');
    if (waitingForPrompt) {
      waitingForPrompt = false;
      triggerRealInstall();
@@ -269,7 +255,6 @@
  });
 
  window.addEventListener('appinstalled', () => {
-   console.log('[ChatMula] appinstalled fired');
    actuallyInstalled = true;
    localStorage.setItem('pwa_installed','1');
    if (progressTimer) {
@@ -288,7 +273,6 @@
      ev.prompt();
      ev.userChoice.then((choice)=>{
        if (choice && choice.outcome === 'accepted') {
-         // appinstalled will fire; leave fake download running
        } else {
          clearInterval(progressTimer); progressTimer = null;
          showInstallState();
@@ -303,7 +287,6 @@
    }
  }
 
- // ==== iOS Safari: Add to Home Screen guide (only place we show a modal now) ====
  function showIosInstallInstructions(){
    let layer=document.getElementById('ios-install-layer');
    if(layer) return;
@@ -339,25 +322,22 @@
    layer.addEventListener('click',e=>{ if(e.target===layer) layer.remove(); });
  }
 
- // ==== Install button ====
  installBtn.addEventListener('click', ()=>{
    if (standalone()){ showInstalledState(); return; }
    if (localStorage.getItem('pwa_installed') === '1'){ showInstalledState(); return; }
-   if (isIOSSafari){ showIosInstallInstructions(); /* continue — fake download also starts */ }
+   if (isIOSSafari){ showIosInstallInstructions(); }
 
    startFakeDownload();
    if (deferredPrompt) triggerRealInstall();
    else waitingForPrompt = true;
  });
 
- // Cancel — stop the fake download
  if(cancelBtn) cancelBtn.addEventListener('click', ()=>{
    if (cancelBtn.disabled) return;
    clearInterval(progressTimer); progressTimer = null;
    showInstallState();
  });
 
- // Uninstall
  if(uninstallBtn) uninstallBtn.addEventListener('click', ()=>{
    localStorage.removeItem('pwa_installed');
    actuallyInstalled = false;
@@ -365,27 +345,24 @@
    say('ChatMula has been uninstalled.');
  });
 
- // Open button modal
  function showInstalledPromptModal(){
    updateRefDisplays();
    const modal=$('installed-modal');
    if(!modal)return;
    modal.classList.remove('hide');
-   clearTimeout(showInstalledPromptModal._t);
-   showInstalledPromptModal._t=setTimeout(()=>modal.classList.add('hide'),15000);
  }
  openBtn.addEventListener('click',()=>{
-   if (standalone()){window.location.href='./app.html';return}
-   showInstalledPromptModal();
+   // ALWAYS go to the app if they click Open
+   window.location.href = './app.html'; 
  });
+ 
  (function wireModal(){
    const modal=$('installed-modal'); if(!modal)return;
-   const close=$('modal-close'); if(close)close.addEventListener('click',()=>{clearTimeout(showInstalledPromptModal._t);modal.classList.add('hide')});
-   const cont=$('modal-continue'); if(cont)cont.addEventListener('click',()=>{clearTimeout(showInstalledPromptModal._t);modal.classList.add('hide');window.location.href='./app.html'});
-   modal.addEventListener('click',e=>{if(e.target===modal){clearTimeout(showInstalledPromptModal._t);modal.classList.add('hide')}});
+   const close=$('modal-close'); if(close)close.addEventListener('click',()=>{modal.classList.add('hide')});
+   const cont=$('modal-continue'); if(cont)cont.addEventListener('click',()=>{modal.classList.add('hide');window.location.href='./app.html'});
+   modal.addEventListener('click',e=>{if(e.target===modal){modal.classList.add('hide')}});
  })();
 
- // ==== Boot ====
  if (standalone() || localStorage.getItem('pwa_installed') === '1') {
    showInstalledState();
  } else {
@@ -397,7 +374,6 @@
  $('more-btn').addEventListener('click',()=>say('ChatMula app details'));
  $('btn-see-all').addEventListener('click',()=>{const hidden=[...document.querySelectorAll('.review-entry.hide')],b=$('btn-see-all');if(hidden.length){hidden.forEach(el=>el.classList.remove('hide'));b.textContent='Show less'}else{document.querySelectorAll('.review-entry').forEach((el,i)=>{if(i>=4)el.classList.add('hide')});b.textContent='See all 12,432 reviews'}});
 
- // ==== Rating ====
  (function initRating(){
    const stars = Array.from(document.querySelectorAll('.rate-star'));
    if (!stars.length) return;

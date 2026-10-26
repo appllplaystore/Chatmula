@@ -1,5 +1,5 @@
 {
-  "id": "./app.html",
+  "id": "/app.html",
   "name": "ChatMula",
   "short_name": "ChatMula",
   "description": "ChatMula conversations, connections and rewards",
@@ -9,6 +9,7 @@
   "orientation": "portrait",
   "background_color": "#0A0F1F",
   "theme_color": "#101B4D",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "icon-192.png",
