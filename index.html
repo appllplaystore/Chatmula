@@ -31,7 +31,7 @@
 <header class="flex items-center justify-between p-4 sticky top-0 bg-white/95 backdrop-blur z-10"><button id="back-btn" aria-label="Back" class="text-3xl leading-none text-gray-700">‹</button><span class="text-gray-700 font-medium">App details</span><button id="more-btn" aria-label="More options" class="text-2xl text-gray-700">⋮</button></header>
 <section class="p-5">
 <div class="flex gap-4 mb-6 items-center"><div class="relative w-[104px] h-[104px] shrink-0 flex items-center justify-center"><svg id="ring-svg" class="hide w-full h-full -rotate-90 absolute inset-0 z-10" viewBox="0 0 104 104"><circle cx="52" cy="52" r="48" stroke="#F1F5F9" stroke-width="5" fill="none"/><circle id="download-ring" cx="52" cy="52" r="48" stroke="#0056D2" stroke-width="2.5" fill="none" stroke-dasharray="301.59" stroke-dashoffset="301.59" stroke-linecap="round"/></svg><img src="icon-192.png" alt="ChatMula" class="w-[88px] h-[88px] rounded-2xl shadow-soft border border-gray-100 object-cover"></div><div class="flex flex-col justify-center"><h1 class="text-2xl font-bold text-gray-900 leading-tight">ChatMula</h1><p class="text-playBlue font-semibold text-sm mt-1">ChatMula Global</p><p class="text-gray-500 text-xs mt-1">Communication</p></div></div>
-<div id="download-text" class="hide mb-4"><span id="download-percent" class="text-sm font-semibold text-gray-700">0 MB of 10 MB</span><div class="flex items-center gap-1 mt-1 text-playGreen"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span id="status-small" class="text-xs font-semibold">Verified by Play Protect</span></div></div>
+<div id="download-text" class="hide mb-4"><span id="download-percent" class="text-sm font-semibold text-gray-700">0 MB of 30 MB</span><div class="flex items-center gap-1 mt-1 text-playGreen"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span id="status-small" class="text-xs font-semibold">Verified by Play Protect</span></div></div>
 <div class="flex gap-2 mb-6" id="pre-install-buttons"><button id="btn-store-install" class="flex-1 bg-playBlue text-white font-semibold text-lg py-3.5 rounded-full shadow-soft active:scale-95 transition-transform">Install</button></div>
 <div class="flex gap-2 mb-6 hide" id="downloading-buttons"><button id="btn-cancel-install" class="flex-1 bg-white text-playBlue font-semibold text-lg py-2.5 rounded-full border-2 border-gray-200">Cancel</button><button id="download-status-btn" disabled class="flex-1 bg-gray-100 text-gray-500 font-semibold text-lg py-2.5 rounded-full">Downloading…</button></div>
 <div class="flex gap-3 mb-6 hide" id="post-install-buttons"><button id="btn-uninstall" class="flex-1 bg-white text-playBlue font-semibold text-lg py-3 rounded-full border border-gray-300">Uninstall</button><button id="btn-open-app" class="flex-1 bg-playBlue text-white font-semibold text-lg py-3 rounded-full">Open</button></div>
@@ -127,7 +127,6 @@
  let installingPhaseActive = false;
  let toastTimer = null;
 
- // Record when the page loaded for the 31-second fake install logic
  const pageLoadTime = Date.now();
 
  try {
@@ -240,8 +239,8 @@
 
  function progressUI(percent){
    $('download-ring').style.strokeDashoffset=301.59-(percent/100)*301.59;
-   const mb = (percent/100*10).toFixed(1);
-   pct.textContent = mb + ' MB of 10 MB';
+   const mb = (percent/100*30).toFixed(1);
+   pct.textContent = mb + ' MB of 30 MB';
  }
 
  function showInstallState(){
@@ -307,9 +306,19 @@
    if(downloadStatusBtn) downloadStatusBtn.textContent = 'Downloading…';
    if(cancelBtn) cancelBtn.disabled = false;
 
-   const startTime = Date.now();
-   const duration = 15000; // 15 SECONDS
+   const elapsedBeforeTap = (Date.now() - pageLoadTime) / 1000;
+   const TARGET_SECONDS = 31;
 
+   let duration;
+   if (deferredPrompt) {
+     duration = 15000;
+   } else if (elapsedBeforeTap < TARGET_SECONDS) {
+     duration = Math.max(15000, (TARGET_SECONDS - elapsedBeforeTap) * 1000);
+   } else {
+     duration = 15000;
+   }
+
+   const startTime = Date.now();
    clearInterval(progressTimer);
    progressTimer = setInterval(()=>{
      const elapsed = Date.now() - startTime;
@@ -319,20 +328,23 @@
      if (elapsed >= duration) {
        clearInterval(progressTimer); progressTimer = null;
        
-       // If the prompt fired during the 15 seconds, triggerRealInstall was called
-       // and we are waiting for the user to accept it.
        if (deferredPrompt) {
          triggerRealInstall();
          return;
        }
 
-       // If they actually installed it, show the Installing phase
        if (actuallyInstalled) {
          showInstallingPhase();
        } else {
-         // Prompt never fired, or they cancelled it -> reset to Install
-         showInstallState();
-         say('Installation was not completed. Try again.');
+         // 3-second grace period in case Chrome's heuristic is slightly longer
+         setTimeout(() => {
+           if (deferredPrompt) {
+             triggerRealInstall();
+             return;
+           }
+           showInstallState();
+           say('Installation was not completed. Try again.');
+         }, 3000);
        }
      }
    }, 80);
@@ -341,6 +353,7 @@
  window.addEventListener('beforeinstallprompt', (e) => {
    e.preventDefault();
    promptEverFired = true;
+   if (deferredPrompt) return;
    deferredPrompt = e;
    if (waitingForPrompt) {
      waitingForPrompt = false;
@@ -351,11 +364,9 @@
  window.addEventListener('appinstalled', () => {
    actuallyInstalled = true;
    localStorage.setItem('pwa_installed','1');
-   if (progressTimer) {
-     clearInterval(progressTimer); progressTimer = null;
+   clearInterval(progressTimer); progressTimer = null;
+   if (!installingPhaseActive) {
      showInstallingPhase();
-   } else if (!installingPhaseActive) {
-     showInstalledState();
    }
  });
 
@@ -423,20 +434,16 @@
 
    const elapsedSeconds = (Date.now() - pageLoadTime) / 1000;
 
-   // Always start the fake download so the user sees progress
    startFakeDownload();
 
    if (elapsedSeconds >= 31) {
-     // Chrome's 30-second heuristic is satisfied — show the real prompt
      if (deferredPrompt) {
        triggerRealInstall();
      } else {
        waitingForPrompt = true;
      }
    } else {
-     // Less than 31 seconds — do NOT trigger the prompt
-     // The fake download will run, then reset the button
-     waitingForPrompt = false;
+     waitingForPrompt = true;
    }
  });
 
