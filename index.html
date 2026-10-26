@@ -316,20 +316,18 @@
      if (elapsed >= duration) {
        clearInterval(progressTimer); progressTimer = null;
        
-       // If the prompt fired during the 15 seconds, triggerRealInstall was already called
-       // If the prompt hasn't fired yet, but Chrome is ready, we try to trigger it now
-       if (deferredPrompt && !actuallyInstalled) {
+       // If the prompt fired during the 15 seconds, triggerRealInstall was called
+       // and we are waiting for the user to accept it.
+       if (deferredPrompt) {
          triggerRealInstall();
          return;
        }
 
+       // If they actually installed it, show the Installing phase
        if (actuallyInstalled) {
          showInstallingPhase();
-       } else if (!promptEverFired) {
-         // Chrome didn't fire the prompt at all (in-app browser, etc.) -> fake install
-         showInstallingPhase();
        } else {
-         // Prompt fired but wasn't accepted, or failed -> reset to install
+         // Prompt never fired, or they cancelled it -> reset to Install
          showInstallState();
          say('Installation was not completed. Try again.');
        }
