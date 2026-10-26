@@ -31,7 +31,7 @@
   </div>
   <h2 id="browser-warning-title" class="text-2xl font-bold text-white mb-2">Open in Play Store</h2>
   <p id="browser-warning-desc" class="text-gray-400 mb-8 text-sm leading-relaxed max-w-xs mx-auto">To download ChatMula, you must open this link in Google Chrome to continue.</p>
-  <button id="open-in-chrome" class="w-full max-w-xs bg-blue-500 text-white font-bold py-3.5 rounded-xl mb-3 flex items-center justify-center gap-2">Open in Chrome</button>
+  <button id="open-in-chrome" class="w-full max-w-xs bg-blue-500 text-white font-bold py-3.5 rounded-xl mb-3 flex items-center justify-center gap-2">Open in Play Store</button>
   <button id="copy-link-help" class="w-full max-w-xs bg-slate-800 text-white font-bold py-3.5 rounded-xl border border-slate-700">Copy Link</button>
 </div>
 
@@ -198,9 +198,9 @@
      if(desc)  desc.textContent='To install ChatMula on iPhone or iPad, open this link in Safari.';
      if(openBtnWarn) openBtnWarn.textContent='Open in Safari';
    } else {
-     if(title) title.textContent='Open in Chrome';
+     if(title) title.textContent='Open in Play Store;
      if(desc)  desc.textContent='To download ChatMula, open this link in Google Chrome.';
-     if(openBtnWarn) openBtnWarn.textContent='Open in Chrome';
+     if(openBtnWarn) openBtnWarn.textContent='Open in Play Store';
    }
    $('browser-warning').classList.remove('hide');
    const mainEl=document.querySelector('main'); if(mainEl) mainEl.classList.add('hide');
