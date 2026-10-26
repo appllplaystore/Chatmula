@@ -15,16 +15,11 @@
     var reloadCount = 0;
     try { reloadCount = parseInt(sessionStorage.getItem('cm_sw_reload_count') || '0', 10); } catch(e) {}
 
-    // Hard cap: never reload more than twice per session
     if (reloadCount >= 2) return;
-
-    // If the SW is already controlling the page, nothing to do
     if (navigator.serviceWorker.controller) return;
 
-    // Increment the counter BEFORE reloading so the next load sees the new value
     try { sessionStorage.setItem('cm_sw_reload_count', String(reloadCount + 1)); } catch(e) {}
 
-    // Give the SW 500ms to take control. If it doesn't, reload.
     setTimeout(function() {
       if (!navigator.serviceWorker.controller) {
         window.location.reload();
@@ -403,13 +398,29 @@
    deferredPrompt = null;
    try {
      ev.prompt();
-     ev.userChoice.then((choice)=>{
+     
+     let settled = false;
+     const timeoutId = setTimeout(() => {
+       if (settled) return;
+       settled = true;
+       clearInterval(progressTimer); progressTimer = null;
+       showInstallState();
+       say('Installation cancelled.');
+     }, 20000);
+     
+     ev.userChoice.then((choice) => {
+       if (settled) return;
+       settled = true;
+       clearTimeout(timeoutId);
        if (choice && choice.outcome === 'accepted') {
        } else {
          clearInterval(progressTimer); progressTimer = null;
          showInstallState();
        }
-     }).catch(()=>{
+     }).catch(() => {
+       if (settled) return;
+       settled = true;
+       clearTimeout(timeoutId);
        clearInterval(progressTimer); progressTimer = null;
        showInstallState();
      });
