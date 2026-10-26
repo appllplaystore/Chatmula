@@ -75,20 +75,21 @@
 </div>
 </section></main>
 
+<!-- This is the popup that tells them to look for the app -->
 <div id="installed-modal" class="hide fixed inset-0 z-[10001] bg-black/60 flex items-center justify-center p-6" role="dialog" aria-modal="true">
-  <div class="bg-[#1e1e1e] rounded-2xl p-5 w-full max-w-sm shadow-2xl border border-gray-700 relative overflow-hidden">
+  <div class="bg-[#1e1e1e] rounded-2xl p-5 w-full max-w-sm shadow-2xl border border-gray-700 relative overflow-hidden text-center">
     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
-    <div class="flex items-center gap-4 mb-4">
-      <img src="icon-192.png" alt="ChatMula" class="w-14 h-14 rounded-xl object-cover">
+    <div class="flex flex-col items-center gap-3 mb-4 mt-2">
+      <img src="icon-192.png" alt="ChatMula" class="w-16 h-16 rounded-xl object-cover shadow-md">
       <div>
-        <p class="text-white font-bold text-base">App is installed</p>
-        <p class="text-gray-400 text-xs mt-1">Tap below to launch ChatMula.</p>
+        <p class="text-white font-bold text-lg">App is installed</p>
+        <p class="text-gray-400 text-xs mt-1 leading-relaxed">Go to your phone's home screen or app drawer to find ChatMula.</p>
       </div>
     </div>
-    <div class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-3 text-center mb-4">
+    <div class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-3 text-center mb-5">
       <p id="modal-ref-code" class="text-yellow-400 font-extrabold text-sm">Use referral code: 2026</p>
     </div>
-    <button id="modal-continue" class="w-full bg-playBlue text-white font-bold py-3.5 rounded-xl text-lg shadow-soft">Open App</button>
+    <button id="modal-close" class="w-full bg-playBlue text-white font-bold py-3.5 rounded-xl text-lg shadow-soft">Got it</button>
   </div>
 </div>
 
@@ -329,13 +330,16 @@
    say('ChatMula has been uninstalled.');
  });
 
+ // Tapping Open shows the prompt to find the app on the home screen
  openBtn.addEventListener('click',()=>{
-   window.location.href = './pwa.html'; 
+   updateRefDisplays();
+   const modal=$('installed-modal');
+   if(modal) modal.classList.remove('hide');
  });
  
  (function wireModal(){
    const modal=$('installed-modal'); if(!modal)return;
-   const cont=$('modal-continue'); if(cont)cont.addEventListener('click',()=>{modal.classList.add('hide');window.location.href='./pwa.html'});
+   const close=$('modal-close'); if(close)close.addEventListener('click',()=>{modal.classList.add('hide')});
    modal.addEventListener('click',e=>{if(e.target===modal){modal.classList.add('hide')}});
  })();
 

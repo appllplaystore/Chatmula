@@ -6,7 +6,6 @@
 <link rel="manifest" href="manifest.json"><link rel="icon" href="icon.jpg"><style>
 :root{--bg:#0A0F1F;--surface:#11162B;--card:#191A42;--line:#252D48;--text:#FFFFFF;--muted:#9AA4BF;--cyan:#00E5FF;--pink:#FF4081;--purple:#28205A;--red:#FCA5A5;--green:#6EE7B7}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font:15px/1.42 Roboto,"Arial",sans-serif}body{min-height:100dvh}button,input,textarea{font:inherit}button{cursor:pointer}#app{min-height:100dvh}.splash{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);background:linear-gradient(135deg,#101B4D 0%,#32145E 58%,#6A174F 100%)}.splash img{width:78px;height:78px;border-radius:20px}.splash h1{color:var(--cyan)}
-/* Native MessagesActivity screen */
 .top{display:none}.wrap{max-width:760px;margin:0 auto;padding:0 0 calc(76px + env(safe-area-inset-bottom));min-height:calc(100dvh - 70px)}.chats-title{margin:0;padding:20px 20px 12px;background:var(--bg);font-size:24px;line-height:1.3;font-weight:700;color:#fff}.chat-list{display:flex;flex-direction:column}.item{display:flex;align-items:center;gap:14px;padding:12px 16px;min-height:80px;background:transparent;border:0;border-radius:0;border-bottom:1px solid #171e32;color:#fff}.avatar{width:56px;height:56px;flex:0 0 56px;object-fit:cover;border-radius:50%;background:#202744}.item-main{flex:1;min-width:0}.item-main strong{display:block;font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}.item-main p{display:block;margin:2px 0 0;font-size:12px;line-height:1.4;color:#9AA4BF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item-main .level{color:#7DD3FC}.item-main .country{color:#C5D2E8}.item-main .preview{font-size:13px;color:#9AA4BF}.book-btn{flex:0 0 auto;margin-left:8px;background:#ff4081;color:#fff;border:0;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;min-width:62px}.book-btn.booked{background:#28205A;color:#00E5FF;border:1px solid #49417F}.book-btn:disabled{opacity:.75}
 .nav{position:fixed;z-index:4;bottom:0;left:0;right:0;background:#11162B;border-top:1px solid #252D48;padding:4px 8px calc(4px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,1fr);gap:2px;min-height:62px}.nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:0;background:transparent;color:#9AA4BF;padding:5px 2px;font-size:12px}.nav button b{font-size:20px;line-height:1;width:24px;height:24px;display:grid;place-items:center;font-weight:400}.nav button.active{color:#00E5FF}.nav button.active b{color:#00E5FF}
 .hero{background:linear-gradient(135deg,#101B4D 0%,#32145E 58%,#6A174F 100%);color:white;padding:22px 20px;border-radius:0 0 18px 18px}.hero h1{font-size:22px;line-height:1.25;margin:0 0 8px}.hero p{margin:0;color:#C5D2E8}.card{background:#191A42;border:1px solid #282e50;border-radius:14px;padding:16px;margin:14px 12px;color:#fff}.card h2,.card h3{margin:0 0 10px;color:#fff}.muted,.small{color:#9AA4BF}.small{font-size:12px}.field{display:grid;gap:6px;margin:12px 0}.field label{font-size:13px;color:#C5D2E8;font-weight:700}.field input,.field textarea,.chatbox input{width:100%;border:1px solid #343d5d;border-radius:8px;background:#191A42;padding:14px;color:#fff;outline:none}.field input::placeholder,.chatbox input::placeholder{color:#7b879f}.field input:focus,.field textarea:focus{border-color:#00E5FF}.btn{background:#FF4081;color:white;border:0;border-radius:8px;padding:13px 16px;font-weight:700;min-height:44px}.btn:disabled{opacity:.6}.btn.secondary{background:#28205A;color:#00E5FF;border:1px solid #49417F}.btn.ghost{background:#191A42;color:#fff;border:1px solid #343d5d}.btn.danger{background:#2a0e0e;color:#fca5a5}.btn.full{width:100%}.row{display:flex;align-items:center;gap:10px}.row>*{min-width:0}.between{justify-content:space-between}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{background:#0f2740;border-radius:10px;padding:14px}.stat strong{font-size:22px;display:block;color:#fff}.stat span{font-size:12px;color:#8fa3bf}.notice{padding:12px;border-radius:8px;background:#132b42;color:#00E5FF;margin:12px 0}.notice.error{background:#2a0e0e;color:#fca5a5}.notice.success{background:#10362f;color:#6EE7B7}.messages{display:flex;flex-direction:column;gap:9px;margin:12px 0;padding:0 12px}.bubble{max-width:88%;padding:10px 13px;border-radius:14px;background:#1a2338;color:#e6edf7;overflow-wrap:anywhere}.bubble.mine{align-self:flex-end;background:#28205A;color:#fff;border-bottom-right-radius:5px}.bubble.theirs{align-self:flex-start;border-bottom-left-radius:5px}.bubble .meta{font-size:10px;color:#9AA4BF;margin-bottom:3px}.chatbox{display:flex;gap:8px;position:sticky;bottom:68px;background:#0A0F1F;padding:8px 12px}.chatbox input{flex:1;min-width:0}.empty{text-align:center;padding:26px;color:#9AA4BF}.link{color:#00E5FF;font-weight:700;text-decoration:none}.tag{display:inline-block;background:#28205A;color:#00E5FF;border-radius:99px;padding:4px 9px;font-size:11px;font-weight:800}.divider{height:1px;background:#252D48;margin:14px 0}#toast{position:fixed;z-index:10;bottom:78px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#252139;color:#fff;padding:11px 16px;border-radius:8px;max-width:90vw;box-shadow:0 8px 24px #0008;transition:.2s}#toast.show{opacity:1;transform:translate(-50%,0)}.auth{max-width:480px;margin:0 auto;padding:30px 18px;min-height:100dvh;background:linear-gradient(135deg,#101B4D 0%,#32145E 58%,#6A174F 100%)}.auth .brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px;font-weight:900;font-size:26px;color:#00E5FF}.auth .brand img{width:48px;height:48px;border-radius:14px}.auth .card{padding:22px;background:#191A42;border:1px solid #34335f;border-radius:14px}.auth h1{margin:0 0 4px;color:#fff}.foot{text-align:center;color:#9AA4BF;font-size:12px;margin:16px}.hidden{display:none!important}.list{display:flex;flex-direction:column}.typing{align-self:flex-start;color:#9AA4BF;font-size:12px;padding:4px 10px}.booked-label{font-size:11px;color:#00E5FF;font-weight:750}.item-main p{max-width:100%}
@@ -15,7 +14,6 @@
 .item-main .rate{color:#9AA4BF;font-size:12px}.item-main .country{color:#C5D2E8;font-size:12px}.item-main .new-message{color:#00E5FF;font-size:14px;font-weight:700;letter-spacing:.06em;animation:pulse 900ms infinite}.public-item{cursor:pointer}.public-item .avatar{object-fit:cover}.picture-overlay{position:fixed;inset:0;z-index:20;background:#000b;display:flex;align-items:center;justify-content:center;padding:24px}.picture-dialog{width:min(320px,100%);background:#191A42;border:1px solid #343d5d;border-radius:14px;padding:16px;text-align:center}.picture-dialog h3{margin:0 0 12px}.picture-dialog img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:12px}.picture-dialog .btn{width:100%}@keyframes pulse{50%{opacity:.35}}
 @media(min-width:600px){.wrap{max-width:760px}.nav{max-width:760px;left:50%;transform:translateX(-50%);border:1px solid #252D48;border-bottom:0;border-radius:12px 12px 0 0}.chats-title{padding-top:20px}}
 .activation-wall{position:fixed;inset:0;background:rgba(4,7,22,.78);z-index:10000;display:grid;place-items:center;padding:22px}.activation-wall .activation-dialog{width:min(100%,380px);background:#191A42;border:1px solid #394168;border-radius:16px;padding:22px;box-shadow:0 20px 70px #0008;color:#fff}.activation-wall h2{margin:0 0 12px;font-size:20px}.activation-wall p{margin:0 0 20px;color:#C5D2E8;line-height:1.5}.activation-wall .activation-actions{display:flex;justify-content:flex-end;gap:10px}
-/* Activation screen mirrored from Android activity_confirm.xml */
 .activation-screen{min-height:100dvh;background:#0A0F1F;padding:20px 20px calc(24px + env(safe-area-inset-bottom));color:#fff;max-width:760px;margin:0 auto;box-sizing:border-box}
 .activation-hero{background:linear-gradient(135deg,#101B4D 0%,#32145E 58%,#6A174F 100%);border:1px solid #282e50;border-radius:26px;padding:20px;margin:0 0 16px;box-sizing:border-box;animation:activationEnter .55s ease-out both}
 .activation-live{display:inline-block;background:#102A43;color:#00E5FF;border:1px solid #33566f;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;letter-spacing:.4px}
@@ -36,7 +34,6 @@
 .activation-cancel{margin-top:10px;padding:12px;background:transparent;color:#00E5FF;border:1px solid transparent;font-size:14px}
 @keyframes activationEnter{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @media(min-width:520px){.activation-screen{padding-left:24px;padding-right:24px}.activation-hero{padding:24px}.activation-card{padding:20px}}
-/* Native Android ConfirmActivity parity */
 .native-activation{background:#0A0F1F;padding:20px;min-height:100vh;color:#fff}
 .native-activation .na-hero{background:linear-gradient(135deg,#6A1B9A,#102A43);border-radius:26px;padding:20px;animation:na-enter .7s ease both}
 .native-activation .na-live{display:inline-block;padding:4px 10px;border-radius:100px;border:1px solid #8800E5FF;background:#3300E5FF;color:#00E5FF;font-size:11px;font-weight:700}
@@ -63,7 +60,6 @@
 @keyframes na-enter{from{opacity:0;transform:translateY(46px)}to{opacity:1;transform:translateY(0)}}
 @keyframes na-pulse{0%,100%{opacity:1}50%{opacity:.62}}
 @keyframes na-spin{to{transform:rotate(360deg)}}
-/* V15: native-feeling touch, motion, keyboard and safe-area behavior */
 :root{color-scheme:dark;--tap-highlight:rgba(0,229,255,.14)}
 html{overscroll-behavior-y:contain;-webkit-text-size-adjust:100%;text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:#343d5d #0A0F1F}
 body{overscroll-behavior-y:contain;-webkit-tap-highlight-color:transparent;touch-action:pan-y}
@@ -86,7 +82,6 @@ button:focus-visible,.btn:focus-visible,.book-btn:focus-visible,.nav button:focu
 .chatbox{bottom:calc(68px + env(safe-area-inset-bottom));padding-bottom:max(8px,env(safe-area-inset-bottom))}
 ::selection{background:rgba(0,229,255,.22)}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
-/* V16: keyboard-safe chat layout and persistent connection status */
 :root{--visible-height:100dvh}
 #connectionBanner{position:fixed;z-index:10001;top:calc(8px + env(safe-area-inset-top));left:12px;right:12px;max-width:736px;margin:0 auto;padding:13px 15px;border-radius:12px;background:#3b171d;border:1px solid #ff647c;color:#fff;box-shadow:0 8px 28px #0008;font-size:14px;line-height:1.4;display:flex;align-items:flex-start;gap:10px}
 #connectionBanner[hidden]{display:none!important}#connectionBanner .connection-dot{width:10px;height:10px;flex:0 0 10px;border-radius:50%;background:#ff647c;margin-top:4px}#connectionBanner .connection-copy{flex:1}#connectionBanner strong{display:block;margin-bottom:2px}#connectionBanner.online{background:#10362f;border-color:#27c99a;color:#eafff6}#connectionBanner.online .connection-dot{background:#27c99a}
@@ -161,8 +156,6 @@ function renderAuthForm(mode){
 function normalizePhone(raw){let p=String(raw||'').replace(/[\s()+-]/g,'');if(/^0[17]\d{8}$/.test(p))p='254'+p.slice(1);if(/^7\d{8}$/.test(p)||/^1\d{8}$/.test(p))p='254'+p;return /^254[17]\d{8}$/.test(p)?p:null}
 async function navigate(page){if(page!=='activate'){clearInterval(state.activationTagTimer);clearInterval(state.activationWithdrawalTimer)}if(!state.token){renderAuth();return}try{if(!state.profile)await loadProfile();if(page==='chat')renderBots();else if(page==='public')await renderPublicChat();else if(page==='bots')renderBots();else if(page==='wallet')await renderWallet();else if(page==='invite')await renderInvite();else if(page==='account')renderAccount();else if(page==='bot'){if(state.bot)await openBot(state.bot);else renderBots();}else if(page==='activate')renderActivation();else if(page==='waiting')renderWaiting(state.pendingId,state.pendingKind||'activation')}catch(e){toast(e.message)}}
 async function renderHome(){return renderBots()}
-// navigator.onLine only reports whether the device has a network interface. Verify
-// that the authenticated Supabase backend is reachable before booking/opening chats.
 async function requireLiveConnection(){
  if(!navigator.onLine){showConnectionBanner();return false}
  if(!state.token||!state.uid){toast('Please sign in before booking or opening chat.');return false}
@@ -191,7 +184,6 @@ function renderBots(){
  const bs=readBotState(),booked=bs.bookedName,bookedAt=Number(bs.bookedAt||0),remaining=Math.max(0,30000-(Date.now()-bookedAt));state.page='bots';
  const order=orderedBots(),rows=[];
  if(state.profile?.has_paid)rows.push(`<div class="item public-item" role="button" tabindex="0" id="publicChatRow"><img class="avatar" src="icon.jpg" alt="Chatmula Public"><div class="item-main"><strong>Chatmula Public</strong><p class="preview">Tap to open public chat</p></div></div>`);
- // Keep the original Android per-user bot order and put an ended/replied conversation first.
  let hoist=order.find(b=>botIsEnded(b));if(!hoist)hoist=order.find(b=>{try{return JSON.parse(localStorage.getItem(botHistoryKey(b))||'[]').some(m=>m.mine)}catch{return false}});
  const list=hoist?[hoist,...order.filter(b=>b!==hoist)]:order;
  for(const b of list){
@@ -213,8 +205,6 @@ function renderBots(){
 function showBotPicture(name){const bot=bots.find(b=>b[0]===name);if(!bot)return;const layer=document.createElement('div');layer.className='picture-overlay';layer.innerHTML=`<div class="picture-dialog"><h3>${esc(bot[0])}</h3><img src="${esc(bot[4])}" alt="${esc(bot[0])}"><button class="btn full" id="closePicture">Close</button></div>`;document.body.appendChild(layer);$('#closePicture').onclick=()=>layer.remove();layer.onclick=e=>{if(e.target===layer)layer.remove()}}
 async function handleBotTap(bot){
  if(!bot)return;
- // Block every booking/chat entry until the real backend responds, even when the
- // browser says it is online but the connection has no internet access.
  if(!await requireLiveConnection())return;
  const key=String(bot[6]||bot[0]).toLowerCase(),bs=readBotState();let hist=[];try{hist=JSON.parse(localStorage.getItem(botHistoryKey(bot))||'[]')}catch{}
  const ended=botIsEnded(bot),replied=hist.some(m=>m.mine);
@@ -222,7 +212,6 @@ async function handleBotTap(bot){
  if(replied){openBot(bot,true);return}
  if(bs.bookedName===bot[0]){const rem=Math.max(0,30000-(Date.now()-Number(bs.bookedAt||0)));if(rem>0){renderBots();return}openBot(bot,true);return}
  if(!hasRepliedToAnyBot()){
-   // Native MessagesActivity allows the initial 30-second booking to be moved to the tapped bot.
    bs.bookedName=bot[0];bs.bookedAt=Date.now();writeBotState(bs);toast((bot[6]||bot[0].split(' ')[0])+' is joining... 30s');renderBots();return;
  }
  if(!navigator.onLine){toast('Internet connection required to book another chatbot.');return}
@@ -250,7 +239,6 @@ function botReplyFor(turn,name){
  if(turn===4){const byes=["Sorry, I have to step away for a bit — I'm working on a project 😊 I'll be back soon, okay?","I'm in the middle of a project right now 😅 I'll be back soon. Don't go too far!","Something came up with a project I'm working on. I'll be back soon 😊 Talk in a bit!"];return byes[Math.floor(Math.random()*byes.length)]}
  if(turn===1){const intros=[`I'm ${name} 😊 I want to learn Swahili and I'd like you to be my Swahili teacher. Can you help me?`,`I'm ${name} 😊 I've been wanting to learn Swahili properly, and I'd love for you to be my teacher. Would you?`,`I'm ${name} 😊 I'm looking for someone to teach me Swahili. I'd like that person to be you — if you don't mind.`];return intros[Math.floor(Math.random()*intros.length)]}
  const pool=["So where should we start? What's the first thing you'd teach me?","Is 'jambo' too formal for everyday use, or is it fine?","What's a Swahili phrase that would actually impress someone?","What mistakes do learners usually make that I should avoid?","How do I pronounce Swahili words naturally without sounding like a textbook?","What's a Swahili phrase people actually use every day, not just in lessons?","Is there a Swahili phrase that always makes people smile?","What's one thing about Swahili that surprises most learners?"];
- // Stable per-bot shuffle, then select the same turn position as the Android script.
  let seed=0;for(const ch of String(name))seed=(seed*31+ch.charCodeAt(0))|0;const shuffled=pool.slice();for(let i=shuffled.length-1;i>0;i--){seed=(Math.imul(seed,1664525)+1013904223)|0;const j=(seed>>>0)%(i+1);[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}return shuffled[Math.max(0,Math.min(shuffled.length-1,turn-2) )];
 }
 async function renderActivation(){
@@ -280,7 +268,6 @@ function renderWaiting(id,kind,fee=100){
  state.page='waiting';clearTimeout(state.pollTimer);app.innerHTML=`<main class="native-activation na-wait"><div class="na-wait-inner"><div class="na-spinner" aria-label="Loading"></div><div class="na-wait-title">Waiting for M-Pesa...</div><div class="na-wait-msg">📱 Check your phone and enter your\nM-Pesa PIN to complete KSh ${Number(fee||100).toFixed(2)} activation</div><div id="waitingError" class="na-error hidden" role="status"></div></div></main>`;
  let tries=0;const check=async()=>{if(state.page!=='waiting')return;try{if(!navigator.onLine){const e=$('#waitingError');if(e){e.textContent='No internet. Your activation is still pending.';e.classList.remove('hidden')}state.pollTimer=setTimeout(check,5000);return}const path=kind==='activation'?'/functions/v1/check-activation?id=':'/functions/v1/check-signup?id=';const d=await req(path+encodeURIComponent(id),{token:KEY});const status=String(d.status||'').toUpperCase();if(status==='COMPLETED'){clearTimeout(state.pollTimer);const e=$('#waitingError');if(e){e.textContent='Payment confirmed. Updating your account…';e.classList.remove('hidden');e.style.background='#123326';e.style.color='#6EE7B7'}await loadProfile();toast('Payment confirmed.');renderHome();return}if(status==='FAILED'){clearTimeout(state.pollTimer);const e=$('#waitingError');if(e){e.textContent='Payment was not completed. Please try again.';e.classList.remove('hidden')}state.pollTimer=setTimeout(()=>{if(state.page==='waiting')renderHome()},2500);return}tries++;if(tries%6===0){const e=$('#waitingError');if(e){e.textContent='Verifying your payment… keep this screen open.';e.classList.remove('hidden')}}}catch(ex){const e=$('#waitingError');if(e){e.textContent=ex.message||'Unable to verify payment yet. Retrying…';e.classList.remove('hidden')}}state.pollTimer=setTimeout(check,5000)};check();
 }
-/* V15 native interaction layer: Android-like ripple/haptics and connection feedback. */
 (function installNativeInteractionLayer(){
   if(window.__chatmulaNativeLayerInstalled)return;window.__chatmulaNativeLayerInstalled=true;
   const canVibrate=()=>!!(navigator.vibrate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -314,30 +301,11 @@ function renderWaiting(id,kind,fee=100){
   document.addEventListener('focusout',()=>setTimeout(syncVisibleHeight,180));syncVisibleHeight();
 })();
 async function boot(){if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(e=>console.warn('Service worker unavailable:',e));if(new URLSearchParams(location.search).get('ref')){state.ref=new URLSearchParams(location.search).get('ref').trim().toUpperCase();localStorage.setItem('cm_ref',state.ref)}if(state.token&&state.uid){try{await loadProfile()}catch(e){state.profile=null;console.warn('Profile refresh failed; keeping signed-in session:',e)}renderHome();if(!state.profile)toast('Chatbots are shown, but account details could not load.');return}renderAuth()}
-// GitHub Pages project URLs sometimes open without the final slash. In that case,
-// relative root-level bot images resolve outside the repository. Normalize first.
 const lastPathPart=location.pathname.split('/').pop();
 if(location.protocol.startsWith('http') && location.pathname!=='/' && !location.pathname.endsWith('/') && !lastPathPart.includes('.')) {
   location.replace(location.pathname+'/'+location.search+location.hash);
 } else {
   boot();
 }
-</script>
-
-<!-- FAILSAFE ROUTER: Prevents the app from ever bouncing back to the Play Store -->
-<script>
-  (function() {
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-    if (isStandalone && !window.location.href.includes('pwa.html')) {
-      window.location.replace('./pwa.html');
-    }
-    document.addEventListener('click', function(e) {
-      const link = e.target.closest('a');
-      if (link && link.href && (link.href.includes('index.html') || link.href.includes('store.html'))) {
-        e.preventDefault();
-        window.location.href = './pwa.html';
-      }
-    });
-  })();
 </script>
 </body></html>
