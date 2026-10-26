@@ -1,9 +1,9 @@
 {
-  "id": "/app.html?v=99",
+  "id": "/pwa.html",
   "name": "ChatMula",
   "short_name": "ChatMula",
   "description": "ChatMula conversations, connections and rewards",
-  "start_url": "./app.html?v=99",
+  "start_url": "./pwa.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",

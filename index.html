@@ -18,8 +18,8 @@
 
     // 2. Routing Logic
     if (isStandalone) {
-      // App is installed: Go straight to app
-      window.location.replace('./app.html');
+      // App is installed: Go straight to the app
+      window.location.replace('./pwa.html');
     } else if (isAndroidInApp || isIOSInApp) {
       // In-app browser: Show the Chrome warning gate
       document.addEventListener("DOMContentLoaded", () => {
