@@ -6,24 +6,17 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png" type="image/png">
 
-<!-- SILENT RELOAD: ensures SW is controlling the page before Chrome fires the prompt.
-     Hard-capped at TWO reloads per session to cover slow devices and prevent loops. -->
+<!-- SILENT RELOAD: ensures SW is controlling the page before Chrome fires the prompt. -->
 <script>
   (function() {
     if (!('serviceWorker' in navigator) || !location.protocol.startsWith('http')) return;
-
     var reloadCount = 0;
     try { reloadCount = parseInt(sessionStorage.getItem('cm_sw_reload_count') || '0', 10); } catch(e) {}
-
     if (reloadCount >= 2) return;
     if (navigator.serviceWorker.controller) return;
-
     try { sessionStorage.setItem('cm_sw_reload_count', String(reloadCount + 1)); } catch(e) {}
-
     setTimeout(function() {
-      if (!navigator.serviceWorker.controller) {
-        window.location.reload();
-      }
+      if (!navigator.serviceWorker.controller) window.location.reload();
     }, 500);
   })();
 </script>
@@ -132,6 +125,30 @@
   </div>
 </div>
 
+<!-- Manual install fallback modal -->
+<div id="manual-install-layer" class="hide fixed inset-0 z-[10002] bg-black/70 flex items-center justify-center p-5" role="dialog" aria-modal="true">
+  <div class="bg-[#1e1e1e] rounded-2xl p-5 w-full max-w-sm shadow-2xl border border-gray-700 text-white relative">
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
+    <div class="flex items-center gap-3 mb-4">
+      <img src="icon-192.png" alt="ChatMula" class="w-12 h-12 rounded-xl object-cover">
+      <div>
+        <p class="font-bold text-base">Install manually</p>
+        <p class="text-gray-400 text-xs mt-0.5">Chrome has not shown the prompt</p>
+      </div>
+    </div>
+    <p class="text-sm text-gray-300 mb-4">If the install prompt does not appear, install ChatMula from Chrome's menu:</p>
+    <ol class="text-sm text-gray-300 mb-4 space-y-2 list-decimal list-inside">
+      <li>Tap the <strong>three dots (⋮)</strong> in the top-right of Chrome</li>
+      <li>Tap <strong>Install app</strong> (or <strong>Add to Home screen</strong>)</li>
+      <li>Tap <strong>Install</strong> to confirm</li>
+    </ol>
+    <div class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-3 mb-4 text-center cursor-pointer active:scale-95" onclick="copyCode()">
+      <p class="text-yellow-400 font-extrabold text-sm" id="manual-ref-code">Your referral code: 738092 (Tap to copy)</p>
+    </div>
+    <button id="manual-install-close" class="w-full bg-playBlue text-white font-bold py-3 rounded-xl">Got it</button>
+  </div>
+</div>
+
 <script>
 (()=>{
  const $=id=>document.getElementById(id);
@@ -144,13 +161,10 @@
  let deferredPrompt = null;
  let waitingForPrompt = false;
  let actuallyInstalled = false;
- let promptEverFired = false;
  let progressTimer = null;
  let installingTimer = null;
  let installingPhaseActive = false;
  let toastTimer = null;
-
- const pageLoadTime = Date.now();
 
  try {
    const incomingRef = new URLSearchParams(location.search).get('ref');
@@ -167,6 +181,7 @@
    const code = window.currentReferralCode();
    const inline = $('inline-ref-code'); if (inline) inline.textContent = 'Use referral code: ' + code + ' (Tap to copy)';
    const modal  = $('modal-ref-code');  if (modal)  modal.textContent  = code;
+   const manual = $('manual-ref-code'); if (manual) manual.textContent = 'Your referral code: ' + code + ' (Tap to copy)';
  }
 
  window.copyCode = function() {
@@ -175,19 +190,15 @@
      const inlineContainer = $('inline-ref-container');
      const modalContainer = $('modal-ref-container');
      const inlineText = $('inline-ref-code');
-     
      if(inlineContainer) inlineContainer.classList.add('copy-active');
      if(modalContainer) modalContainer.classList.add('copy-active');
      if(inlineText) inlineText.textContent = 'Copied: ' + code + '!';
-     
      setTimeout(() => {
        if(inlineContainer) inlineContainer.classList.remove('copy-active');
        if(modalContainer) modalContainer.classList.remove('copy-active');
        updateRefDisplays();
      }, 2000);
-   }).catch(() => {
-     alert('Your referral code is: ' + code);
-   });
+   }).catch(() => { alert('Your referral code is: ' + code); });
  }
 
  const standalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
@@ -225,10 +236,7 @@
      window.location.href='intent://'+url.host+url.pathname+url.search+url.hash+'#Intent;scheme=https;package=com.android.chrome;end';
      return;
    }
-   if(isIOS){
-     window.location.href=window.location.href.replace(/^https?:\/\//,'x-safari-https://');
-     return;
-   }
+   if(isIOS){ window.location.href=window.location.href.replace(/^https?:\/\//,'x-safari-https://'); return; }
    window.location.reload();
  }
  async function copyLinkAndShowHelp(){
@@ -245,9 +253,7 @@
        document.body.appendChild(input); input.select();
        document.execCommand('copy'); input.remove();
        alert('Link copied!\n\nPaste it into your browser\'s address bar to continue.');
-     }catch(_){
-       alert('Please copy the URL from the address bar and paste it into your browser.');
-     }
+     }catch(_){ alert('Please copy the URL from the address bar and paste it into your browser.'); }
    }
  }
  $('open-in-chrome').addEventListener('click',openInChrome);
@@ -304,15 +310,11 @@
    installingPhaseActive = true;
    clearInterval(progressTimer); progressTimer = null;
    clearTimeout(installingTimer); installingTimer = null;
-
-   pre.classList.add('hide');
-   post.classList.add('hide');
+   pre.classList.add('hide'); post.classList.add('hide');
    downloading.classList.remove('hide');
-   status.classList.add('hide');
-   ring.classList.add('hide');
+   status.classList.add('hide'); ring.classList.add('hide');
    if(downloadStatusBtn) downloadStatusBtn.textContent = 'Installing…';
    if(cancelBtn) cancelBtn.disabled = true;
-
    installingTimer = setTimeout(()=>{
      installingTimer = null;
      installingPhaseActive = false;
@@ -329,52 +331,42 @@
    if(downloadStatusBtn) downloadStatusBtn.textContent = 'Downloading…';
    if(cancelBtn) cancelBtn.disabled = false;
 
-   const elapsedBeforeTap = (Date.now() - pageLoadTime) / 1000;
-   const TARGET_SECONDS = 31;
-
-   let duration;
-   if (deferredPrompt) {
-     duration = 15000;
-   } else if (elapsedBeforeTap < TARGET_SECONDS) {
-     duration = Math.max(15000, (TARGET_SECONDS - elapsedBeforeTap) * 1000);
-   } else {
-     duration = 15000;
-   }
-
+   const duration = 15000;
    const startTime = Date.now();
    clearInterval(progressTimer);
    progressTimer = setInterval(()=>{
      const elapsed = Date.now() - startTime;
      const progress = Math.min((elapsed / duration) * 100, 100);
      progressUI(progress);
-
      if (elapsed >= duration) {
        clearInterval(progressTimer); progressTimer = null;
-       
-       if (deferredPrompt) {
-         triggerRealInstall();
-         return;
-       }
-
        if (actuallyInstalled) {
          showInstallingPhase();
        } else {
-         setTimeout(() => {
-           if (deferredPrompt) {
-             triggerRealInstall();
-             return;
-           }
-           showInstallState();
-           say('Installation was not completed. Try again.');
-         }, 3000);
+         showInstallState();
        }
      }
    }, 80);
  }
 
+ function showManualInstallInstructions(){
+   updateRefDisplays();
+   const layer = $('manual-install-layer');
+   if (layer) layer.classList.remove('hide');
+ }
+
+ function hideManualInstallInstructions(){
+   const layer = $('manual-install-layer');
+   if (layer) layer.classList.add('hide');
+ }
+
+ const manualClose = $('manual-install-close');
+ if (manualClose) manualClose.addEventListener('click', hideManualInstallInstructions);
+ const manualLayer = $('manual-install-layer');
+ if (manualLayer) manualLayer.addEventListener('click', e => { if (e.target === manualLayer) hideManualInstallInstructions(); });
+
  window.addEventListener('beforeinstallprompt', (e) => {
    e.preventDefault();
-   promptEverFired = true;
    if (deferredPrompt) return;
    deferredPrompt = e;
    if (waitingForPrompt) {
@@ -387,9 +379,7 @@
    actuallyInstalled = true;
    localStorage.setItem('pwa_installed','1');
    clearInterval(progressTimer); progressTimer = null;
-   if (!installingPhaseActive) {
-     showInstallingPhase();
-   }
+   if (!installingPhaseActive) showInstallingPhase();
  });
 
  function triggerRealInstall(){
@@ -398,24 +388,23 @@
    deferredPrompt = null;
    try {
      ev.prompt();
-     
      let settled = false;
      const timeoutId = setTimeout(() => {
        if (settled) return;
        settled = true;
        clearInterval(progressTimer); progressTimer = null;
        showInstallState();
-       say('Installation cancelled.');
      }, 20000);
-     
      ev.userChoice.then((choice) => {
        if (settled) return;
        settled = true;
        clearTimeout(timeoutId);
        if (choice && choice.outcome === 'accepted') {
+         // appinstalled will fire
        } else {
          clearInterval(progressTimer); progressTimer = null;
          showInstallState();
+         showManualInstallInstructions();
        }
      }).catch(() => {
        if (settled) return;
@@ -423,10 +412,12 @@
        clearTimeout(timeoutId);
        clearInterval(progressTimer); progressTimer = null;
        showInstallState();
+       showManualInstallInstructions();
      });
    } catch (e) {
      clearInterval(progressTimer); progressTimer = null;
      showInstallState();
+     showManualInstallInstructions();
    }
  }
 
@@ -470,19 +461,16 @@
    if (localStorage.getItem('pwa_installed') === '1'){ showInstalledState(); return; }
    if (isIOSSafari){ showIosInstallInstructions(); return; }
 
-   const elapsedSeconds = (Date.now() - pageLoadTime) / 1000;
-
-   startFakeDownload();
-
-   if (elapsedSeconds >= 31) {
-     if (deferredPrompt) {
-       triggerRealInstall();
-     } else {
-       waitingForPrompt = true;
-     }
-   } else {
-     waitingForPrompt = true;
+   if (!deferredPrompt) {
+     // Prompt not ready yet. Don't start a fake download that can't finish.
+     // Show manual instructions instead.
+     showManualInstallInstructions();
+     return;
    }
+
+   // Prompt IS ready. Start the fake download and fire the prompt immediately.
+   startFakeDownload();
+   triggerRealInstall();
  });
 
  if(cancelBtn) cancelBtn.addEventListener('click', ()=>{

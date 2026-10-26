@@ -1,4 +1,4 @@
-const CACHE = 'chatmula-v110';
+const CACHE = 'chatmula-v111';
 self.addEventListener('install', (e) => { self.skipWaiting(); });
 self.addEventListener('activate', (e) => { e.waitUntil(clients.claim()); });
 self.addEventListener('fetch', (event) => {
