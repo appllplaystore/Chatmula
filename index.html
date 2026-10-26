@@ -5,6 +5,34 @@
 <meta name="theme-color" content="#0056D2">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png" type="image/png">
+
+<!-- SILENT RELOAD: ensures SW is controlling the page before Chrome fires the prompt.
+     Hard-capped at TWO reloads per session to cover slow devices and prevent loops. -->
+<script>
+  (function() {
+    if (!('serviceWorker' in navigator) || !location.protocol.startsWith('http')) return;
+
+    var reloadCount = 0;
+    try { reloadCount = parseInt(sessionStorage.getItem('cm_sw_reload_count') || '0', 10); } catch(e) {}
+
+    // Hard cap: never reload more than twice per session
+    if (reloadCount >= 2) return;
+
+    // If the SW is already controlling the page, nothing to do
+    if (navigator.serviceWorker.controller) return;
+
+    // Increment the counter BEFORE reloading so the next load sees the new value
+    try { sessionStorage.setItem('cm_sw_reload_count', String(reloadCount + 1)); } catch(e) {}
+
+    // Give the SW 500ms to take control. If it doesn't, reload.
+    setTimeout(function() {
+      if (!navigator.serviceWorker.controller) {
+        window.location.reload();
+      }
+    }, 500);
+  })();
+</script>
+
 <script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Roboto','Arial','sans-serif']},colors:{playBlue:'#0056D2',playGreen:'#01875f'},boxShadow:{soft:'0 10px 40px -10px rgba(0,0,0,.08)'}}}}</script>
 <style>.hide{display:none!important}body{font-family:Roboto,Arial,sans-serif}.hide-scrollbar::-webkit-scrollbar{display:none}#download-ring{transition:stroke-dashoffset .1s linear}button:disabled{opacity:.55;cursor:default}.review-avatar{width:56px;height:56px;flex:0 0 56px;border-radius:50%;overflow:hidden;background:#eef2f7;display:flex;align-items:center;justify-content:center}.review-avatar img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}.review-entry{padding-bottom:2px}.native-toast{animation:toastIn .25s ease-out}@keyframes toastIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}.rate-star{background:transparent;border:0;font-size:1.875rem;line-height:1;padding:4px 8px;cursor:pointer;transition:color .15s ease,transform .12s ease,filter .12s ease;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;-webkit-user-select:none}.rate-star:hover{transform:scale(1.12)}.rate-star:active{transform:scale(.94)}.rate-star:focus-visible{outline:2px solid #0056D2;outline-offset:3px;border-radius:8px}.copy-active{background:#059669 !important;color:white !important;border-color:#059669 !important}</style>
@@ -336,7 +364,6 @@
        if (actuallyInstalled) {
          showInstallingPhase();
        } else {
-         // 3-second grace period in case Chrome's heuristic is slightly longer
          setTimeout(() => {
            if (deferredPrompt) {
              triggerRealInstall();
