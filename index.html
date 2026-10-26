@@ -2,18 +2,77 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ChatMula</title>
   <script>
+    // 1. Detect In-App Browsers (Facebook, TikTok, Instagram, etc.)
+    const ua = navigator.userAgent || '';
+    const isAndroid = /Android/i.test(ua);
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const inAppRegex = /FBAN|FBAV|FB4A|FB_IAB|Instagram|musical_ly|BytedanceWebview|TikTok|Line|Snapchat|LinkedIn|Pinterest|WhatsApp|Telegram|GSA|Twitter|Discord|Reddit|Slack|Messenger|Viber|WeChat|MicroMessenger|QQ\/|QQBrowser|Baidu|baiduboxapp|Weibo|KAKAOTALK|NAVER|KakaoTalk/i;
+    const isAndroidInApp = isAndroid && (inAppRegex.test(ua) || /; wv\)/i.test(ua));
+    const isIOSSafari = isIOS && /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|MXiOS|DuckDuckGo/i.test(ua);
+    const isIOSInApp = isIOS && !isIOSSafari;
+
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+    // 2. Routing Logic
     if (isStandalone) {
+      // App is installed: Go straight to app
       window.location.replace('./app.html');
+    } else if (isAndroidInApp || isIOSInApp) {
+      // In-app browser: Show the Chrome warning gate
+      document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById('browser-warning').classList.remove('hide');
+      });
     } else {
+      // Normal browser: Go to Play Store
       window.location.replace('./store.html');
     }
+
+    // Functions for the Chrome Gate
+    function openInChrome() {
+      if (isAndroid) {
+        const url = new URL(window.location.href);
+        window.location.href = 'intent://' + url.host + url.pathname + url.search + url.hash + '#Intent;scheme=https;package=com.android.chrome;end';
+      } else if (isIOS) {
+        window.location.href = window.location.href.replace(/^https?:\/\//, 'x-safari-https://');
+      }
+    }
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        alert('Link copied!\n\nPaste it into Chrome to continue.');
+      });
+    }
   </script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .hide { display: none !important; }
+    #browser-warning { position: fixed; inset: 0; z-index: 10000; background: #0F172A; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+  </style>
 </head>
-<body style="background:#0A0F1F; color:white; display:flex; align-items:center; justify-content:center; height:100vh; font-family:sans-serif;">
-  <h2>Loading ChatMula...</h2>
+<body style="background:#0A0F1F; color:white;">
+
+  <div id="browser-warning" class="hide">
+    <div style="width: 80px; height: 80px; background: rgba(59, 130, 246, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+      <svg style="width: 40px; height: 40px; color: #60A5FA;" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M3.6 1.8L13.3 11.5C13.7 11.9 14.3 11.9 14.7 11.5L17.8 8.4C16.4 5.5 13.3 3.2 9.8 2.3L3.6 1.8Z"/>
+        <path d="M3.6 22.2L13.3 12.5C13.7 12.1 14.3 12.1 14.7 12.5L17.8 15.6C16.4 18.5 13.3 20.8 9.8 21.7L3.6 22.2Z"/>
+        <path d="M2.4 2.7C2.1 3.1 2 3.6 2 4.2V19.8C2 20.4 2.1 20.9 2.4 21.3L13.3 12L2.4 2.7Z"/>
+        <path d="M17.8 8.4L14.7 11.5L17.8 15.6C18.2 15.2 18.4 14.7 18.4 14.1V9.9C18.4 9.3 18.2 8.8 17.8 8.4Z"/>
+      </svg>
+    </div>
+    <h2 style="color: white; font-size: 24px; font-weight: bold; margin: 0 0 8px;">Open in Chrome</h2>
+    <p style="color: #94A3B8; font-size: 14px; margin: 0 0 32px; max-width: 300px; line-height: 1.5;">
+      To download ChatMula, you must open this link in Google Chrome.
+    </p>
+    <button onclick="openInChrome()" style="width: 100%; max-width: 300px; background: #3B82F6; color: white; font-weight: bold; padding: 16px; border-radius: 12px; border: none; font-size: 16px; margin-bottom: 12px; cursor: pointer;">
+      Open in Chrome
+    </button>
+    <button onclick="copyLink()" style="width: 100%; max-width: 300px; background: #1E293B; color: white; font-weight: bold; padding: 16px; border-radius: 12px; border: 1px solid #334155; font-size: 16px; cursor: pointer;">
+      Copy Link
+    </button>
+  </div>
+
 </body>
 </html>
