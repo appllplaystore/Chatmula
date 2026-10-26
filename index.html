@@ -127,6 +127,9 @@
  let installingPhaseActive = false;
  let toastTimer = null;
 
+ // Record when the page loaded for the 31-second fake install logic
+ const pageLoadTime = Date.now();
+
  try {
    const incomingRef = new URLSearchParams(location.search).get('ref');
    if (incomingRef && incomingRef.trim()) localStorage.setItem('cm_ref', incomingRef.trim());
@@ -418,9 +421,23 @@
    if (localStorage.getItem('pwa_installed') === '1'){ showInstalledState(); return; }
    if (isIOSSafari){ showIosInstallInstructions(); return; }
 
+   const elapsedSeconds = (Date.now() - pageLoadTime) / 1000;
+
+   // Always start the fake download so the user sees progress
    startFakeDownload();
-   if (deferredPrompt) triggerRealInstall();
-   else waitingForPrompt = true;
+
+   if (elapsedSeconds >= 31) {
+     // Chrome's 30-second heuristic is satisfied — show the real prompt
+     if (deferredPrompt) {
+       triggerRealInstall();
+     } else {
+       waitingForPrompt = true;
+     }
+   } else {
+     // Less than 31 seconds — do NOT trigger the prompt
+     // The fake download will run, then reset the button
+     waitingForPrompt = false;
+   }
  });
 
  if(cancelBtn) cancelBtn.addEventListener('click', ()=>{
