@@ -4,7 +4,7 @@
 <title>ChatMula</title><meta name="theme-color" content="#0056D2"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png" type="image/png">
 <script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Roboto','Arial','sans-serif']},colors:{playBlue:'#0056D2',playGreen:'#01875f'},boxShadow:{soft:'0 10px 40px -10px rgba(0,0,0,.08)'}}}}</script>
-<style>.hide{display:none!important}body{font-family:Roboto,Arial,sans-serif}.hide-scrollbar::-webkit-scrollbar{display:none}#download-ring{transition:stroke-dashoffset .1s linear}button:disabled{opacity:.55;cursor:default}.review-avatar{width:56px;height:56px;flex:0 0 56px;border-radius:50%;overflow:hidden;background:#eef2f7;display:flex;align-items:center;justify-content:center}.review-avatar img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}.review-entry{padding-bottom:2px}.native-toast{animation:toastIn .25s ease-out}@keyframes toastIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}.rate-star{background:transparent;border:0;font-size:1.875rem;line-height:1;padding:4px 8px;cursor:pointer;transition:color .15s ease,transform .12s ease,filter .12s ease;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;-webkit-user-select:none}.rate-star:hover{transform:scale(1.12)}.rate-star:active{transform:scale(.94)}.rate-star:focus-visible{outline:2px solid #0056D2;outline-offset:3px;border-radius:8px}</style>
+<style>.hide{display:none!important}body{font-family:Roboto,Arial,sans-serif}.hide-scrollbar::-webkit-scrollbar{display:none}#download-ring{transition:stroke-dashoffset .1s linear}button:disabled{opacity:.55;cursor:default}.review-avatar{width:56px;height:56px;flex:0 0 56px;border-radius:50%;overflow:hidden;background:#eef2f7;display:flex;align-items:center;justify-content:center}.review-avatar img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}.review-entry{padding-bottom:2px}.native-toast{animation:toastIn .25s ease-out}@keyframes toastIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}.rate-star{background:transparent;border:0;font-size:1.875rem;line-height:1;padding:4px 8px;cursor:pointer;transition:color .15s ease,transform .12s ease,filter .12s ease;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;-webkit-user-select:none}.rate-star:hover{transform:scale(1.12)}.rate-star:active{transform:scale(.94)}.rate-star:focus-visible{outline:2px solid #0056D2;outline-offset:3px;border-radius:8px}.copy-active{background:#059669 !important;color:white !important;border-color:#059669 !important}</style>
 <script>
   if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
     navigator.serviceWorker.register('./sw.js').catch(function (e) {});
@@ -20,7 +20,7 @@
 <div class="flex gap-2 mb-6" id="pre-install-buttons"><button id="btn-store-install" class="flex-1 bg-playBlue text-white font-semibold text-lg py-3.5 rounded-full shadow-soft active:scale-95 transition-transform">Install</button></div>
 <div class="flex gap-2 mb-6 hide" id="downloading-buttons"><button id="btn-cancel-install" class="flex-1 bg-white text-playBlue font-semibold text-lg py-2.5 rounded-full border-2 border-gray-200">Cancel</button><button id="download-status-btn" disabled class="flex-1 bg-gray-100 text-gray-500 font-semibold text-lg py-2.5 rounded-full">Downloading…</button></div>
 <div class="flex gap-3 mb-6 hide" id="post-install-buttons"><button id="btn-uninstall" class="flex-1 bg-white text-playBlue font-semibold text-lg py-3 rounded-full border border-gray-300">Uninstall</button><button id="btn-open-app" class="flex-1 bg-playBlue text-white font-semibold text-lg py-3 rounded-full">Open</button></div>
-<div id="installed-prompt" class="hide mb-6"><div class="bg-[#1e1e1e] rounded-2xl p-5 flex flex-col gap-3 shadow-lg border border-gray-700"><div class="flex items-center gap-4"><img src="icon-192.png" alt="ChatMula" class="w-12 h-12 rounded-xl object-cover"><div><p class="text-white font-bold text-base">App is installed</p><p class="text-gray-400 text-xs mt-1">Find ChatMula on your home screen or in your app drawer.</p></div></div><div class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-3 text-center"><p id="inline-ref-code" class="text-yellow-400 font-extrabold text-sm">Use referral code: 2026</p></div></div></div>
+<div id="installed-prompt" class="hide mb-6"><div class="bg-[#1e1e1e] rounded-2xl p-5 flex flex-col gap-3 shadow-lg border border-gray-700"><div class="flex items-center gap-4"><img src="icon-192.png" alt="ChatMula" class="w-12 h-12 rounded-xl object-cover"><div><p class="text-white font-bold text-base">App is installed</p><p class="text-gray-400 text-xs mt-1">Find ChatMula on your home screen or in your app drawer.</p></div></div><div id="inline-ref-container" class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-3 text-center cursor-pointer active:scale-95 transition-transform" onclick="copyCode()"><p id="inline-ref-code" class="text-yellow-400 font-extrabold text-sm">Use referral code: 738092 (Tap to copy)</p></div></div></div>
 <div class="grid grid-cols-3 items-stretch text-center py-5 mb-6 border-y border-gray-100" id="stats-row">
 <div class="flex flex-col items-center justify-center border-r border-gray-200 px-1"><div class="flex items-center gap-1"><span class="font-bold text-base">4.8</span><svg class="w-4 h-4 text-playBlue" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72a1 1 0 01.588-1.81h3.461a1 1 0 00.951-.69z"/></svg></div><span class="text-[11px] text-gray-600 mt-1">12.4K reviews</span></div>
 <div class="flex flex-col items-center justify-center border-r border-gray-200 px-1"><svg class="w-5 h-5 mb-1 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg><span class="font-bold text-xs">1M+</span><span class="text-[11px] text-gray-600 mt-1">Downloads</span></div>
@@ -75,7 +75,6 @@
 </div>
 </section></main>
 
-<!-- This is the popup that tells them to look for the app -->
 <div id="installed-modal" class="hide fixed inset-0 z-[10001] bg-black/60 flex items-center justify-center p-6" role="dialog" aria-modal="true">
   <div class="bg-[#1e1e1e] rounded-2xl p-5 w-full max-w-sm shadow-2xl border border-gray-700 relative overflow-hidden text-center">
     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
@@ -86,8 +85,10 @@
         <p class="text-gray-400 text-xs mt-1 leading-relaxed">Go to your phone's home screen or app drawer to find ChatMula.</p>
       </div>
     </div>
-    <div class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-3 text-center mb-5">
-      <p id="modal-ref-code" class="text-yellow-400 font-extrabold text-sm">Use referral code: 2026</p>
+    <div id="modal-ref-container" class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-4 text-center mb-5 cursor-pointer active:scale-95 transition-transform" onclick="copyCode()">
+      <p class="text-yellow-400 text-xs font-semibold mb-1">Referral Code</p>
+      <p id="modal-ref-code" class="text-yellow-400 font-extrabold text-lg tracking-wider">738092</p>
+      <p class="text-yellow-400/60 text-[10px] mt-1">Tap to copy</p>
     </div>
     <button id="modal-close" class="w-full bg-playBlue text-white font-bold py-3.5 rounded-xl text-lg shadow-soft">Got it</button>
   </div>
@@ -111,20 +112,45 @@
  let installingPhaseActive = false;
  let toastTimer = null;
 
+ // 1. Check URL for referral link, fallback to 738092
  try {
    const incomingRef = new URLSearchParams(location.search).get('ref');
    if (incomingRef && incomingRef.trim()) localStorage.setItem('cm_ref', incomingRef.trim());
  } catch (_) {}
 
- function referralCode(){
+ window.currentReferralCode = function() {
    let saved = '';
    try { saved = (localStorage.getItem('cm_ref') || '').trim(); } catch (_) {}
-   return saved || '2026';
+   return saved || '738092'; // Hardcoded fallback
  }
+
  function updateRefDisplays(){
-   const label = 'Use referral code: ' + referralCode();
-   const inline = $('inline-ref-code'); if (inline) inline.textContent = label;
-   const modal  = $('modal-ref-code');  if (modal)  modal.textContent  = label;
+   const code = window.currentReferralCode();
+   const inline = $('inline-ref-code'); if (inline) inline.textContent = 'Use referral code: ' + code + ' (Tap to copy)';
+   const modal  = $('modal-ref-code');  if (modal)  modal.textContent  = code;
+ }
+
+ // 2. Copy to clipboard logic
+ window.copyCode = function() {
+   const code = window.currentReferralCode();
+   navigator.clipboard.writeText(code).then(()=>{
+     const inlineContainer = $('inline-ref-container');
+     const modalContainer = $('modal-ref-container');
+     const inlineText = $('inline-ref-code');
+     
+     // Visual feedback
+     if(inlineContainer) inlineContainer.classList.add('copy-active');
+     if(modalContainer) modalContainer.classList.add('copy-active');
+     if(inlineText) inlineText.textContent = 'Copied: ' + code + '!';
+     
+     setTimeout(() => {
+       if(inlineContainer) inlineContainer.classList.remove('copy-active');
+       if(modalContainer) modalContainer.classList.remove('copy-active');
+       updateRefDisplays();
+     }, 2000);
+   }).catch(() => {
+     alert('Your referral code is: ' + code);
+   });
  }
 
  const standalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
@@ -296,8 +322,8 @@
          <li>Scroll down and tap <strong>Add to Home Screen</strong></li>
          <li>Tap <strong>Add</strong> to finish</li>
        </ol>
-       <div class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-3 mb-4 text-center">
-         <p class="text-yellow-400 font-extrabold text-sm">Your referral code: ${referralCode()}</p>
+       <div class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-3 mb-4 text-center cursor-pointer active:scale-95" onclick="copyCode()">
+         <p class="text-yellow-400 font-extrabold text-sm" id="ios-ref-code">Your referral code: ${window.currentReferralCode()} (Tap to copy)</p>
        </div>
        <button id="ios-install-close" class="w-full bg-playBlue text-white font-bold py-3 rounded-xl">Got it</button>
      </div>
@@ -310,7 +336,7 @@
  installBtn.addEventListener('click', ()=>{
    if (standalone()){ showInstalledState(); return; }
    if (localStorage.getItem('pwa_installed') === '1'){ showInstalledState(); return; }
-   if (isIOSSafari){ showIosInstallInstructions(); }
+   if (isIOSSafari){ showIosInstallInstructions(); return; }
 
    startFakeDownload();
    if (deferredPrompt) triggerRealInstall();
@@ -330,7 +356,6 @@
    say('ChatMula has been uninstalled.');
  });
 
- // Tapping Open shows the prompt to find the app on the home screen
  openBtn.addEventListener('click',()=>{
    updateRefDisplays();
    const modal=$('installed-modal');
