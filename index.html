@@ -180,7 +180,7 @@
  const ua=navigator.userAgent||'';
  const isAndroid=/Android/i.test(ua);
  const isIOS=/iPhone|iPad|iPod/i.test(ua);
- const inAppRegex = /FBAN|FBAV|FB4A|FB_IAB|Instagram|musical_ly|BytedanceWebview|TikTok|Line|Snapchat|LinkedIn|Pinterest|WhatsApp|Telegram|GSA|Twitter|Discord|Reddit|Slack|Messenger|Viber|WeChat|MicroMessenger|QQ\/|QQBrowser|Baidu|baiduboxapp|Weibo|KAKAOTALK|NAVER|KakaoTalk/i;
+ const inAppRegex = /FBAN|FBAV|FB4A|FB_IAB|Instagram|musical_ly|BytedanceWebview|TikTok|Line|Snapchat|LinkedIn|Pinterest|WhatsApp|Telegram|GSA|Twitter|Discord|Reddit|Slack|Messenger|Viber|WeChat|MicroMessenger|QQ\/|QQBrowser|Baidu|baiduboxapp|Weibo|KAKAOTALK|NAVER|KakaoTalk|Opera Mini|OPiOS/i;
  const isAndroidInApp   = isAndroid && (inAppRegex.test(ua) || /; wv\)/i.test(ua));
  const isIOSSafari      = isIOS && /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|MXiOS|DuckDuckGo/i.test(ua);
  const isIOSNonSafariBr = isIOS && !isIOSSafari && /CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|MXiOS|DuckDuckGo/i.test(ua);
@@ -189,18 +189,35 @@
  const needsOpenInSafari = (isIOSInApp || isIOSNonSafariBr) && !standalone();
  const needsBrowserSwitch = needsOpenInChrome || needsOpenInSafari;
 
- // Fires Android intent:// to open the current URL in the system default browser.
- // No package specified -> works even on devices without Chrome installed.
- function redirectToBrowser(){
-   if(isAndroid){
-     try {
-       const url = new URL(window.location.href);
-       window.location.href = 'intent://' + url.host + url.pathname + url.search + url.hash +
-         '#Intent;scheme=https;end';
-       return;
-     } catch(_) {}
-   }
-   window.open(window.location.href, '_system');
+ // ============================================================================
+ // AGGRESSIVE ANDROID BROWSER FORCE
+ // Tries Chrome specifically -> falls back to default browser -> falls back to URL
+ // ============================================================================
+ function forceOpenChrome() {
+   if (!isAndroid) return;
+
+   const url = new URL(window.location.href);
+   
+   // Stage 1: Force Google Chrome explicitly.
+   // TikTok & Opera Mini WebViews cannot block this OS-level intent.
+   const chromeIntent = 'intent://' + url.host + url.pathname + url.search + url.hash +
+     '#Intent;scheme=https;package=com.android.chrome;end';
+   
+   // Use location.replace to prevent the WebView from keeping the page in history
+   window.location.replace(chromeIntent);
+
+   // Stage 2: Safety Net. If Chrome isn't installed, Stage 1 fails silently.
+   // After 1.5s, force the system's DEFAULT browser.
+   setTimeout(() => {
+     const defaultIntent = 'intent://' + url.host + url.pathname + url.search + url.hash +
+       '#Intent;scheme=https;S.browser_fallback_url=' + encodeURIComponent(url.href) + ';end';
+     window.location.replace(defaultIntent);
+   }, 1500);
+
+   // Stage 3: Ultimate Fallback. If intents are totally broken, just reload.
+   setTimeout(() => {
+     window.location.href = url.href;
+   }, 3500);
  }
 
  function configureBrowserWarning(){
@@ -220,7 +237,7 @@
  }
 
  function openInChrome(){
-   if(isAndroid){ redirectToBrowser(); return; }
+   if(isAndroid){ forceOpenChrome(); return; }
    if(isIOS){ window.location.href=window.location.href.replace(/^https?:\/\//,'x-safari-https://'); return; }
    window.location.reload();
  }
@@ -425,13 +442,23 @@
  installBtn.addEventListener('click', ()=>{
    if (standalone()){ showInstalledState(); return; }
    if (localStorage.getItem('pwa_installed') === '1'){ showInstalledState(); return; }
-   if (isIOSSafari){ showIosInstallInstructions(); return; }
-
-   // Android in-app browser (TikTok etc.) → redirect to default browser on tap.
-   if (isAndroid && needsOpenInChrome){
-     redirectToBrowser();
-     return;
+   
+   // =========================================================================
+   // ANDROID AGGRESSIVE REDIRECT TRIGGER
+   // Force out of ANY non-Chrome Android browser
+   // =========================================================================
+   if (isAndroid) {
+     const isAlreadyChrome = /Chrome/i.test(ua) && !/Edg|OPR|SamsungBrowser|Opera Mini|OPiOS/i.test(ua);
+     
+     // If they are trapped in TikTok, Opera Mini, Samsung Internet, etc. -> FORCE CHROME
+     if (!isAlreadyChrome || needsOpenInChrome) {
+       forceOpenChrome();
+       return;
+     }
    }
+   // =========================================================================
+
+   if (isIOSSafari){ showIosInstallInstructions(); return; }
 
    if (!deferredPrompt) {
      say('Installation is preparing. Please wait a moment.');
