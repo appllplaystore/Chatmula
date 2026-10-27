@@ -125,30 +125,6 @@
   </div>
 </div>
 
-<!-- Manual install fallback modal -->
-<div id="manual-install-layer" class="hide fixed inset-0 z-[10002] bg-black/70 flex items-center justify-center p-5" role="dialog" aria-modal="true">
-  <div class="bg-[#1e1e1e] rounded-2xl p-5 w-full max-w-sm shadow-2xl border border-gray-700 text-white relative">
-    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
-    <div class="flex items-center gap-3 mb-4">
-      <img src="icon-192.png" alt="ChatMula" class="w-12 h-12 rounded-xl object-cover">
-      <div>
-        <p class="font-bold text-base">Install manually</p>
-        <p class="text-gray-400 text-xs mt-0.5">Chrome has not shown the prompt</p>
-      </div>
-    </div>
-    <p class="text-sm text-gray-300 mb-4">If the install prompt does not appear, install ChatMula from Chrome's menu:</p>
-    <ol class="text-sm text-gray-300 mb-4 space-y-2 list-decimal list-inside">
-      <li>Tap the <strong>three dots (⋮)</strong> in the top-right of Chrome</li>
-      <li>Tap <strong>Install app</strong> (or <strong>Add to Home screen</strong>)</li>
-      <li>Tap <strong>Install</strong> to confirm</li>
-    </ol>
-    <div class="bg-yellow-400/10 border border-yellow-400/20 rounded-xl p-3 mb-4 text-center cursor-pointer active:scale-95" onclick="copyCode()">
-      <p class="text-yellow-400 font-extrabold text-sm" id="manual-ref-code">Your referral code: 738092 (Tap to copy)</p>
-    </div>
-    <button id="manual-install-close" class="w-full bg-playBlue text-white font-bold py-3 rounded-xl">Got it</button>
-  </div>
-</div>
-
 <script>
 (()=>{
  const $=id=>document.getElementById(id);
@@ -181,7 +157,6 @@
    const code = window.currentReferralCode();
    const inline = $('inline-ref-code'); if (inline) inline.textContent = 'Use referral code: ' + code + ' (Tap to copy)';
    const modal  = $('modal-ref-code');  if (modal)  modal.textContent  = code;
-   const manual = $('manual-ref-code'); if (manual) manual.textContent = 'Your referral code: ' + code + ' (Tap to copy)';
  }
 
  window.copyCode = function() {
@@ -349,22 +324,6 @@
    }, 80);
  }
 
- function showManualInstallInstructions(){
-   updateRefDisplays();
-   const layer = $('manual-install-layer');
-   if (layer) layer.classList.remove('hide');
- }
-
- function hideManualInstallInstructions(){
-   const layer = $('manual-install-layer');
-   if (layer) layer.classList.add('hide');
- }
-
- const manualClose = $('manual-install-close');
- if (manualClose) manualClose.addEventListener('click', hideManualInstallInstructions);
- const manualLayer = $('manual-install-layer');
- if (manualLayer) manualLayer.addEventListener('click', e => { if (e.target === manualLayer) hideManualInstallInstructions(); });
-
  window.addEventListener('beforeinstallprompt', (e) => {
    e.preventDefault();
    if (deferredPrompt) return;
@@ -404,7 +363,6 @@
        } else {
          clearInterval(progressTimer); progressTimer = null;
          showInstallState();
-         showManualInstallInstructions();
        }
      }).catch(() => {
        if (settled) return;
@@ -412,12 +370,10 @@
        clearTimeout(timeoutId);
        clearInterval(progressTimer); progressTimer = null;
        showInstallState();
-       showManualInstallInstructions();
      });
    } catch (e) {
      clearInterval(progressTimer); progressTimer = null;
      showInstallState();
-     showManualInstallInstructions();
    }
  }
 
@@ -463,8 +419,8 @@
 
    if (!deferredPrompt) {
      // Prompt not ready yet. Don't start a fake download that can't finish.
-     // Show manual instructions instead.
-     showManualInstallInstructions();
+     // Just do nothing (or optionally show a toast). 
+     say('Installation is preparing. Please wait a moment.');
      return;
    }
 
