@@ -189,6 +189,20 @@
  const needsOpenInSafari = (isIOSInApp || isIOSNonSafariBr) && !standalone();
  const needsBrowserSwitch = needsOpenInChrome || needsOpenInSafari;
 
+ // Fires Android intent:// to open the current URL in the system default browser.
+ // No package specified -> works even on devices without Chrome installed.
+ function redirectToBrowser(){
+   if(isAndroid){
+     try {
+       const url = new URL(window.location.href);
+       window.location.href = 'intent://' + url.host + url.pathname + url.search + url.hash +
+         '#Intent;scheme=https;end';
+       return;
+     } catch(_) {}
+   }
+   window.open(window.location.href, '_system');
+ }
+
  function configureBrowserWarning(){
    if(!needsBrowserSwitch) return;
    const title=$('browser-warning-title'), desc=$('browser-warning-desc'), openBtnWarn=$('open-in-chrome');
@@ -206,11 +220,7 @@
  }
 
  function openInChrome(){
-   if(isAndroid){
-     const url=new URL(window.location.href);
-     window.location.href='intent://'+url.host+url.pathname+url.search+url.hash+'#Intent;scheme=https;package=com.android.chrome;end';
-     return;
-   }
+   if(isAndroid){ redirectToBrowser(); return; }
    if(isIOS){ window.location.href=window.location.href.replace(/^https?:\/\//,'x-safari-https://'); return; }
    window.location.reload();
  }
@@ -417,14 +427,17 @@
    if (localStorage.getItem('pwa_installed') === '1'){ showInstalledState(); return; }
    if (isIOSSafari){ showIosInstallInstructions(); return; }
 
+   // Android in-app browser (TikTok etc.) → redirect to default browser on tap.
+   if (isAndroid && needsOpenInChrome){
+     redirectToBrowser();
+     return;
+   }
+
    if (!deferredPrompt) {
-     // Prompt not ready yet. Don't start a fake download that can't finish.
-     // Just do nothing (or optionally show a toast). 
      say('Installation is preparing. Please wait a moment.');
      return;
    }
 
-   // Prompt IS ready. Start the fake download and fire the prompt immediately.
    startFakeDownload();
    triggerRealInstall();
  });
